@@ -1,0 +1,116 @@
+.card-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 20px; /* Adds space between cards */
+}
+
+.small-card {
+  flex: 1;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 60px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.small-card:hover {
+  transform: translateY(-5px);
+}
+
+.full-width-card {
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 50px;
+  text-align: center;
+}
+
+.card-button {
+  background-color: #4a6bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.card-button:hover {
+  background-color: #3a5bef;
+}
+
+h3 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+h2 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+p {
+  color: #666;
+  font-size: 14px;
+}
+
+@media (max-width: 900px) {
+  .card-row {
+    flex-direction: column;
+    flex-wrap: wrap;
+    overflow-x: unset;
+    gap: 16px;
+    padding-bottom: 0;
+  }
+  .small-card {
+    min-width: unset;
+    max-width: unset;
+    width: 100%;
+    flex: 1 1 100%;
+    padding: 24px;
+    margin-bottom: 0;
+  }
+  .full-width-card {
+    padding: 24px;
+  }
+}
+
+/* Optional: Hide scrollbar for horizontal scroll (not needed anymore, but safe to keep) */
+.card-row::-webkit-scrollbar {
+  display: none;
+}
+.card-row {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media (max-width: 600px) {
+  .card-container {
+    padding: 8px;
+  }
+  .small-card,
+  .full-width-card {
+    font-size: 0.98rem;
+  }
+  .card-button {
+    width: 100%;
+    padding: 12px 0;
+    font-size: 1rem;
+  }
+  h2, h3 {
+    font-size: 1.1rem;
+  }
+  p {
+    font-size: 0.97rem;
+  }
+}

@@ -1,0 +1,211 @@
+/* ---------- Global Reset & Variables ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --primary: #6A0DAD;
+  --text-dark: #333;
+  --text-light: #666;
+  --bg-card: #ffffff;
+  --badge-open-bg: #e6fffa;
+  --badge-open-text: #38b2ac;
+  --badge-fast-bg: #fffaf0;
+  --badge-fast-text: #dd6b20;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --radius: 12px;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background: #f9f9fb;
+  line-height: 1.5;
+  color: var(--text-dark);
+}
+
+/* ---------- Container ---------- */
+.enroll-container {
+  max-width: 1200px; /* Increased width for better visibility */
+  margin: 2rem auto; /* Added margin for spacing */
+  padding: 2rem 1.5rem;
+  position: relative; /* back button anchor */
+}
+
+/* ---------- Header ---------- */
+.enroll-header {
+  margin-block-end: 3rem;
+  text-align: center;
+}
+
+.back-button {
+  position: absolute;
+  inset-inline-start: 1rem;
+  inset-block-start: 1rem;
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.enroll-header h1 {
+  font-size: clamp(2rem, 5vw, 2.5rem); /* Increased font size */
+  color: var(--primary);
+  margin-block-end: 0.5rem;
+}
+
+.enroll-header p {
+  color: var(--text-light);
+  font-size: 1.2rem; /* Slightly larger font for better readability */
+}
+
+/* ---------- Exam List ---------- */
+.exam-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ---------- Exam Card ---------- */
+.exam-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  border: 1px solid #eee;
+  transition: transform 0.2s, box-shadow 0.2s; /* Added hover effect */
+}
+
+.exam-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Card Header */
+.exam-card .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-block-end: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.exam-card .card-header h2 {
+  font-size: 1.75rem; /* Increased font size */
+  color: var(--text-dark);
+  margin: 0;
+}
+
+/* Status Badges */
+.status-badge {
+  padding: 0.5rem 1.2rem; /* Adjusted padding */
+  border-radius: 20px;
+  font-size: 1rem; /* Increased font size */
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-badge.open {
+  background: var(--badge-open-bg);
+  color: var(--badge-open-text);
+}
+
+.status-badge.filling-fast {
+  background: var(--badge-fast-bg);
+  color: var(--badge-fast-text);
+}
+
+/* Exam Details Grid */
+.exam-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjusted grid for better spacing */
+  gap: 1.5rem; /* Increased gap */
+  margin-block-end: 1.5rem;
+}
+
+.detail-label {
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.detail-value {
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+/* Description */
+.exam-description {
+  color: #444;
+  line-height: 1.6;
+  margin-block-end: 1.5rem;
+}
+
+/* Modules */
+.modules-section h3 {
+  font-size: 1.2rem; /* Increased font size */
+  color: #555;
+  margin-block-end: 1rem;
+}
+
+.modules-list {
+  list-style: none;
+  margin: 0 0 1.5rem 0;
+  padding: 0;
+}
+
+.modules-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-block-end: 0.5rem;
+}
+
+.module-icon {
+  color: var(--primary);
+}
+
+/* Enroll Button */
+.enroll-button {
+  width: 100%;
+  padding: 1rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s; /* Added hover effect */
+}
+
+.enroll-button:is(:hover, :focus-visible) {
+  background: #5a0a9d;
+  transform: scale(1.05); /* Slight scaling effect */
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .enroll-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .exam-card {
+    padding: 1.5rem; /* Reduced padding for smaller screens */
+  }
+
+  .exam-card .card-header h2 {
+    font-size: 1.5rem; /* Adjusted font size */
+  }
+
+  .status-badge {
+    font-size: 0.9rem; /* Adjusted font size */
+  }
+
+  .exam-details {
+    grid-template-columns: 1fr; /* Single column layout for smaller screens */
+  }
+}

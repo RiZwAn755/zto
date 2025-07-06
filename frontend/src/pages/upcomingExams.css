@@ -1,0 +1,496 @@
+:root {
+  --primary-color: #6a0dad;
+  --secondary-color: #9c27b0;
+  --accent-color: #e91e63;
+  --math-color: #4a00e0;
+  --science-color: #00b09b;
+  --english-color: #f46b45;
+  --cs-color: #2196f3;
+  --dark-text: #2d3436;
+  --medium-text: #636e72;
+  --light-text: #b2bec3;
+  --light-bg: #f5f6fa;
+  --white: #ffffff;
+  --success-color: #4caf50;
+  --warning-color: #ff9800;
+  --danger-color: #f44336;
+  --shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.upcoming-exams-page {
+  background-color: var(--light-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.upcoming-exams-container {
+  padding: 60px 5%;
+  flex: 1;
+}
+
+.header-content {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.upcoming-exams-title {
+  font-size: 2.8rem;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 800;
+  margin-bottom: 15px;
+  animation: fadeInDown 0.8s ease;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: var(--medium-text);
+  margin-bottom: 30px;
+}
+
+.countdown-banner {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: var(--white);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin: 2rem auto;
+  max-width: 800px;
+  box-shadow: var(--shadow);
+}
+
+.countdown-banner h3 {
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+.countdown-timer {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.countdown-unit .number {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.countdown-unit .label {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+.filter-control, .sort-control {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.controls label {
+  font-weight: 600;
+  color: var(--dark-text);
+}
+
+.controls select {
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  background-color: var(--white);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  min-width: 180px;
+}
+
+.controls select:hover {
+  border-color: var(--primary-color);
+}
+
+.controls select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(106, 13, 173, 0.2);
+}
+
+.upcoming-exams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.upcoming-exam-card {
+  background: var(--white);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+}
+
+.upcoming-exam-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 20px;
+  background-color: rgba(0, 0, 0, 0.02);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.subject-badge {
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--white);
+  text-transform: uppercase;
+}
+
+.subject-badge.math {
+  background-color: var(--math-color);
+}
+
+.subject-badge.science {
+  background-color: var(--science-color);
+}
+
+.subject-badge.english {
+  background-color: var(--english-color);
+}
+
+.subject-badge.cs {
+  background-color: var(--cs-color);
+}
+
+.level-badge {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  background-color: rgba(0, 0, 0, 0.1);
+  color: var(--dark-text);
+}
+
+.level-badge.national {
+  background-color: rgba(233, 30, 99, 0.1);
+  color: var(--accent-color);
+}
+
+.level-badge.zonal {
+  background-color: rgba(156, 39, 176, 0.1);
+  color: var(--secondary-color);
+}
+
+.level-badge.regional {
+  background-color: rgba(33, 150, 243, 0.1);
+  color: var(--cs-color);
+}
+
+.card-content {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.upcoming-exam-card h3 {
+  font-size: 1.4rem;
+  color: var(--dark-text);
+  margin-bottom: 15px;
+  line-height: 1.3;
+}
+
+.exam-date-time {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 15px;
+  color: var(--medium-text);
+  font-size: 0.9rem;
+}
+
+.exam-date-time i {
+  margin-right: 5px;
+  color: var(--primary-color);
+}
+
+.exam-description {
+  font-size: 1rem;
+  color: var(--dark-text);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.exam-prize {
+  margin: 20px 0;
+  font-weight: 600;
+  color: var(--medium-text);
+}
+
+.exam-prize i {
+  color: var(--warning-color);
+  margin-right: 8px;
+}
+
+.prize-amount {
+  color: var(--accent-color);
+  font-weight: 700;
+}
+
+.registration-info {
+  margin-top: 25px;
+  background-color: rgba(0, 0, 0, 0.02);
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.deadline-warning {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--medium-text);
+  margin-bottom: 10px;
+}
+
+.deadline-warning i {
+  color: var(--danger-color);
+}
+
+.urgent-badge {
+  background-color: var(--danger-color);
+  color: var(--white);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  margin-left: 8px;
+}
+
+.progress-container {
+  width: 100%;
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  height: 20px;
+  margin-top: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+  border-radius: 10px;
+  transition: width 0.5s ease;
+}
+
+.progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.7rem;
+  color: var(--white);
+  font-weight: 600;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+.card-footer {
+  display: flex;
+  padding: 0 20px 20px;
+  gap: 10px;
+}
+
+.register-button, .details-button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.register-button {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: var(--white);
+}
+
+.register-button:hover {
+  background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(156, 39, 176, 0.4);
+}
+
+.details-button {
+  background-color: var(--light-bg);
+  color: var(--dark-text);
+}
+
+.details-button:hover {
+  background-color: #e0e0e0;
+  transform: translateY(-2px);
+}
+
+.no-results {
+  text-align: center;
+  padding: 3rem;
+  background-color: var(--white);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
+}
+
+.no-results p {
+  font-size: 1.1rem;
+  color: var(--medium-text);
+}
+
+.upcoming-cta {
+  text-align: center;
+  padding: 2.5rem;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  border-radius: 16px;
+  color: var(--white);
+  margin-top: 2rem;
+}
+
+.upcoming-cta h3 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.upcoming-cta p {
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+  opacity: 0.9;
+}
+
+.cta-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.cta-button {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cta-button i {
+  font-size: 1rem;
+}
+
+.cta-button.primary {
+  background-color: var(--white);
+  color: var(--primary-color);
+}
+
+.cta-button.primary:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.cta-button.secondary {
+  background-color: transparent;
+  color: var(--white);
+  border: 2px solid var(--white);
+}
+
+.cta-button.secondary:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Animations */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .upcoming-exams-title {
+    font-size: 2.2rem;
+  }
+  
+  .controls {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .filter-control, .sort-control {
+    width: 100%;
+  }
+  
+  .upcoming-exams-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .countdown-timer {
+    gap: 1rem;
+  }
+
+  .countdown-unit .number {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .upcoming-exams-container {
+    padding: 40px 20px;
+  }
+  
+  .upcoming-exams-title {
+    font-size: 1.8rem;
+  }
+  
+  .card-footer {
+    flex-direction: column;
+  }
+
+  .countdown-unit .number {
+    font-size: 1.2rem;
+  }
+
+  .countdown-unit .label {
+    font-size: 0.7rem;
+  }
+}

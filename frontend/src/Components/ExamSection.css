@@ -1,0 +1,222 @@
+.exam-section {
+    padding: 40px 60px;
+    background-color: #fff;
+  }
+  
+  .active-users {
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 40px;
+  }
+  
+  .exam-categories {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 60px;
+  }
+  
+  .exam-card {
+    width: 180px;
+    height: 220px;
+    text-align: center;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.4s ease;
+    cursor: pointer;
+  }
+  
+  .exam-card:hover {
+    transform: translateY(-10px);
+  }
+  
+  .exam-card img {
+    height: 100px;
+    margin-bottom: 15px;
+  }
+  
+  .exam-card h4 {
+    font-size: 16px;
+    color: #222;
+  }
+  
+  .exam-explore .explore-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+    text-align: center;
+    gap: 18px;
+  }
+  
+  .explore-heading h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .explore-btn {
+    background-color: #fcdc3a;
+    border: none;
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .subject-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .subject-card {
+    width: calc(33.33% - 20px);
+    min-width: 220px;
+    background-color: #fff7f1;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease;
+  }
+  
+  .subject-card:hover {
+    transform: translateY(-6px);
+  }
+  
+  .subject-card img {
+    height: 40px;
+    margin-bottom: 10px;
+  }
+  
+  .subject-card h4 {
+    margin-bottom: 6px;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .subject-card p {
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .subject-icon {
+    font-size: 2.2rem;
+    color: #4e4cf4;
+    margin-bottom: 10px;
+    display: block;
+  }
+  
+  .subject-quote {
+    font-size: 1.02rem;
+    color: #222;
+    margin: 10px 0 4px 0;
+    font-weight: 500;
+  }
+  
+  .subject-author {
+    font-size: 0.98rem;
+    color: #b03a2e;
+    font-style: italic;
+    margin-bottom: 0;
+  }
+  
+  .subject-card h4 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 4px;
+    color: #222;
+  }
+  
+  @media (max-width: 900px) {
+    .exam-section {
+      padding: 30px 20px;
+    }
+    .exam-categories {
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .exam-card {
+      width: 150px;
+      height: 180px;
+      padding: 14px;
+    }
+    .exam-card img {
+      height: 70px;
+    }
+    .explore-heading {
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .explore-heading h2 {
+      font-size: 22px;
+    }
+    .subject-card {
+      min-width: 160px;
+      width: calc(50% - 16px);
+      padding: 14px;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .exam-section {
+      padding: 18px 4vw;
+    }
+    .active-users {
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+    .exam-categories {
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 30px;
+    }
+    .exam-card {
+      width: 90vw;
+      max-width: 260px;
+      height: 120px;
+      padding: 10px;
+    }
+    .exam-card img {
+      height: 40px;
+      margin-bottom: 8px;
+    }
+    .exam-card h4 {
+      font-size: 14px;
+    }
+    .exam-explore .explore-heading {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .explore-heading h2 {
+      font-size: 18px;
+    }
+    .explore-btn {
+      padding: 8px 14px;
+      font-size: 14px;
+    }
+    .subject-grid {
+      flex-direction: column;
+      gap: 12px;
+    }
+    .subject-card {
+      width: 100%;
+      min-width: unset;
+      padding: 12px;
+    }
+    .subject-card img {
+      height: 28px;
+    }
+    .subject-card h4 {
+      font-size: 13px;
+    }
+    .subject-card p {
+      font-size: 12px;
+    }
+  }
