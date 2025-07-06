@@ -17,6 +17,7 @@ import CheckResult from './pages/CheckResult'; // Corrected import
 
 import CardLayout from './pages/Exams';
 import PageNotFound from './Components/PageNotFound';
+import AskAI from './Components/Doubt_Assistant';
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
           <Route path="/enroll-exams" element={<EnrollExams />} />
           <Route path="/rewards" element={<Rewards />} />
           <Route path="/checkresult" element={<CheckResult  />} />
+          <Route path='/AskAI' element = {<AskAI/>} />
           <Route path="*" element={<PageNotFound />} />
 
         </Routes>

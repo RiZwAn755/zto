@@ -7,7 +7,8 @@ import adminSignup from "./api/adminSignup.api.js";
 import adminLogin from "./api/adminLogin.api.js";
 import examform from "./api/examform.api.js";
 import studentsApi from "./api/students.api.js";
-import registeredApi from "./api/registered.api.js"
+import registeredApi from "./api/registered.api.js";
+import gemini from "./api/gemini.api.js"
 
 import "./DB/config.js";
 
@@ -23,6 +24,7 @@ app.use("/adminLogin" , adminLogin);
 app.use("/regForm", examform);
 app.use("/students", studentsApi);
 app.use("/registered" , registeredApi);
+app.use('/gemini' , gemini);
 
 app.listen(3000, () => {
     console.log("Server is running on port 3000");

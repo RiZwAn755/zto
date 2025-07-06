@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './Resources.css';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
+import { useNavigate } from 'react-router';
+import AskAI from '../Components/Doubt_Assistant';
 
 const Resources = () => {
   const [activeTab, setActiveTab] = useState('grades');
@@ -12,9 +14,18 @@ const Resources = () => {
   const subjects = ["Physics", "Chemistry", "Maths", "English", "Biology"];
   const samplePapers = ["2023 Papers", "2022 Papers", "2021 Papers", "Model Papers"];
 
+  const navigate = useNavigate();
+
+  const handleDoubt = (e) => {
+      
+    e.preventDefault();
+    navigate('/AskAI');
+  }
+
   return (
     <>
       <Navbar />
+      <button className='doubtButton-fixed' onClick={handleDoubt}>Doubts ?</button>
       <div className="resources-container">
         <div className="resources-header">
           <h1>PYQ and Sample Papers</h1>

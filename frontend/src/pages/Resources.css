@@ -6,6 +6,40 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.doubtButton
+{
+  color:white;
+  font-size: xx-large;
+  height: 60px;
+  width: 200px;
+  background-color: #6A0DAD;
+  border-radius: 100px;
+  border: 1px solid white;
+  
+
+}
+
+.doubtButton-fixed {
+  position: fixed;
+  right: 32px;
+  bottom: 32px;
+  z-index: 1000;
+  color: white;
+  font-size: xx-large;
+  height: 60px;
+  width: 200px;
+  background-color: #6A0DAD;
+  border-radius: 100px;
+  border: 1px solid white;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.doubtButton-fixed:hover {
+  background-color: #531f9c;
+}
+
 .resources-header {
   text-align: center;
   margin-bottom: 2rem;
