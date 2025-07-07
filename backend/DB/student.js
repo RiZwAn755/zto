@@ -11,7 +11,7 @@ const studentSchema = new mongoose.Schema({
   classs:{type:Number, required : true},
   email: { type: String },
   
-  password: { type: String, required: [true, "Passwmord is required"], minlength: 0 }
+  password: { type: String, required: [true, "Passwmimage.pngord is required"], minlength: 0 }
 }, { timestamps: true });
 
 export default mongoose.model("Student", studentSchema);

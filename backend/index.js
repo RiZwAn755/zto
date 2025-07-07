@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/stReg", signupApi);
-app.use("/stLogin", loginApi);
+app.use("/Login", loginApi);
 app.use("/adminSignup", adminSignup);
 app.use("/adminLogin" , adminLogin);
 app.use("/regForm", examform);

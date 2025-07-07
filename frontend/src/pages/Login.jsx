@@ -21,11 +21,16 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post('http://localhost:3000/stLogin', formData);
+      const { data } = await axios.post('http://localhost:3000/Login', formData);
       if (data) {
         localStorage.setItem("email", formData.email);
         toast.success('Logged in successfully!');
-        setTimeout(() => navigate("/"), 1500); // Wait for toast before redirect
+        if(data.role === "admin"){
+          setTimeout(() => navigate("/admin"), 1500); // Wait for toast before redirect
+        }
+        else{
+          setTimeout(() => navigate("/"), 1500); // Wait for toast before redirect
+        }
       } else {
         toast.error('Unable to login');
       }
