@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+const baseUrl = import.meta.env.VITE_BASE_URL;
 
 const RegisterPage = () => {
 
@@ -33,7 +33,7 @@ const RegisterPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const {data} = await axios.post('http://localhost:3000/stReg' , formData);
+    const {data} = await axios.post(`${baseUrl}/stReg` , formData);
     if(data)
     {
         setIsSubmitting(true);
