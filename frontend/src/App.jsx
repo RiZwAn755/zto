@@ -11,7 +11,7 @@ import PastExams from './pages/PastExams';
 import UpcomingExams from './pages/upcomingExams'
 import Admin from './pages/Admin';
 // import EnrollExams from './pages/EnrollExams';
-// import PrivateComponent from './pages/privateComponent';
+import PrivateComponent from './pages/privateComponent';
 
 import CheckResult from './pages/CheckResult'; // Corrected import
 
@@ -29,7 +29,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<Admin />} />
-         
+          <Route path="*" element={<PageNotFound />} />
+
+          // private hai ye Components
+         <Route  element = {<PrivateComponent/>}>
            <Route path="/UpcomingExams" element={<UpcomingExams />} />
           <Route path="/" element={<Home />} />
           <Route path="/resources" element={<Resources />} />
@@ -41,8 +44,9 @@ function App() {
           <Route path="/rewards" element={<Rewards />} />
           <Route path="/checkresult" element={<CheckResult  />} />
           <Route path='/AskAI' element = {<AskAI/>} />
-          <Route path="*" element={<PageNotFound />} />
-
+          </Route>
+          
+          
         </Routes>
       </Router>
     </div>
