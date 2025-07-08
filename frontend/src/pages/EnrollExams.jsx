@@ -6,6 +6,7 @@ import Footer from '../Components/Footer';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+const baseURL=import.meta.env.VITE_BASE_URL;
 
 const EnrollExams = () => {
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ const EnrollExams = () => {
     e.preventDefault();
     try {
       const payload = { ...formData, class: Number(formData.class) };
-      await axios.post('http://localhost:3000/regForm', payload);
+      await axios.post(`${baseURL}/regForm`, payload);
       toast.success('Registration successful!');
       setTimeout(() => navigate('/'), 1500);
     } catch (err) {
