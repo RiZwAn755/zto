@@ -4,8 +4,9 @@ import ReactMarkdown from "react-markdown";
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
-import dotenv from "dotenv";
-dotenv.config();
+
+const baseUrl = import.meta.env.VITE_BASE_URL ;
+
 
 const AskAI = () => {
   const [prompt, setPrompt] = useState('');
@@ -78,7 +79,7 @@ const AskAI = () => {
     setMessages(prev => [...prev, { role: 'user', content: prompt }]);
     setPrompt('');
     try {
-      const baseUrl = import.meta.env.VITE_BASE_URL ;
+      
 
       const res = await fetch(`${baseUrl}/gemini`, {
         method: 'POST',
