@@ -6,7 +6,7 @@ import Footer from '../Components/Footer';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-const baseURL=import.meta.env.VITE_BASE_URL;
+const baseURL = import.meta.env.VITE_BASE_URL;
 
 const EnrollExams = () => {
   const navigate = useNavigate();
@@ -22,6 +22,7 @@ const EnrollExams = () => {
     parentPhone: '',
     dob: ''
   });
+  const [loading, setLoading] = useState(false);
 
   const inputStyle = {
     width: "100%",
@@ -42,13 +43,29 @@ const EnrollExams = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!baseURL) {
+      toast.error('Server URL not set.');
+      return;
+    }
+    setLoading(true);
     try {
-      const payload = { ...formData, class: Number(formData.class) };
-      await axios.post(`${baseURL}/regForm`, payload);
+      const payload = {
+        ...formData,
+        class: Number(formData.class),
+        phone: formData.phone.trim(),
+        parentPhone: formData.parentPhone.trim(),
+      };
+      await axios.post(`${baseURL.replace(/\/$/, '')}/regForm`, payload);
       toast.success('Registration successful!');
       setTimeout(() => navigate('/'), 1500);
     } catch (err) {
-      toast.error('Registration failed. Please check your details.');
+      if (err.response && err.response.data && err.response.data.error) {
+        toast.error(`Registration failed: ${err.response.data.error}`);
+      } else {
+        toast.error('Registration failed. Please check your details.');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -195,8 +212,9 @@ const EnrollExams = () => {
                 cursor: "pointer",
                 fontSize: "1rem",
               }}
+              disabled={loading}
             >
-              Register
+              {loading ? "Registering..." : "Register"}
             </button>
           </form>
         </div>
