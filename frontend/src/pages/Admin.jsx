@@ -13,12 +13,7 @@ const Admin = () => {
     totalRevenue: 45600
   };
 
-  const recentExams = [
-    { id: 1, name: 'JEE Main 2024', date: '2024-01-15', status: 'Active', participants: 234 },
-    { id: 2, name: 'NEET 2024', date: '2024-02-20', status: 'Upcoming', participants: 189 },
-    { id: 3, name: 'CAT 2024', date: '2024-03-10', status: 'Completed', participants: 156 },
-    { id: 4, name: 'GATE 2024', date: '2024-04-05', status: 'Active', participants: 298 }
-  ];
+
 
   const recentUsers = [
     { id: 1, name: 'Rahul Sharma', email: 'rahul@example.com', joinDate: '2024-01-10', status: 'Active' },

@@ -26,6 +26,10 @@ app.use("/students", studentsApi);
 app.use("/registered" , registeredApi);
 app.use('/gemini' , gemini);
 
+app.get("/", (req,resp) => {
+    resp.send("hii");
+})
+
 app.listen(3000, () => {
     console.log("Server is running on port 3000");
 });
