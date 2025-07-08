@@ -3,6 +3,7 @@
 import express from "express";
 import Student from "../DB/student.js";
 import Admin from "../DB/admin.js";
+
 const router = express.Router();
 
 router.post("/", async (req, res) => {
