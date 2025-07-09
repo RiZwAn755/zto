@@ -18,7 +18,7 @@ import CheckResult from './pages/CheckResult'; // Corrected import
 import CardLayout from './pages/Exams';
 import PageNotFound from './Components/PageNotFound';
 import AskAI from './Components/Doubt_Assistant';
-
+import Landing from './pages/Landing';
 
 function App() {
   return (
@@ -29,6 +29,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/" element={<Landing />} />
           <Route path="*" element={<PageNotFound />} />
 
           // private hai ye Components
