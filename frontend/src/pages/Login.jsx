@@ -33,7 +33,7 @@ const Login = () => {
           } else {
             navigate("/");
           }
-        }, 1500);
+        }, 1000);
       } else {
         toast.error('Unable to login');
       }

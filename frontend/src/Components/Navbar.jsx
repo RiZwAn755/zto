@@ -44,8 +44,8 @@ const Navbar = () => {
     localStorage.removeItem("email");
     setIsLoggedIn(false);
     setTimeout(() => {
-      navigate("/login");
-    }, 1200); // Wait for toast before redirecting
+      navigate("/landing");
+    }, 1000); // Wait for toast before redirecting
   };
 
   return (
@@ -53,7 +53,7 @@ const Navbar = () => {
       <ToastContainer />
       <nav className={`navbar ${isOpen ? 'open' : ''} ${scrolled ? 'scrolled' : ''}`}>
         <div className="navbar-logo">
-          <h1>ZTO</h1>
+          <button style={{ backgroundColor: 'transparent', border: 'none' }}   onClick={() => navigate("/")}><h1>ZTO</h1></button>
         </div>
 
         <div className="hamburger" onClick={toggleMenu}>
