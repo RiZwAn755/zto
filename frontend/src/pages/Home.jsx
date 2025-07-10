@@ -7,13 +7,20 @@ import OurTeams from "../Components/OurTeams";
 
 const Home = () => {
   return (
-    <div>
+    <div style={{ paddingTop: 80 }}>
       <Navbar />
       <HeroCarousel />
       <ExamSection />
       <MissionSection />
       <OurTeams />
       <Footer />
+      <style>{`
+        @media (max-width: 600px) {
+          div {
+            padding-top: 70px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

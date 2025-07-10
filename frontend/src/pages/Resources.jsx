@@ -26,7 +26,7 @@ const Resources = () => {
     <>
       <Navbar />
       <button className='doubtButton-fixed' onClick={handleDoubt}>Doubts ?</button>
-      <div className="resources-container">
+      <div className="resources-container" style={{ paddingTop: 100 }}>
         <div className="resources-header">
           <h1>PYQ and Sample Papers</h1>
           <p className="resources-subheading">ZTO: All Grades. All Subjects. One Place.</p>
@@ -129,6 +129,13 @@ const Resources = () => {
         </div>
       </div>
       <Footer />
+      <style>{`
+        @media (max-width: 600px) {
+          .resources-container {
+            padding-top: 70px !important;
+          }
+        }
+      `}</style>
     </>
   );
 };

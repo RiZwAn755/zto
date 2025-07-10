@@ -29,7 +29,7 @@ const Landing = () => {
         filter: 'blur(32px)',
         opacity: 0.7,
       }} />
-      <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px 12px 32px 12px', position: 'relative', zIndex: 1 }}>
+      <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px 12px 32px 12px', position: 'relative', zIndex: 1, paddingTop: 80 }}>
         <section style={{
           background: 'rgba(255,255,255,0.98)',
           borderRadius: 32,
@@ -101,6 +101,9 @@ const Landing = () => {
       {/* Responsive style */}
       <style>{`
         @media (max-width: 600px) {
+          main {
+            padding-top: 70px !important;
+          }
           section {
             padding: 10px 2px 8px 2px !important;
             border-radius: 14px !important;
