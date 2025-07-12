@@ -7,7 +7,7 @@ import OurTeams from "../Components/OurTeams";
 
 const Home = () => {
   return (
-    <div style={{ paddingTop: 80 }}>
+    <div className="home-container">
       <Navbar />
       <HeroCarousel />
       <ExamSection />
@@ -15,9 +15,19 @@ const Home = () => {
       <OurTeams />
       <Footer />
       <style>{`
-        @media (max-width: 600px) {
-          div {
-            padding-top: 70px !important;
+        .home-container {
+          padding-top: 80px;
+        }
+        
+        @media (max-width: 768px) {
+          .home-container {
+            padding-top: 70px;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .home-container {
+            padding-top: 60px;
           }
         }
       `}</style>

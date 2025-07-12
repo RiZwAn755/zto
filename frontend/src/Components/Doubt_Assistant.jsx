@@ -70,6 +70,8 @@ const AskAI = () => {
     setRecognition(recog);
   }, []);
 
+  const token = localStorage.getItem('token');
+
   const handleAsk = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
@@ -83,7 +85,9 @@ const AskAI = () => {
 
       const res = await fetch(`${baseUrl}/gemini`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+         },
         body: JSON.stringify({ prompt }),
       });
       if (!res.ok) throw new Error('Failed to get response');

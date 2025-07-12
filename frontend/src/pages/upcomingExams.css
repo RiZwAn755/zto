@@ -476,10 +476,12 @@
 @media (max-width: 480px) {
   .upcoming-exams-container {
     padding: 40px 20px;
+
   }
   
   .upcoming-exams-title {
     font-size: 1.8rem;
+    margin-top: 0px;
   }
   
   .card-footer {

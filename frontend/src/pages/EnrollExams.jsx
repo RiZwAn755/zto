@@ -55,15 +55,17 @@ const EnrollExams = () => {
         phone: formData.phone.trim(),
         parentPhone: formData.parentPhone.trim(),
       };
+      const token = localStorage.getItem('token'); // or wherever you store your token
 
-      const token = localStorage.getItem('token');
-      await axios.post(`${baseURL}/regForm`, payload,
-    {
-      headers:{
-        Authorization: `Bearer ${token}`
-      }
-    }
-    );
+      await axios.post(
+        `${baseURL}/regForm`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
       toast.success('Registration successful!');
       setTimeout(() => navigate('/'), 1500);
     } catch (err) {
@@ -103,11 +105,14 @@ const EnrollExams = () => {
               boxShadow: "0 0 10px rgba(0,0,0,0.1)",
               width: "100%",
               maxWidth: "400px",
+              marginTop: "100px",
             }}
           >
-            <h2 style={{ marginBottom: "20px", color: "#2a4d8f" }}>
+            
+            <h2 style={{ marginBottom: "20px", color: "#2a4d8f"  }}>
               Student Exam Registration
             </h2>
+
             <input
               type="text"
               name="fullname"

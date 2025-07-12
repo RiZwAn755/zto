@@ -1,3 +1,7 @@
+.exams-container {
+  padding-top: 80px;
+}
+
 .card-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -34,6 +38,22 @@
   text-align: center;
 }
 
+.full-card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.full-card-text {
+  flex: 1;
+  text-align: left;
+}
+
+.full-width-button {
+  white-space: nowrap;
+}
+
 .card-button {
   background-color: #4a6bff;
   color: white;
@@ -43,10 +63,17 @@
   cursor: pointer;
   margin-top: 15px;
   font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
 .card-button:hover {
   background-color: #3a5bef;
+}
+
+.card-icon {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  display: block;
 }
 
 h3 {
@@ -62,26 +89,137 @@ h2 {
 p {
   color: #666;
   font-size: 14px;
+  line-height: 1.5;
 }
 
+/* Tablet styles */
 @media (max-width: 900px) {
+  .exams-container {
+    padding-top: 70px;
+  }
+  
+  .card-container {
+    padding: 16px;
+  }
+  
   .card-row {
     flex-direction: column;
-    flex-wrap: wrap;
-    overflow-x: unset;
     gap: 16px;
-    padding-bottom: 0;
   }
+  
   .small-card {
-    min-width: unset;
-    max-width: unset;
-    width: 100%;
-    flex: 1 1 100%;
-    padding: 24px;
-    margin-bottom: 0;
+    padding: 30px 24px;
   }
+  
   .full-width-card {
-    padding: 24px;
+    padding: 30px 24px;
+  }
+  
+  .full-card-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+  
+  .full-card-text {
+    text-align: center;
+  }
+  
+  .card-icon {
+    font-size: 2rem;
+  }
+}
+
+/* Mobile styles */
+@media (max-width: 600px) {
+  .exams-container {
+    padding-top: 60px;
+  }
+  
+  .card-container {
+    padding: 12px 8px;
+  }
+  
+  .card-row {
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .small-card {
+    padding: 20px 16px;
+  }
+  
+  .full-width-card {
+    padding: 20px 16px;
+  }
+  
+  .full-card-content {
+    gap: 12px;
+  }
+  
+  .card-button {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+    margin-top: 12px;
+  }
+  
+  .card-icon {
+    font-size: 1.8rem;
+    margin-bottom: 12px;
+  }
+  
+  h2 {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+  
+  h3 {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+  }
+  
+  p {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+}
+
+/* Small mobile styles */
+@media (max-width: 480px) {
+  .exams-container {
+    padding-top: 55px;
+  }
+  
+  .card-container {
+    padding: 8px 4px;
+  }
+  
+  .small-card,
+  .full-width-card {
+    padding: 16px 12px;
+  }
+  
+  .card-icon {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+  }
+  
+  h2 {
+    font-size: 1.1rem;
+  }
+  
+  h3 {
+    font-size: 1rem;
+  }
+  
+  p {
+    font-size: 12px;
+  }
+  
+  .card-button {
+    padding: 10px 12px;
+    font-size: 13px;
   }
 }
 
@@ -92,25 +230,4 @@ p {
 .card-row {
   -ms-overflow-style: none;
   scrollbar-width: none;
-}
-
-@media (max-width: 600px) {
-  .card-container {
-    padding: 8px;
-  }
-  .small-card,
-  .full-width-card {
-    font-size: 0.98rem;
-  }
-  .card-button {
-    width: 100%;
-    padding: 12px 0;
-    font-size: 1rem;
-  }
-  h2, h3 {
-    font-size: 1.1rem;
-  }
-  p {
-    font-size: 0.97rem;
-  }
 }

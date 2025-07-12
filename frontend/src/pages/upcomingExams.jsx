@@ -87,7 +87,7 @@ const UpcomingExams = () => {
     <div className="upcoming-exams-page">
       <Navbar />
       <div className="upcoming-exams-container">
-        <div className="header-content">
+        <div className="header-content" style={{ marginTop: "50px" }}>
           <h2 className="upcoming-exams-title">Upcoming Olympiad Exams</h2>
           <p className="subtitle">Register now for these prestigious academic competitions</p>
           

@@ -10,7 +10,7 @@ const Exams = () => {
     <>
       <Navbar />
      
-      <div style={{ paddingTop: 80 }}>
+      <div className="exams-container">
         <div 
           className="small-card rewards-card"
        
@@ -99,13 +99,6 @@ const Exams = () => {
       </div>
     </div>
       <Footer />
-      <style>{`
-        @media (max-width: 600px) {
-          div {
-            padding-top: 70px !important;
-          }
-        }
-      `}</style>
     </div>
     </>
   );
