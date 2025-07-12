@@ -39,7 +39,7 @@ const Contact = () => {
   return (
     <>
         <Navbar/>
-        <div className="contact-wrapper">
+        <div className="contact-wrapper" style={{ paddingTop: 100 }}>
         <div className="contact-container">
             <div className="contact-left">
             <img src="/contact.jpg" alt="Contact Us"  />
@@ -87,6 +87,13 @@ const Contact = () => {
         </div>
         </div>
         <Footer />
+        <style>{`
+          @media (max-width: 600px) {
+            .contact-wrapper {
+              padding-top: 70px !important;
+            }
+          }
+        `}</style>
     </>
   );
 };

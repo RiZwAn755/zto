@@ -7,8 +7,10 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 50px;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  width: 100vw;
   z-index: 100;
   transition: all 0.3s ease-in-out;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
@@ -157,6 +159,7 @@
 @media (max-width: 768px) {
   .hamburger {
     display: flex;
+    z-index: 300;
   }
   .navbar-links,
   .navbar-buttons {
@@ -164,6 +167,9 @@
   }
   .navbar {
     padding: 0 20px;
+    background: #fff !important;
+    z-index: 300;
+    border-bottom: 1px solid #e0e0e0;
   }
 }
 
@@ -171,6 +177,7 @@
 .navbar.open .navbar-links,
 .navbar.open .navbar-buttons {
   display: flex;
+  z-index: 301;
 }
 
 .navbar.open .navbar-links {
@@ -178,13 +185,14 @@
   position: absolute;
   top: 80px;
   left: 0;
-  width: 100%;
-  background: rgba(255, 255, 255, 0.95);
+  width: 100vw;
+  background: #fff;
   padding: 20px 0;
   gap: 15px;
   align-items: center;
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-  z-index: 99;
+  z-index: 301;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .navbar.open .navbar-buttons {
@@ -192,13 +200,13 @@
   position: absolute;
   top: calc(80px + 180px); /* Adjust based on your links height */
   left: 0;
-  width: 100%;
-  background: rgba(255, 255, 255, 0.95);
+  width: 100vw;
+  background: #fff;
   padding: 20px 0;
   gap: 15px;
   align-items: center;
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-  z-index: 99;
+  z-index: 301;
 }
 
 .navbar.open .navbar-links li a {
@@ -216,11 +224,16 @@
 @media (max-width: 480px) {
   .navbar {
     height: 70px;
+    background: #fff !important;
+    z-index: 300;
+    border-bottom: 1px solid #e0e0e0;
   }
   .navbar.open .navbar-links {
     top: 70px;
+    z-index: 301;
   }
   .navbar.open .navbar-buttons {
     top: calc(70px + 180px);
+    z-index: 301;
   }
 }

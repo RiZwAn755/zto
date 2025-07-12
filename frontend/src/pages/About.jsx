@@ -13,7 +13,7 @@ const About = () => {
   return (
     <>
       <Navbar />
-      <div style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden' }}>
+      <div style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden', paddingTop: 80 }}>
         <Particles
           id="tsparticles"
           init={particlesInit}
@@ -123,6 +123,13 @@ const About = () => {
         </div>
       </div>
       <Footer />
+      <style>{`
+        @media (max-width: 600px) {
+          .about-main-container, div[style*='minHeight: 100vh'] {
+            padding-top: 70px !important;
+          }
+        }
+      `}</style>
     </>
   );
 };
