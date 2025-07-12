@@ -53,7 +53,7 @@ const Navbar = () => {
       <ToastContainer />
       <nav className={`navbar ${isOpen ? 'open' : ''} ${scrolled ? 'scrolled' : ''}`}>
         <div className="navbar-logo">
-          <button style={{ backgroundColor: 'transparent', border: 'none' }}   onClick={() => navigate("/")}><h1>ZTO</h1></button>
+          <button style={{ backgroundColor: 'transparent', border: 'none' }}   onClick={() => navigate("/")}> <h1>ZTO</h1></button>
         </div>
 
         <div className="hamburger" onClick={toggleMenu}>
@@ -62,24 +62,45 @@ const Navbar = () => {
           <span className={isOpen ? 'active' : ''}></span>
         </div>
 
-        <ul className="navbar-links">
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/about">About</Link></li>
-          <li><Link to="/exams">Exams</Link></li>
-          <li><Link to="/resources">Resources</Link></li>
-          <li><Link to="/contact">Contact</Link></li>
-          <li><Link to='/checkresult'> Results </Link></li>
-        </ul>
-
-        <div className="navbar-buttons">
-          {!isLoggedIn && (
-            <button className="login-btn" onClick={handleLogin}>Login</button>
-          )}
-          {isLoggedIn && (
-            <button className="getstarted-btn" onClick={handleLogout}>Logout</button>
-
-          )}
-        </div>
+        {isOpen ? (
+          <div className="navbar-menu-group">
+            <ul className="navbar-links">
+              <li><Link to="/">Home</Link></li>
+              <li><Link to="/about">About</Link></li>
+              <li><Link to="/exams">Exams</Link></li>
+              <li><Link to="/resources">Resources</Link></li>
+              <li><Link to="/contact">Contact</Link></li>
+              <li><Link to='/checkresult'> Results </Link></li>
+            </ul>
+            <div className="navbar-buttons">
+              {!isLoggedIn && (
+                <button className="login-btn" onClick={handleLogin}>Login</button>
+              )}
+              {isLoggedIn && (
+                <button className="getstarted-btn" onClick={handleLogout}>Logout</button>
+              )}
+            </div>
+          </div>
+        ) : (
+          <>
+            <ul className="navbar-links">
+              <li><Link to="/">Home</Link></li>
+              <li><Link to="/about">About</Link></li>
+              <li><Link to="/exams">Exams</Link></li>
+              <li><Link to="/resources">Resources</Link></li>
+              <li><Link to="/contact">Contact</Link></li>
+              <li><Link to='/checkresult'> Results </Link></li>
+            </ul>
+            <div className="navbar-buttons">
+              {!isLoggedIn && (
+                <button className="login-btn" onClick={handleLogin}>Login</button>
+              )}
+              {isLoggedIn && (
+                <button className="getstarted-btn" onClick={handleLogout}>Logout</button>
+              )}
+            </div>
+          </>
+        )}
       </nav>
     </>
   );
