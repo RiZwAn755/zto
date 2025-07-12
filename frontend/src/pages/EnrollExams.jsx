@@ -55,7 +55,15 @@ const EnrollExams = () => {
         phone: formData.phone.trim(),
         parentPhone: formData.parentPhone.trim(),
       };
-      await axios.post(`${baseURL.replace(/\/$/, '')}/regForm`, payload);
+
+      const token = localStorage.getItem('token');
+      await axios.post("http://localhost:3000/regForm", payload,
+    {
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    }
+    );
       toast.success('Registration successful!');
       setTimeout(() => navigate('/'), 1500);
     } catch (err) {
