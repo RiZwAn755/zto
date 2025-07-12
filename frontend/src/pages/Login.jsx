@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-const baseUrl = import.meta.env.VITE_BASE_URL;
+const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:3000';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ const Login = () => {
     try {
       const { data } = await axios.post(`${baseUrl}/Login`, formData);
       if (data) {
-        localStorage.setItem("token",data.token);
+        localStorage.setItem("email", formData.email);
         toast.success('Logged in successfully!');
         setTimeout(() => {
           if (data.role === "admin") {
