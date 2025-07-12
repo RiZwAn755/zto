@@ -57,7 +57,7 @@ const EnrollExams = () => {
       };
 
       const token = localStorage.getItem('token');
-      await axios.post("http://localhost:3000/regForm", payload,
+      await axios.post(`${baseURL}/regForm`, payload,
     {
       headers:{
         Authorization: `Bearer ${token}`
