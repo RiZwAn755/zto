@@ -39,7 +39,7 @@ const Footer = () => {
         <p>Follow us:</p>
         <br />
         <div className="social-icons">
-          <a href="https://www.linkedin.com/in/mdrzwn001" target="_blank" rel="noopener noreferrer" className="social-link">
+          <a href="https://www.linkedin.com/in/md-rizwan-3b3141255/" target="_blank" rel="noopener noreferrer" className="social-link">
             <FaLinkedin size={30} color="#0e76a8" />
           </a>
           <a href="https://www.facebook.com/yourusername" target="_blank" rel="noopener noreferrer" className="social-link">
