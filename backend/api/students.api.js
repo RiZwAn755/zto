@@ -2,11 +2,11 @@
 
 import express from "express";
 import Student from "../DB/student.js";
-import { verifyToken } from "../middlewares/jwt.middleware.js";
+// import { verifyToken } from "../middlewares/jwt.middleware.js";
 const router = express.Router();
 
 
-router.get("/" , verifyToken,  async (req , res) => {
+router.get("/" ,  async (req , res) => {
     try {
         const students = await Student.find();
         console.log(students);

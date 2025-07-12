@@ -6,6 +6,9 @@ import Admin from "../DB/admin.js";
 import jwt from "jsonwebtoken";
 
 const jwtsecret = process.env.JWT_SECRET;
+if (!jwtsecret) {
+  throw new Error("JWT_SECRET environment variable is not set");
+}
 
 
 const router = express.Router();
@@ -26,10 +29,10 @@ router.post("/", async (req, res) => {
         }
 
 
-         const token =  jwt.sign({email},jwtsecret,{expiresIn:"10s"})          
+         const token =  jwt.sign({email},jwtsecret,{expiresIn:"1h"})          
 
 
-        res.status(200).json({ token: token,  message: "Login successful", role: student ? "student" : "admin"  });
+        res.status(200).json({ token:token ,  message: "Login successful", role: student ? "student" : "admin"  });
     } catch (error) {
         console.error(error); // This will show up in Vercel logs
         res.status(500).json({ error: "Internal server error", details: error.message });
