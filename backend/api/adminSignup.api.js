@@ -4,7 +4,7 @@ import Admin from "../DB/admin.js";
 import "../DB/config.js";
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/",  async (req, res) => {
     try {
         const { name, referrer, email, password } = req.body;
 

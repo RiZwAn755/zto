@@ -2,9 +2,10 @@
 
 import express from "express";
 import Admin from "../DB/admin.js";
+import { verifyToken } from "../middlewares/jwt.middleware.js";
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/", verifyToken,  async (req, res) => {
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {

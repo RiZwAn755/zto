@@ -27,7 +27,7 @@ const Navbar = () => {
   // Listen for login/logout changes in localStorage (optional, for multi-tab support)
   useEffect(() => {
     const handleStorage = () => {
-      setIsLoggedIn(!!localStorage.getItem("email"));
+      setIsLoggedIn(!!localStorage.getItem("token" ));
     };
     window.addEventListener('storage', handleStorage);
     return () => window.removeEventListener('storage', handleStorage);

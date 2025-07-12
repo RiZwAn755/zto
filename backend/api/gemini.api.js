@@ -1,6 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
 import express from "express";
+import { verifyToken } from "../middlewares/jwt.middleware.js";
 dotenv.config();
 
 const router = express.Router();
@@ -20,7 +21,7 @@ async function main(prompt) {
   return "No response";
 }
 
-router.post("/", async (req, res) => {
+router.post("/", verifyToken, async (req, res) => {
   const { prompt } = req.body;
   if (!prompt) {
     return res.status(400).json({ error: "Prompt is required" });

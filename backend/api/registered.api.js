@@ -2,10 +2,11 @@
 
 import express from "express";
 import examForm from "../DB/examForm.js";
+import { verifyToken } from "../middlewares/jwt.middleware.js";
 
 const router = express.Router();
 
-router.get("/", async (req, resp) => {
+router.get("/", verifyToken,  async (req, resp) => {
     try {
         const registered_students = await examForm.find();
         resp.send(registered_students);

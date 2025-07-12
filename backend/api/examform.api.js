@@ -3,10 +3,11 @@
 import express from "express";
 import Registrations from "../DB/examForm.js";
 import "../DB/config.js";
+import { verifyToken } from "../middlewares/jwt.middleware.js";
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/", verifyToken, async (req, res) => {
     try {
         const {
             fullname,

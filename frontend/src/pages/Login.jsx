@@ -25,7 +25,7 @@ const Login = () => {
     try {
       const { data } = await axios.post(`${baseUrl}/Login`, formData);
       if (data) {
-        localStorage.setItem("email", formData.email);
+        localStorage.setItem("token",data.token);
         toast.success('Logged in successfully!');
         setTimeout(() => {
           if (data.role === "admin") {
