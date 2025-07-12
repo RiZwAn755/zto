@@ -21,6 +21,40 @@ const RegisterPage = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const validateField = (name, value) => {
+    let error = "";
+    switch (name) {
+      case "name":
+        if (!value) error = "Name is required";
+        else if (value.length < 2) error = "Name must be at least 2 characters";
+        break;
+      case "school":
+        if (!value) error = "School is required";
+        else if (value.length < 2) error = "School name must be at least 2 characters";
+        break;
+      case "classs":
+        if (!value) error = "Class is required";
+        else if (!["8", "9", "10", "11", "12"].includes(value)) error = "Class must be 8, 9, 10, 11, or 12";
+        break;
+      case "phone":
+        if (!value) error = "Phone is required";
+        else if (!/^\d{10}$/.test(value)) error = "Phone number must be 10 digits";
+        break;
+      case "email":
+        if (!value) error = "Email is required";
+        else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value)) error = "Please enter a valid email address";
+        break;
+      case "password":
+        if (!value) error = "Password is required";
+        else if (value.length < 6) error = "Password must be at least 6 characters";
+        break;
+      default:
+        break;
+    }
+    return error;
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,24 +62,33 @@ const RegisterPage = () => {
       ...prev,
       [name]: value
     }));
+
+    // Validate this field as user types
+    setErrors(prev => ({
+      ...prev,
+      [name]: validateField(name, value)
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrors({}); // Clear previous errors
 
-    const {data} = await axios.post(`${baseUrl}/stReg` , formData);
-    if(data)
-    {
-        setIsSubmitting(true);
-    console.log('Form submitted:', formData);
-    toast.success('Registered successfully , You can login now');
-    
-    setTimeout(() => {
-      setIsSubmitting(false);
-       navigate('/login');
-    }, 1500);
+    try {
+      const {data} = await axios.post(`${baseUrl}/stReg` , formData);
+      setIsSubmitting(true);
+      toast.success('Registered successfully , You can login now');
+      setTimeout(() => {
+        setIsSubmitting(false);
+        navigate('/login');
+      }, 1500);
+    } catch (err) {
+      if (err.response && err.response.data && err.response.data.errors) {
+        setErrors(err.response.data.errors);
+      } else {
+        toast.error('Registration failed. Please try again.');
+      }
     }
-   
   };
 
   return (
@@ -71,6 +114,7 @@ const RegisterPage = () => {
                 placeholder="Enter your name"
                 required
                 />
+                {errors.name && <div className="error-message">{errors.name}</div>}
             </div>
 
             <div className="form-group">
@@ -84,6 +128,7 @@ const RegisterPage = () => {
                 placeholder="Enter your school or coaching name"
                 required
                 />
+                {errors.school && <div className="error-message">{errors.school}</div>}
             </div>
 
             <div className="form-group">
@@ -97,6 +142,7 @@ const RegisterPage = () => {
                 placeholder="Enter your class"
                 required
                 />
+                {errors.classs && <div className="error-message">{errors.classs}</div>}
             </div>
 
             <div className="form-group">
@@ -110,6 +156,7 @@ const RegisterPage = () => {
                 placeholder="Enter your phone number"
                 required
                 />
+                {errors.phone && <div className="error-message">{errors.phone}</div>}
             </div>
 
             <div className="form-group">
@@ -123,6 +170,7 @@ const RegisterPage = () => {
                 placeholder="Enter your email"
                 required
                 />
+                {errors.email && <div className="error-message">{errors.email}</div>}
             </div>
 
             <div className="form-group">
@@ -144,6 +192,7 @@ const RegisterPage = () => {
                     {showPassword ? '🙈' : '👁️'}
                 </span>
                 </div>
+                {errors.password && <div className="error-message">{errors.password}</div>}
             </div>
 
             <button type="submit" className="register-button" disabled={isSubmitting}>

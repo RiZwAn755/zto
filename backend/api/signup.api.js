@@ -14,6 +14,13 @@ router.post("/", async (req, res) => {
         await newStudent.save();
         res.status(201).json({ message: "Student created successfully" });
     } catch (error) {
+        if (error.name === 'ValidationError') {
+            const errors = {};
+            for (let field in error.errors) {
+                errors[field] = error.errors[field].message;
+            }
+            return res.status(400).json({ errors });
+        }
         res.status(500).json({ error: "Failed to create student" });
     }
 });
