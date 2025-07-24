@@ -25,7 +25,7 @@ const Resources = () => {
   return (
     <>
       <Navbar />
-      <button className='doubtButton-fixed' onClick={handleDoubt}>Doubts ?</button>
+      <button className='doubtButton-fixed' style={{position: 'fixed', right: '32px', bottom: '32px', zIndex: '1000', width: '70px', height: '70px', backgroundColor: '#6A0DAD', borderRadius: '30%', border: 'none', boxShadow: '0 4px 16px rgba(0,0,0,0.18)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'background 0.2s, box-shadow 0.2s, transform 0.2s', padding: '0', color: 'white'}} onClick={handleDoubt}>Doubts ?</button>
       <div className="resources-container" style={{ paddingTop: 100 }}>
         <div className="resources-header">
           <h1>PYQ and Sample Papers</h1>

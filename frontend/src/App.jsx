@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Resources from './pages/Resources';
@@ -19,38 +19,45 @@ import CardLayout from './pages/Exams';
 import PageNotFound from './Components/PageNotFound';
 import AskAI from './Components/Doubt_Assistant';
 import Landing from './pages/Landing';
+import DoubtButton from './Components/DoubtButton';
 
 function App() {
+  
+  const handleDoubt = (e) => {
+    e.preventDefault();
+    navigate('/AskAI');
+  };
   return (
     <div className="App">
-      <Router>
-        <Routes>
-  
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/landing" element={<Landing />} />
-          <Route path="*" element={<PageNotFound />} />
+      {/* No <Router> here, just <Routes> and components */}
+      <Routes>
 
-          // private hai ye Components
-         <Route  element = {<PrivateComponent/>}>
-           <Route path="/UpcomingExams" element={<UpcomingExams />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/resources" element={<Resources />} />
-          <Route path="/exams" element={<CardLayout />} />
-          <Route path="/pastexams" element={<PastExams />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/enroll-exams" element={<EnrollExams />} />
-          <Route path="/rewards" element={<Rewards />} />
-          <Route path="/checkresult" element={<CheckResult  />} />
-          <Route path='/AskAI' element = {<AskAI/>} />
-          </Route>
-          
-          
-        </Routes>
-      </Router>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/landing" element={<Landing />} />
+            <Route path="*" element={<PageNotFound />} />
+
+            // private hai ye Components
+           <Route  element = {<PrivateComponent/>}>
+             <Route path="/UpcomingExams" element={<UpcomingExams />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/resources" element={<Resources />} />
+            <Route path="/exams" element={<CardLayout />} />
+            <Route path="/pastexams" element={<PastExams />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/enroll-exams" element={<EnrollExams />} />
+            <Route path="/rewards" element={<Rewards />} />
+            <Route path="/checkresult" element={<CheckResult  />} />
+            <Route path='/AskAI' element = {<AskAI/>} />
+            </Route>
+
+
+          </Routes>
+          <DoubtButton />
     </div>
+     
   );
 }
 

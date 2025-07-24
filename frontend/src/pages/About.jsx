@@ -13,6 +13,7 @@ const About = () => {
   return (
     <>
       <Navbar />
+      
       <div style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden', paddingTop: 80 }}>
         <Particles
           id="tsparticles"
