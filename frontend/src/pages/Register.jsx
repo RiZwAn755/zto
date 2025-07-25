@@ -83,7 +83,9 @@ const RegisterPage = () => {
         navigate('/login');
       }, 1500);
     } catch (err) {
-      if (err.response && err.response.data && err.response.data.errors) {
+      if (err.response && err.response.status === 409 && err.response.data && err.response.data.error === "Email already exists") {
+        toast.error('Email already exists');
+      } else if (err.response && err.response.data && err.response.data.errors) {
         setErrors(err.response.data.errors);
       } else {
         toast.error('Registration failed. Please try again.');
@@ -94,6 +96,7 @@ const RegisterPage = () => {
   return (
     <>
         <Navbar/>
+        <ToastContainer />
         <div className="register-container">
         <div className="register-card">
             <div className="register-header">

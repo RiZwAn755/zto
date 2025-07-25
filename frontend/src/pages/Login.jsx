@@ -22,8 +22,13 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    // Trim email and password before sending
+    const trimmedFormData = {
+      email: formData.email.trim(),
+      password: formData.password.trim()
+    };
     try {
-      const { data } = await axios.post(`${baseUrl}/Login`, formData);
+      const { data } = await axios.post(`${baseUrl}/Login`, trimmedFormData);
       if (data) {
         localStorage.setItem("email", formData.email);
         localStorage.setItem('token' , data.token);

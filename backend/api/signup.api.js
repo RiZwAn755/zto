@@ -10,6 +10,11 @@ router.post("/", async (req, res) => {
         console.log(req.body);
 
         const { name, lastName, phone, email, password , classs , school } = req.body;
+        // Check if email already exists
+        const existingStudent = await Student.findOne({ email });
+        if (existingStudent) {
+            return res.status(409).json({ error: "Email already exists" });
+        }
         const newStudent = new Student({ name, lastName, phone, email, password,classs , school });
         await newStudent.save();
         res.status(201).json({ message: "Student created successfully" });

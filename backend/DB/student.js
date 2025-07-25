@@ -32,9 +32,11 @@ const studentSchema = new mongoose.Schema({
     }
   },
   email: {
+    unique: true,
     type: String,
     required: [true, "Email is required"],
-    match: [/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, "Please enter a valid email address"]
+    match: [/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, "Please enter a valid email address"],
+    
   },
   password: {
     type: String,
