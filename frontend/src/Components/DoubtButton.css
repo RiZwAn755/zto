@@ -1,12 +1,10 @@
 .doubtButton-fixed {
   position: fixed;
-  right: 32px;
-  bottom: 32px;
   z-index: 1000;
   width: 70px;
   height: 70px;
   background-color: #6A0DAD;
-  border-radius: 30%;
+  border-radius: 10%;
   border: none;
   box-shadow: 0 4px 16px rgba(0,0,0,0.18);
   display: flex;
@@ -43,8 +41,7 @@
   .doubtButton-fixed {
     width: 56px;
     height: 56px;
-    right: 16px;
-    bottom: 16px;
+    /* Removed bottom, left, right, top overrides to allow dragging */
   }
   .chatbot-icon {
     font-size: 1.5rem;

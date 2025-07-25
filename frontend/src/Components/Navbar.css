@@ -2,18 +2,18 @@
 .navbar {
   background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(10px);
-  height: 80px;
+  height: 70px; /* Reduced height */
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 50px;
+  padding: 0 40px; /* Reduced padding */
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   z-index: 100;
   transition: all 0.3s ease-in-out;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08); /* Slightly lighter shadow */
 }
 
 /* Logo Styles */
@@ -29,7 +29,9 @@
 .navbar-links {
   list-style: none;
   display: flex;
+  align-items: center;
   gap: 30px;
+  height: 100%;
 }
 
 .navbar-links li a {
@@ -63,18 +65,23 @@
 /* Button Styles */
 .navbar-buttons {
   display: flex;
+  align-items: center;
   gap: 15px;
+  height: 100%;
 }
 
 .login-btn,
 .getstarted-btn {
-  padding: 10px 20px;
+  padding: 8px 18px; /* Slightly reduced padding */
   font-size: 16px;
   border-radius: 8px;
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  height: 40px; /* Consistent button height */
 }
 
 .login-btn {
@@ -143,13 +150,13 @@
 /* Responsive Styles */
 @media (max-width: 992px) {
   .navbar {
-    padding: 0 30px;
+    padding: 0 20px; /* Reduced padding for medium screens */
   }
   .navbar-logo h1 {
     font-size: 24px;
   }
   .navbar-links {
-    gap: 20px;
+    gap: 18px;
   }
   .navbar-links li a {
     font-size: 16px;
@@ -157,6 +164,10 @@
 }
 
 @media (max-width: 768px) {
+  .navbar {
+    padding: 0 8px;
+    height: 60px; /* Reduce height for mobile */
+  }
   .hamburger {
     display: flex;
     z-index: 300;
@@ -166,7 +177,7 @@
     display: none;
   }
   .navbar {
-    padding: 0 20px;
+    padding: 0 12px;
     background: #fff !important;
     z-index: 300;
     border-bottom: 1px solid #e0e0e0;
@@ -195,6 +206,8 @@
   border-bottom: 1px solid #e0e0e0;
   align-items: center;
   padding-bottom: 20px;
+  padding-left:30px !important;
+  padding-right: 0 !important;
 }
 
 .navbar.open .navbar-links {
@@ -219,6 +232,8 @@
   background: transparent;
   box-shadow: none;
   gap: 15px;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 .navbar.open .navbar-links li a {
@@ -229,19 +244,52 @@
 .navbar.open .getstarted-btn {
   width: 80%;
   max-width: 200px;
-  padding: 10px 0;
+  padding: 0px 0;
   text-align: center;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-start;
+  width: auto;
+}
+
+.navbar.open .navbar-logo {
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 @media (max-width: 480px) {
   .navbar {
-    height: 70px;
+    height: 55px;
     background: #fff !important;
     z-index: 300;
     border-bottom: 1px solid #e0e0e0;
   }
   .navbar.open .navbar-menu-group {
-    top: 70px;
-    max-height: calc(100vh - 70px);
+    top: 55px;
+    max-height: calc(100vh - 55px);
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar.open .login-btn,
+  .navbar.open .getstarted-btn {
+    width: 90vw;
+    max-width: 95vw;
+    min-width: 120px;
+    font-size: 1rem;
+    height: 42px;
+    margin: 8px 0;
+    border-radius: 8px;
+    text-align: center;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
   }
 }

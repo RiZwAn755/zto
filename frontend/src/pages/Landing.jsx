@@ -34,7 +34,7 @@ const Landing = () => {
       <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px 12px 32px 12px', position: 'relative', zIndex: 1, paddingTop: 80 }}>
         <section style={{
           background: 'rgba(255,255,255,0.98)',
-          borderRadius: 32,
+          borderRadius: 3,
           boxShadow: '0 8px 32px rgba(43,78,255,0.13)',
           maxWidth: 500,
           width: '100%',
@@ -78,6 +78,7 @@ const Landing = () => {
             Empower your learning journey with resources, exams, and a vibrant community. Join thousands of students building their future with ZTO.
           </p>
           <button
+            className="get-started-btn"
             onClick={() => navigate('/register')}
             style={{
               background: 'linear-gradient(90deg, #2b4eff 60%, #6a5acd 100%)',
@@ -120,7 +121,7 @@ const Landing = () => {
           p {
             font-size: 1.05rem !important;
           }
-          button {
+          .get-started-btn {
             font-size: 1.1rem !important;
             padding: 14px 18vw !important;
           }

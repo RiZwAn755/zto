@@ -53,7 +53,7 @@ const Navbar = () => {
       <ToastContainer />
       <nav className={`navbar ${isOpen ? 'open' : ''} ${scrolled ? 'scrolled' : ''}`}>
         <div className="navbar-logo">
-          <button style={{ backgroundColor: 'transparent', border: 'none' }}   onClick={() => navigate("/")}> <h1>ZTO</h1></button>
+          <button style={{ backgroundColor: 'transparent', border: 'none', }}   onClick={() => navigate("/")}> <h1>ZTO</h1></button>
         </div>
 
         <div className="hamburger" onClick={toggleMenu}>

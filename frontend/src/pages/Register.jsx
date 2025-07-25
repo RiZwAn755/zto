@@ -99,7 +99,7 @@ const RegisterPage = () => {
             <div className="register-header">
             <h1>Let's Register</h1>
             <h2>Account</h2>
-            <p className="welcome-message">Hello user, you have a grateful journey</p>
+            <p className="welcome-message">Hey, there! Wishing you a wonderful journey at ZTO</p>
             </div>
 
             <form onSubmit={handleSubmit} className="register-form">
