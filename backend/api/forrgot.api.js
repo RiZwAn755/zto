@@ -19,6 +19,15 @@ router.post('/', async (req, res) => {
         },
     });
 
+    // Verify transporter configuration
+    try {
+        await transporter.verify();
+        console.log('Email transporter verified successfully');
+    } catch (error) {
+        console.error('Email transporter verification failed:', error);
+        return res.status(500).json({ message: 'Email service configuration error' });
+    }
+
     const foundStudent = await Student.findOne({ email });
     if (!foundStudent) {
         return res.status(404).json({ message: 'No Student found with this email' });
@@ -37,9 +46,14 @@ router.post('/', async (req, res) => {
 
     try {
         const info = await transporter.sendMail(receiver);
+        console.log('Email sent successfully:', info.messageId);
         res.status(200).json({ message: 'Password reset link sent to your email' });
     } catch (error) {
-        res.status(500).json({ message: 'Failed to send reset link' });
+        console.error('Email sending failed:', error);
+        res.status(500).json({ 
+            message: 'Failed to send reset link',
+            error: error.message 
+        });
     }
 
 });
