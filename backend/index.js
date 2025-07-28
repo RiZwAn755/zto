@@ -17,7 +17,12 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-  origin: "*",
+  origin: [
+    'https://zto-fe.vercel.app',
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'https://ztobackend.vercel.app'
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
