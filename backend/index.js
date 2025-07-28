@@ -10,6 +10,7 @@ import studentsApi from "./api/students.api.js";
 import registeredApi from "./api/registered.api.js";
 import gemini from "./api/gemini.api.js";
 import googleAuth from "./api/googleAuth.api.js";
+import forgotPassword from "./api/forrgot.api.js";
 
 import "./DB/config.js";
 
@@ -37,6 +38,7 @@ app.use("/students", studentsApi);
 app.use("/registered" , registeredApi);
 app.use('/gemini' , gemini);
 app.use("/auth/google", googleAuth);
+app.use("/forgotPassword", forgotPassword);
 
 app.get("/", (req,resp) => {
     resp.send("hii");

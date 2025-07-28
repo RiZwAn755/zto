@@ -21,6 +21,7 @@ import PageNotFound from './Components/PageNotFound';
 import AskAI from './Components/Doubt_Assistant';
 import Landing from './pages/Landing';
 import DoubtButton from './Components/DoubtButton';
+import ForgotPassword from './Components/ForgotPassword';
 
 function App() {
   
@@ -42,6 +43,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/landing" element={<Landing />} />
+            <Route path="/forgotPassword" element={<ForgotPassword />} />
             <Route path="*" element={<PageNotFound />} />
 
             // private hai ye Components
