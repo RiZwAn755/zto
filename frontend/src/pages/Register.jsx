@@ -5,9 +5,15 @@ import { useNavigate } from 'react-router';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { GoogleLogin } from '@react-oauth/google';
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 const RegisterPage = () => {
+
+  const handGooglereg= (e) =>{
+    e.preventDefault();
+    console.log("signup with google");
+  }
 
   const navigate = useNavigate();
 
@@ -91,6 +97,43 @@ const RegisterPage = () => {
         toast.error('Registration failed. Please try again.');
       }
     }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      setIsSubmitting(true);
+      console.log('Attempting Google auth with URL:', `${baseUrl}/auth/google`);
+      const { data } = await axios.post(`${baseUrl}/auth/google`, {
+        token: credentialResponse.credential
+      });
+      
+      if (data && data.token) {
+        localStorage.setItem("email", data.user.email);
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('userType', data.user.userType);
+        toast.success('Google registration successful!');
+        setTimeout(() => {
+          if (data.user.userType === "admin") {
+            navigate("/admin");
+          } else {
+            navigate("/");
+          }
+        }, 1000);
+      }
+    } catch (err) {
+      console.error('Google registration error:', err);
+      if (err.response && err.response.data && err.response.data.error) {
+        toast.error(`Google registration failed: ${err.response.data.error}`);
+      } else {
+        toast.error('Google registration failed. Please try again.');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleGoogleError = () => {
+    toast.error('Google registration failed. Please try again.');
   };
 
   return (
@@ -203,6 +246,23 @@ const RegisterPage = () => {
             </button>
             </form>
 
+            <div className="divider">
+            <span>or</span>
+          </div>
+                  
+            <div className="social-icons">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={handleGoogleError}
+                disabled={isSubmitting}
+                theme="outline"
+                size="large"
+                text="signup_with"
+                shape="rectangular"
+                width="300"
+              />
+            </div>
+          
             <div className="login-redirect">
             Already have an account? <a href="/login">Login</a>
             </div>

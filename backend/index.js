@@ -8,14 +8,20 @@ import adminLogin from "./api/adminLogin.api.js";
 import examform from "./api/examform.api.js";
 import studentsApi from "./api/students.api.js";
 import registeredApi from "./api/registered.api.js";
-import gemini from "./api/gemini.api.js"
+import gemini from "./api/gemini.api.js";
+import googleAuth from "./api/googleAuth.api.js";
 
 import "./DB/config.js";
 
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use("/stReg", signupApi);
 app.use("/Login", loginApi);
@@ -25,11 +31,22 @@ app.use("/regForm", examform);
 app.use("/students", studentsApi);
 app.use("/registered" , registeredApi);
 app.use('/gemini' , gemini);
+app.use("/auth/google", googleAuth);
 
 app.get("/", (req,resp) => {
     resp.send("hii");
 })
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Error:', err);
+  res.status(500).json({ 
+    error: 'Internal server error', 
+    message: err.message 
+  });
+});
+
 app.listen(3000, () => {
     console.log("Server is running on port 3000");
+    console.log("Google auth endpoint: http://localhost:3000/auth/google");
 });

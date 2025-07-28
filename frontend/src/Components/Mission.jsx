@@ -1,12 +1,13 @@
 import React from 'react';
 import './Mission.css';
+import { useNavigate } from 'react-router';
+
 
 const MissionSection = () => {
-  const handleExploreClick = () => {
-    const examSection = document.getElementById('exam-section');
-    if (examSection) {
-      examSection.scrollIntoView({ behavior: 'smooth' });
-    }
+  const navigate = useNavigate();
+  const handleExploreClick = (e) => {
+   e.preventDefault();
+   navigate('/exams');
   };
   return (
     <section className="mission-container">

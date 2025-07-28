@@ -42,6 +42,17 @@ const studentSchema = new mongoose.Schema({
     type: String,
     required: [true, "Password is required"],
     minlength: [6, "Password must be at least 6 characters"]
+  },
+  googleId: {
+    type: String,
+    sparse: true
+  },
+  profilePicture: {
+    type: String
+  },
+  isGoogleUser: {
+    type: Boolean,
+    default: false
   }
 }, { timestamps: true });
 

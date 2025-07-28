@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Resources from './pages/Resources';
@@ -27,10 +28,15 @@ function App() {
     e.preventDefault();
     navigate('/AskAI');
   };
+
+  // Debug: Log the Google Client ID
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  console.log('Google Client ID:', googleClientId);
   return (
-    <div className="App">
-      {/* No <Router> here, just <Routes> and components */}
-      <Routes>
+    <GoogleOAuthProvider clientId={googleClientId}>
+      <div className="App">
+      
+        <Routes>
 
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
@@ -56,7 +62,8 @@ function App() {
 
           </Routes>
           <DoubtButton />
-    </div>
+        </div>
+      </GoogleOAuthProvider>
      
   );
 }

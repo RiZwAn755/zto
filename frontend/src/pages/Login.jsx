@@ -4,13 +4,21 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:3000';
+import { GoogleLogin } from '@react-oauth/google';
+const baseUrl = import.meta.env.VITE_BASE_URL;
 
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const handleGoogle = (e) =>{
+
+    e.preventDefault();
+    console.log("login with google");
+
+  } 
 
   const handleChange = (e) => {
     setFormData(prev => ({
@@ -53,6 +61,43 @@ const Login = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      setLoading(true);
+      console.log('Attempting Google auth with URL:', `${baseUrl}/auth/google`);
+      const { data } = await axios.post(`${baseUrl}/auth/google`, {
+        token: credentialResponse.credential
+      });
+      
+      if (data && data.token) {
+        localStorage.setItem("email", data.user.email);
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('userType', data.user.userType);
+        toast.success('Google login successful!');
+        setTimeout(() => {
+          if (data.user.userType === "admin") {
+            navigate("/admin");
+          } else {
+            navigate("/");
+          }
+        }, 1000);
+      }
+    } catch (err) {
+      console.error('Google login error:', err);
+      if (err.response && err.response.data && err.response.data.error) {
+        toast.error(`Google login failed: ${err.response.data.error}`);
+      } else {
+        toast.error('Google login failed. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleError = () => {
+    toast.error('Google login failed. Please try again.');
   };
 
   return (
@@ -106,7 +151,16 @@ const Login = () => {
           </div>
 
           <div className="social-icons">
-            <img src="/google_login_image.jpg" alt="Google login" />
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={handleGoogleError}
+              disabled={loading}
+              theme="outline"
+              size="large"
+              text="continue_with"
+              shape="rectangular"
+              width="300"
+            />
           </div>
 
           <p className="register-link">

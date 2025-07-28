@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './ExamSection.css';
 import { useNavigate } from 'react-router-dom';
 import { FaSquareRootAlt, FaAtom, FaVial, FaDna, FaGlobeAmericas, FaPuzzlePiece } from 'react-icons/fa';
 import { Typewriter } from 'react-simple-typewriter';
 import { useInView } from 'react-intersection-observer';
+import axios from 'axios';
 
 const categories = [
   { title: 'Primary Exam', color: '#E1F0FA', image: '/Exams_1.jpg' },
@@ -50,16 +51,57 @@ const subjects = [
   },
 ];
 
+const baseUrl = import.meta.env.VITE_BASE_URL ;
+
 const ExamSection = () => {
   const navigate = useNavigate();
+  const [visitorCount, setVisitorCount] = useState(0);
+  const [displayCount, setDisplayCount] = useState(0);
+
+  useEffect(() => {
+    const fetchVisitorCount = async () => {
+      try {
+        const response = await axios.get(`${baseUrl}/students`);
+        if (response.data && Array.isArray(response.data)) {
+          setVisitorCount(response.data.length);
+        }
+      } catch (error) {
+        console.error('Error fetching visitor count:', error);
+        setVisitorCount(0);
+      }
+    };
+
+    fetchVisitorCount();
+  }, []);
+
+  // Animate the count-up effect
+  useEffect(() => {
+    if (displayCount === visitorCount) return;
+    const increment = visitorCount > 100 ? Math.ceil(visitorCount / 50) : 1;
+    const timer = setInterval(() => {
+      setDisplayCount(prev => {
+        if (prev + increment >= visitorCount) {
+          clearInterval(timer);
+          return visitorCount;
+        }
+        return prev + increment;
+      });
+    }, 100);
+    return () => clearInterval(timer);
+  }, [visitorCount, displayCount]);
+
   return (
     <section className="exam-section" id="exam-section">
-      <div className="active-users">NUMBER OF ACTIVE USERS RIGHT NOW – 3000+</div>
+      <div className="active-users-wrapper">
+        <div className="active-users"> Visitors count – {displayCount}+</div>
+      </div>
 
       <div className="exam-categories">
         {categories.map((cat, i) => (
           <div key={i} className="exam-card" style={{ backgroundColor: cat.color }}>
-            <img src={cat.image} alt={cat.title} />
+            <button onClick={() => navigate('/exams')}>
+              <img src={cat.image} alt={cat.title} />
+            </button>
             <h4>{cat.title}</h4>
           </div>
         ))}
