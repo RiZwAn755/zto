@@ -138,8 +138,8 @@ const Login = () => {
             </div>
           </div>
 
-          <div className="forgot-password">
-            <button onClick={() => navigate("/forgot-password")}>Forgot Password?</button>
+          <div className="forgotpassword">
+            <button onClick={() => navigate("/forgotPassword")}>Forgot Password?</button>
           </div>
 
           <button type="submit" className="sign-in-btn" disabled={loading}>
