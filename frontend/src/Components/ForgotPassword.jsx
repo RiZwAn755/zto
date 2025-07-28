@@ -29,8 +29,7 @@ const ForgotPassword = () => {
 
         setLoading(true);
         try {
-            // TODO: Replace with your actual forgot password endpoint
-            const response = await axios.post(`${baseUrl}/forgot-password`, { email });
+            const response = await axios.post(`${baseUrl}/forgotPassword`, { email });
             setEmailSent(true);
             setError('');
         } catch (error) {

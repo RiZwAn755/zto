@@ -40,7 +40,7 @@ app.use("/registered" , registeredApi);
 app.use('/gemini' , gemini);
 app.use("/auth/google", googleAuth);
 app.use("/forgotPassword", forgotPassword);
-app.use("/resetPassword/:token", resetPassword);
+app.use("/reset-password", resetPassword);
 
 app.get("/", (req,resp) => {
     resp.send("hii");

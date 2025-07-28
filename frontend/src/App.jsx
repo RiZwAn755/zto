@@ -22,6 +22,7 @@ import AskAI from './Components/Doubt_Assistant';
 import Landing from './pages/Landing';
 import DoubtButton from './Components/DoubtButton';
 import ForgotPassword from './Components/ForgotPassword';
+import ResetPassword from './Components/resetpassword';
 
 function App() {
   
@@ -44,6 +45,7 @@ function App() {
             <Route path="/admin" element={<Admin />} />
             <Route path="/landing" element={<Landing />} />
             <Route path="/forgotPassword" element={<ForgotPassword />} />
+            <Route path="/resetpassword" element={<ResetPassword />} />
             <Route path="*" element={<PageNotFound />} />
 
             // private hai ye Components
