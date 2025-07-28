@@ -139,7 +139,7 @@ const Login = () => {
           </div>
 
           <div className="forgot-password">
-            <a href="#farhan">Forgot Password?</a>
+            <button onClick={() => navigate("/forgot-password")}>Forgot Password?</button>
           </div>
 
           <button type="submit" className="sign-in-btn" disabled={loading}>
