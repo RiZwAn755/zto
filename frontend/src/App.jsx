@@ -45,7 +45,7 @@ function App() {
             <Route path="/admin" element={<Admin />} />
             <Route path="/landing" element={<Landing />} />
             <Route path="/forgotPassword" element={<ForgotPassword />} />
-            <Route path="/resetpassword" element={<ResetPassword />} />
+            <Route path="/resetPassword" element={<ResetPassword />} />
             <Route path="*" element={<PageNotFound />} />
 
             // private hai ye Components

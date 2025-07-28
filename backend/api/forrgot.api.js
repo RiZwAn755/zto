@@ -41,7 +41,7 @@ router.post('/', async (req, res) => {
         subject: 'Password Reset Request',
         text: 'Click the link to reset your password',
         html: `<p>Click the link to reset your password</p>
-        <a href="https://zto-fe.vercel.app/ForgotPassword?token=${token}">Reset Password</a>`,
+        <a href="https://zto-fe.vercel.app/resetPassword?token=${token}">Reset Password</a>`,
     }
 
     try {
