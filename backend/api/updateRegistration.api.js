@@ -146,4 +146,34 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Delete registration by ID
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedRegistration = await Registrations.findByIdAndDelete(id);
+
+    if (!deletedRegistration) {
+      return res.status(404).json({
+        success: false,
+        message: 'Registration not found'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Registration deleted successfully',
+      data: deletedRegistration
+    });
+
+  } catch (error) {
+    console.error('Error deleting registration:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+      error: error.message
+    });
+  }
+});
+
 export default router; 

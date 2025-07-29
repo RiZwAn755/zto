@@ -12,6 +12,7 @@ import gemini from "./api/gemini.api.js";
 import googleAuth from "./api/googleAuth.api.js";
 import forgotPassword from "./api/forrgot.api.js";
 import resetPassword from "./api/resetPassword.api.js";
+import updateRegistration from "./api/updateRegistration.api.js";
 
 import "./DB/config.js";
 
@@ -41,6 +42,7 @@ app.use('/gemini' , gemini);
 app.use("/auth/google", googleAuth);
 app.use("/forgotPassword", forgotPassword);
 app.use("/reset-password", resetPassword);
+app.use("/registered/update", updateRegistration);
 
 app.get("/", (req,resp) => {
     resp.send("hii");

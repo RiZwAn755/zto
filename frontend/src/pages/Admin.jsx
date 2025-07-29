@@ -19,7 +19,9 @@ const Admin = () => {
   const [allUsers, setAllUsers] = useState([]);
   const [examRegistrations, setExamRegistrations] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedRegistration, setSelectedRegistration] = useState(null);
   const [showUserModal, setShowUserModal] = useState(false);
+  const [showRegistrationModal, setShowRegistrationModal] = useState(false);
   const [modalType, setModalType] = useState('view'); // 'view', 'edit', 'delete'
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -204,6 +206,73 @@ const Admin = () => {
       }
       
       toast.error('Failed to delete user');
+    }
+  };
+
+  // Registration handlers
+  const handleViewRegistration = (registration) => {
+    setSelectedRegistration(registration);
+    setModalType('view');
+    setShowRegistrationModal(true);
+  };
+
+  const handleEditRegistration = (registration) => {
+    setSelectedRegistration(registration);
+    setModalType('edit');
+    setShowRegistrationModal(true);
+  };
+
+  const handleDeleteRegistration = (registration) => {
+    setSelectedRegistration(registration);
+    setModalType('delete');
+    setShowRegistrationModal(true);
+  };
+
+  const handleRegistrationUpdate = async (updatedData) => {
+    try {
+      const config = getAuthConfig();
+      await axios.patch(`${baseUrl}/registered/update/${selectedRegistration.id}`, updatedData, config);
+      
+      toast.success('Registration updated successfully');
+      setShowRegistrationModal(false);
+      setSelectedRegistration(null);
+      
+      // Refresh data
+      fetchDashboardData();
+    } catch (error) {
+      console.error('Error updating registration:', error);
+      
+      if (error.response && error.response.status === 401) {
+        toast.error('Authentication required. Please login again.');
+        window.location.href = '/login';
+        return;
+      }
+      
+      toast.error('Failed to update registration');
+    }
+  };
+
+  const handleRegistrationDelete = async () => {
+    try {
+      const config = getAuthConfig();
+      await axios.delete(`${baseUrl}/registered/update/${selectedRegistration.id}`, config);
+      
+      toast.success('Registration deleted successfully');
+      setShowRegistrationModal(false);
+      setSelectedRegistration(null);
+      
+      // Refresh data
+      fetchDashboardData();
+    } catch (error) {
+      console.error('Error deleting registration:', error);
+      
+      if (error.response && error.response.status === 401) {
+        toast.error('Authentication required. Please login again.');
+        window.location.href = '/login';
+        return;
+      }
+      
+      toast.error('Failed to delete registration');
     }
   };
 
@@ -474,9 +543,9 @@ const Admin = () => {
                       </button>
                     </td>
                     <td>
-                      <button className="action-btn view" onClick={() => handleViewUser(registration)}>View</button>
-                      <button className="action-btn edit" onClick={() => handleEditUser(registration)}>Edit</button>
-                      <button className="action-btn delete" onClick={() => handleDeleteUser(registration)}>Delete</button>
+                      <button className="action-btn view" onClick={() => handleViewRegistration(registration)}>View</button>
+                      <button className="action-btn edit" onClick={() => handleEditRegistration(registration)}>Edit</button>
+                      <button className="action-btn delete" onClick={() => handleDeleteRegistration(registration)}>Delete</button>
                     </td>
                   </tr>
                 ))}
@@ -682,10 +751,253 @@ const Admin = () => {
     );
   };
 
+  const renderRegistrationModal = () => {
+    if (!showRegistrationModal || !selectedRegistration) return null;
+
+    return (
+      <div className="modal-overlay" onClick={() => setShowRegistrationModal(false)}>
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-header">
+            <h3>
+              {modalType === 'view' && 'View Registration Details'}
+              {modalType === 'edit' && 'Edit Registration'}
+              {modalType === 'delete' && 'Delete Registration'}
+            </h3>
+            <button className="modal-close" onClick={() => setShowRegistrationModal(false)}>×</button>
+          </div>
+          
+          <div className="modal-body">
+            {modalType === 'view' && (
+              <div className="user-details">
+                <div className="detail-row">
+                  <label>Name:</label>
+                  <span>{selectedRegistration.name}</span>
+                </div>
+                <div className="detail-row">
+                  <label>Email:</label>
+                  <span>{selectedRegistration.email}</span>
+                </div>
+                <div className="detail-row">
+                  <label>Phone:</label>
+                  <span>{selectedRegistration.phone}</span>
+                </div>
+                <div className="detail-row">
+                  <label>School:</label>
+                  <span>{selectedRegistration.school}</span>
+                </div>
+                <div className="detail-row">
+                  <label>Class:</label>
+                  <span>{selectedRegistration.classs}</span>
+                </div>
+                <div className="detail-row">
+                  <label>Zone:</label>
+                  <span>{selectedRegistration.zone}</span>
+                </div>
+                <div className="detail-row">
+                  <label>Parent Name:</label>
+                  <span>{selectedRegistration.parentName}</span>
+                </div>
+                <div className="detail-row">
+                  <label>Parent Phone:</label>
+                  <span>{selectedRegistration.parentPhone}</span>
+                </div>
+                <div className="detail-row">
+                  <label>Registration Date:</label>
+                  <span>{selectedRegistration.registrationDate}</span>
+                </div>
+                <div className="detail-row">
+                  <label>Payment Status:</label>
+                  <span className={`status-badge ${selectedRegistration.paymentStatus.toLowerCase().replace(' ', '-')}`}>
+                    {selectedRegistration.paymentStatus}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {modalType === 'edit' && (
+              <RegistrationEditForm 
+                registration={selectedRegistration}
+                onUpdate={handleRegistrationUpdate}
+                onCancel={() => setShowRegistrationModal(false)}
+              />
+            )}
+            
+            {modalType === 'delete' && (
+              <div className="delete-confirmation">
+                <p>Are you sure you want to delete this registration?</p>
+                <div className="user-info">
+                  <strong>{selectedRegistration.name}</strong> ({selectedRegistration.email})
+                </div>
+                <p>This action cannot be undone.</p>
+              </div>
+            )}
+          </div>
+          
+          <div className="modal-footer">
+            {modalType === 'view' && (
+              <button className="btn-secondary" onClick={() => setShowRegistrationModal(false)}>Close</button>
+            )}
+            {modalType === 'delete' && (
+              <>
+                <button className="btn-secondary" onClick={() => setShowRegistrationModal(false)}>Cancel</button>
+                <button className="btn-danger" onClick={handleRegistrationDelete}>Delete Registration</button>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // Registration Edit Form Component
+  const RegistrationEditForm = ({ registration, onUpdate, onCancel }) => {
+    const [formData, setFormData] = useState({
+      fullname: registration.name,
+      email: registration.email,
+      phone: registration.phone,
+      school: registration.school,
+      class: registration.classs,
+      zone: registration.zone,
+      parentName: registration.parentName,
+      parentPhone: registration.parentPhone
+    });
+
+    const handleInputChange = (e) => {
+      const { name, value } = e.target;
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    };
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      onUpdate(formData);
+    };
+
+    return (
+      <form onSubmit={handleSubmit} className="edit-form">
+        <div className="form-row">
+          <div className="form-group">
+            <label>Full Name:</label>
+            <input
+              type="text"
+              name="fullname"
+              value={formData.fullname}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Email:</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+        </div>
+
+        <div className="form-row">
+          <div className="form-group">
+            <label>Phone:</label>
+            <input
+              type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>School:</label>
+            <input
+              type="text"
+              name="school"
+              value={formData.school}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+        </div>
+
+        <div className="form-row">
+          <div className="form-group">
+            <label>Class:</label>
+            <select
+              name="class"
+              value={formData.class}
+              onChange={handleInputChange}
+              required
+            >
+              <option value="">Select Class</option>
+              <option value="8">Class 8</option>
+              <option value="9">Class 9</option>
+              <option value="10">Class 10</option>
+              <option value="11">Class 11</option>
+              <option value="12">Class 12</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label>Zone:</label>
+            <select
+              name="zone"
+              value={formData.zone}
+              onChange={handleInputChange}
+              required
+            >
+              <option value="">Select Zone</option>
+              <option value="Badlapur">Badlapur</option>
+              <option value="Singhramau">Singhramau</option>
+              <option value="Dhakwa">Dhakwa</option>
+              <option value="Khutahan">Khutahan</option>
+              <option value="MaharajGanj">MaharajGanj</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="form-row">
+          <div className="form-group">
+            <label>Parent Name:</label>
+            <input
+              type="text"
+              name="parentName"
+              value={formData.parentName}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Parent Phone:</label>
+            <input
+              type="tel"
+              name="parentPhone"
+              value={formData.parentPhone}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+        </div>
+
+        <div className="form-actions">
+          <button type="button" className="btn-secondary" onClick={onCancel}>
+            Cancel
+          </button>
+          <button type="submit" className="btn-primary">
+            Update Registration
+          </button>
+        </div>
+      </form>
+    );
+  };
+
   return (
     <div className="admin-container">
       <ToastContainer />
       {renderUserModal()}
+      {renderRegistrationModal()}
       {/* Mobile Menu Toggle */}
       <div className="mobile-menu-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>
         <span></span>
