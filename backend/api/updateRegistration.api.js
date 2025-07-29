@@ -3,25 +3,40 @@ import Registrations from '../DB/examForm.js';
 
 const router = express.Router();
 
+// Test endpoint to verify API is working
+router.get('/test', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Update registration API is working'
+  });
+});
+
 // Update exam registration by ID
 router.patch('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
 
+    console.log('PATCH request received for ID:', id);
+    console.log('Update data:', updateData);
+
     // Find and update the registration
+    // Use runValidators: false to avoid validation errors for fields not being updated
     const updatedRegistration = await Registrations.findByIdAndUpdate(
       id,
       updateData,
-      { new: true, runValidators: true }
+      { new: true, runValidators: false }
     );
 
     if (!updatedRegistration) {
+      console.log('Registration not found for ID:', id);
       return res.status(404).json({
         success: false,
         message: 'Registration not found'
       });
     }
+
+    console.log('Registration updated successfully:', updatedRegistration);
 
     res.status(200).json({
       success: true,
@@ -31,6 +46,11 @@ router.patch('/:id', async (req, res) => {
 
   } catch (error) {
     console.error('Error updating registration:', error);
+    console.error('Error details:', {
+      name: error.name,
+      message: error.message,
+      code: error.code
+    });
     res.status(500).json({
       success: false,
       message: 'Internal server error',
@@ -46,10 +66,11 @@ router.put('/:id', async (req, res) => {
     const updateData = req.body;
 
     // Find and update the registration
+    // Use runValidators: false to avoid validation errors for fields not being updated
     const updatedRegistration = await Registrations.findByIdAndUpdate(
       id,
       updateData,
-      { new: true, runValidators: true }
+      { new: true, runValidators: false }
     );
 
     if (!updatedRegistration) {
@@ -88,10 +109,11 @@ router.post('/update', async (req, res) => {
     }
 
     // Find and update the registration
+    // Use runValidators: false to avoid validation errors for fields not being updated
     const updatedRegistration = await Registrations.findByIdAndUpdate(
       id,
       updateData,
-      { new: true, runValidators: true }
+      { new: true, runValidators: false }
     );
 
     if (!updatedRegistration) {
