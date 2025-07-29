@@ -24,6 +24,8 @@ const Admin = () => {
   const [showRegistrationModal, setShowRegistrationModal] = useState(false);
   const [modalType, setModalType] = useState('view'); // 'view', 'edit', 'delete'
   const [searchTerm, setSearchTerm] = useState('');
+  const [quickEditField, setQuickEditField] = useState(null);
+  const [quickEditValue, setQuickEditValue] = useState('');
 
   // Fetch data on component mount
   useEffect(() => {
@@ -276,6 +278,44 @@ const Admin = () => {
     }
   };
 
+  // Quick edit functionality
+  const handleQuickEdit = (registrationId, field, currentValue) => {
+    setQuickEditField({ registrationId, field });
+    setQuickEditValue(currentValue);
+  };
+
+  const handleQuickEditSave = async () => {
+    if (!quickEditField) return;
+
+    try {
+      const config = getAuthConfig();
+      const updateData = { [quickEditField.field]: quickEditValue };
+      
+      await axios.patch(`${baseUrl}/registered/update/${quickEditField.registrationId}`, updateData, config);
+      
+      // Update local state
+      setExamRegistrations(prevRegistrations => 
+        prevRegistrations.map(reg => 
+          reg.id === quickEditField.registrationId 
+            ? { ...reg, [quickEditField.field]: quickEditValue }
+            : reg
+        )
+      );
+      
+      toast.success(`${quickEditField.field} updated successfully`);
+      setQuickEditField(null);
+      setQuickEditValue('');
+    } catch (error) {
+      console.error('Error updating field:', error);
+      toast.error('Failed to update field');
+    }
+  };
+
+  const handleQuickEditCancel = () => {
+    setQuickEditField(null);
+    setQuickEditValue('');
+  };
+
   const handlePaymentStatusToggle = async (registrationId, currentStatus) => {
     try {
       const newPaymentValue = currentStatus === 'Done' ? false : true;
@@ -526,13 +566,53 @@ const Admin = () => {
                               {filteredRegistrations.map(registration => (
                   <tr key={registration.id}>
                     <td>#{registration.id.slice(-6)}</td>
-                    <td>{registration.name}</td>
-                    <td>{registration.email}</td>
-                    <td>{registration.phone}</td>
-                    <td>{registration.school}</td>
+                    <td>
+                      <span 
+                        className="editable-field"
+                        onClick={() => handleQuickEdit(registration.id, 'name', registration.name)}
+                        title="Click to edit"
+                      >
+                        {registration.name}
+                      </span>
+                    </td>
+                    <td>
+                      <span 
+                        className="editable-field"
+                        onClick={() => handleQuickEdit(registration.id, 'email', registration.email)}
+                        title="Click to edit"
+                      >
+                        {registration.email}
+                      </span>
+                    </td>
+                    <td>
+                      <span 
+                        className="editable-field"
+                        onClick={() => handleQuickEdit(registration.id, 'phone', registration.phone)}
+                        title="Click to edit"
+                      >
+                        {registration.phone}
+                      </span>
+                    </td>
+                    <td>
+                      <span 
+                        className="editable-field"
+                        onClick={() => handleQuickEdit(registration.id, 'school', registration.school)}
+                        title="Click to edit"
+                      >
+                        {registration.school}
+                      </span>
+                    </td>
                     <td>{registration.classs}</td>
                     <td>{registration.zone}</td>
-                    <td>{registration.parentName}</td>
+                    <td>
+                      <span 
+                        className="editable-field"
+                        onClick={() => handleQuickEdit(registration.id, 'parentName', registration.parentName)}
+                        title="Click to edit"
+                      >
+                        {registration.parentName}
+                      </span>
+                    </td>
                     <td>{registration.registrationDate}</td>
                     <td>
                       <button 
@@ -859,7 +939,10 @@ const Admin = () => {
       class: registration.classs,
       zone: registration.zone,
       parentName: registration.parentName,
-      parentPhone: registration.parentPhone
+      parentPhone: registration.parentPhone,
+      address: registration.address || '',
+      dob: registration.dob ? new Date(registration.dob).toISOString().split('T')[0] : '',
+      payment: registration.paymentStatus === 'Done'
     });
 
     const handleInputChange = (e) => {
@@ -981,6 +1064,52 @@ const Admin = () => {
           </div>
         </div>
 
+        <div className="form-row">
+          <div className="form-group">
+            <label>Address:</label>
+            <textarea
+              name="address"
+              value={formData.address}
+              onChange={handleInputChange}
+              rows="3"
+              placeholder="Enter full address"
+            />
+          </div>
+          <div className="form-group">
+            <label>Date of Birth:</label>
+            <input
+              type="date"
+              name="dob"
+              value={formData.dob}
+              onChange={handleInputChange}
+            />
+          </div>
+        </div>
+
+        <div className="form-row">
+          <div className="form-group">
+            <label>Payment Status:</label>
+            <select
+              name="payment"
+              value={formData.payment}
+              onChange={handleInputChange}
+            >
+              <option value={true}>Payment Done</option>
+              <option value={false}>Payment Pending</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label>Registration ID:</label>
+            <input
+              type="text"
+              value={registration.id}
+              disabled
+              className="disabled-input"
+              style={{ backgroundColor: '#f5f5f5', color: '#666' }}
+            />
+          </div>
+        </div>
+
         <div className="form-actions">
           <button type="button" className="btn-secondary" onClick={onCancel}>
             Cancel
@@ -998,6 +1127,36 @@ const Admin = () => {
       <ToastContainer />
       {renderUserModal()}
       {renderRegistrationModal()}
+      {quickEditField && (
+        <div className="modal-overlay" onClick={handleQuickEditCancel}>
+          <div className="modal-content quick-edit-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Quick Edit - {quickEditField.field}</h3>
+              <button className="modal-close" onClick={handleQuickEditCancel}>×</button>
+            </div>
+            <div className="modal-body">
+              <div className="form-group">
+                <label>{quickEditField.field.charAt(0).toUpperCase() + quickEditField.field.slice(1)}:</label>
+                <input
+                  type="text"
+                  value={quickEditValue}
+                  onChange={(e) => setQuickEditValue(e.target.value)}
+                  autoFocus
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      handleQuickEditSave();
+                    }
+                  }}
+                />
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button className="btn-secondary" onClick={handleQuickEditCancel}>Cancel</button>
+              <button className="btn-primary" onClick={handleQuickEditSave}>Save</button>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Mobile Menu Toggle */}
       <div className="mobile-menu-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>
         <span></span>
