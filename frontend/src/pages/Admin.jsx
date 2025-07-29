@@ -14,7 +14,9 @@ const Admin = () => {
   const [stats, setStats] = useState({
     totalUsers: 0,
     totalRegisteredForExams: 0,
-    totalRevenue: 0
+    totalRevenue: 0,
+    totalExpenses: 0,
+    netProfit: 0
   });
   const [recentUsers, setRecentUsers] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
@@ -25,11 +27,19 @@ const Admin = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRegistration, setSelectedRegistration] = useState(null);
   const [showRegistrationModal, setShowRegistrationModal] = useState(false);
+  const [expenses, setExpenses] = useState([]);
+  const [newExpense, setNewExpense] = useState({
+    name: '',
+    description: '',
+    amount: ''
+  });
+  const [showAddExpenseModal, setShowAddExpenseModal] = useState(false);
 
   // Fetch data on component mount
   useEffect(() => {
     fetchDashboardData();
     fetchAllUsers();
+    fetchExpenses();
   }, []);
 
   // Helper function to get auth config
@@ -68,8 +78,23 @@ const Admin = () => {
       const totalRegisteredForExams = registeredStudents.length;
       const activeUsers = users.filter(user => user.status !== 'inactive').length;
       
-      // Calculate revenue based on registered students (assuming ₹500 per registration)
-      const totalRevenue = totalRegisteredForExams * 500;
+      // Calculate revenue based on class-based pricing
+      const totalRevenue = registeredStudents.reduce((total, registration) => {
+        const classValue = parseInt(registration.class);
+        let price = 0;
+        
+        if (classValue === 5 || classValue === 6) {
+          price = 50;
+        } else if (classValue === 7 || classValue === 8) {
+          price = 75;
+        } else if (classValue === 9 || classValue === 10) {
+          price = 90;
+        } else if (classValue === 11 || classValue === 12) {
+          price = 100;
+        }
+        
+        return total + price;
+      }, 0);
       
       // Process exam registrations data
       const examRegistrationsData = registeredStudents.map(registration => ({
@@ -101,7 +126,9 @@ const Admin = () => {
       setStats({
         totalUsers,
         totalRegisteredForExams,
-        totalRevenue
+        totalRevenue,
+        totalExpenses: calculateTotalExpenses(),
+        netProfit: totalRevenue - calculateTotalExpenses()
       });
       
       setRecentUsers(recentUsersData);
@@ -121,7 +148,13 @@ const Admin = () => {
       toast.error('Failed to load dashboard data');
       
       // Fallback to empty data
-      setStats({ totalUsers: 0, totalRegisteredForExams: 0, totalRevenue: 0 });
+      setStats({ 
+        totalUsers: 0, 
+        totalRegisteredForExams: 0, 
+        totalRevenue: 0, 
+        totalExpenses: 0,
+        netProfit: 0 
+      });
       setRecentUsers([]);
       setExamRegistrations([]);
     } finally {
@@ -276,6 +309,67 @@ const Admin = () => {
     registration.phone.includes(searchTerm)
   );
 
+  // Expense-related functions
+  const fetchExpenses = async () => {
+    try {
+      const config = getAuthConfig();
+      const response = await axios.get(`${baseUrl}/expenses`, config);
+      setExpenses(response.data || []);
+    } catch (error) {
+      console.error('Error fetching expenses:', error);
+      if (error.response?.status === 401) {
+        toast.error('Authentication required. Please login again.');
+        window.location.href = '/login';
+        return;
+      }
+      toast.error('Failed to load expenses');
+    }
+  };
+
+  const addExpense = async (e) => {
+    e.preventDefault();
+    try {
+      const config = getAuthConfig();
+      const response = await axios.post(`${baseUrl}/expenses`, newExpense, config);
+      toast.success('Expense added successfully');
+      setNewExpense({ name: '', description: '', amount: '' });
+      setShowAddExpenseModal(false);
+      fetchExpenses(); // Refresh the expenses list
+    } catch (error) {
+      console.error('Error adding expense:', error);
+      if (error.response?.status === 401) {
+        toast.error('Authentication required. Please login again.');
+        window.location.href = '/login';
+        return;
+      }
+      toast.error('Failed to add expense');
+    }
+  };
+
+  const deleteExpense = async (expenseId) => {
+    if (!window.confirm('Are you sure you want to delete this expense?')) {
+      return;
+    }
+    try {
+      const config = getAuthConfig();
+      await axios.delete(`${baseUrl}/expenses/${expenseId}`, config);
+      toast.success('Expense deleted successfully');
+      fetchExpenses(); // Refresh the expenses list
+    } catch (error) {
+      console.error('Error deleting expense:', error);
+      if (error.response?.status === 401) {
+        toast.error('Authentication required. Please login again.');
+        window.location.href = '/login';
+        return;
+      }
+      toast.error('Failed to delete expense');
+    }
+  };
+
+  const calculateTotalExpenses = () => {
+    return expenses.reduce((total, expense) => total + expense.amount, 0);
+  };
+
   const renderDashboard = () => (
     <div className="admin-dashboard">
       {loading ? (
@@ -285,29 +379,45 @@ const Admin = () => {
         </div>
       ) : (
         <>
-          <div className="stats-grid">
-            <div className="stat-card">
-              <div className="stat-icon users-icon">👥</div>
-              <div className="stat-content">
-                <h3>{stats.totalUsers.toLocaleString()}</h3>
-                <p>Total Users</p>
-              </div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-icon exams-icon">📝</div>
-              <div className="stat-content">
+      <div className="stats-grid">
+        <div className="stat-card">
+          <div className="stat-icon users-icon">👥</div>
+          <div className="stat-content">
+            <h3>{stats.totalUsers.toLocaleString()}</h3>
+            <p>Total Users</p>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon exams-icon">📝</div>
+          <div className="stat-content">
                 <h3>{stats.totalRegisteredForExams}</h3>
                 <p>Exam Registrations</p>
-              </div>
-            </div>
-            <div className="stat-card">
+          </div>
+        </div>
+                    <div className="stat-card">
               <div className="stat-icon revenue-icon">💰</div>
               <div className="stat-content">
                 <h3>₹{stats.totalRevenue.toLocaleString()}</h3>
                 <p>Total Revenue</p>
               </div>
             </div>
-          </div>
+            <div className="stat-card">
+              <div className="stat-icon expense-icon">💸</div>
+              <div className="stat-content">
+                <h3>₹{stats.totalExpenses.toLocaleString()}</h3>
+                <p>Total Expenses</p>
+              </div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-icon profit-icon">📈</div>
+              <div className="stat-content">
+                <h3 className={stats.netProfit >= 0 ? 'positive-profit' : 'negative-profit'}>
+                  ₹{stats.netProfit.toLocaleString()}
+                </h3>
+                <p>Net Profit</p>
+              </div>
+            </div>
+      </div>
 
       <div className="dashboard-content">
 
@@ -325,9 +435,9 @@ const Admin = () => {
                   <th>Zone</th>
                   <th>Registration Date</th>
                                   <th>Payment Status</th>
-              </tr>
-            </thead>
-            <tbody>
+                </tr>
+              </thead>
+              <tbody>
                                 {examRegistrations.slice(0, 4).map(registration => (
                   <tr key={registration.id}>
                     <td>{registration.name}</td>
@@ -359,17 +469,17 @@ const Admin = () => {
                 <tr>
                   <th>Name</th>
                   <th>Email</th>
-                                  <th>Join Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recentUsers.map(user => (
-                <tr key={user.id}>
-                  <td>{user.name}</td>
-                  <td>{user.email}</td>
-                                    <td>{user.joinDate}</td>
+                  <th>Join Date</th>
                 </tr>
-              ))}
+              </thead>
+              <tbody>
+                {recentUsers.map(user => (
+                  <tr key={user.id}>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td>{user.joinDate}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -406,11 +516,11 @@ const Admin = () => {
           <p>Loading registrations...</p>
         </div>
       ) : (
-        <div className="table-container">
-          <table>
-                          <thead>
-                <tr>
-                  <th>ID</th>
+      <div className="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
                   <th>Name</th>
                   <th>Email</th>
                   <th>Phone</th>
@@ -420,9 +530,9 @@ const Admin = () => {
                   <th>Parent Name</th>
                   <th>Registration Date</th>
                   <th>Payment Status</th>
-                </tr>
-              </thead>
-            <tbody>
+            </tr>
+          </thead>
+          <tbody>
                               {filteredRegistrations.map(registration => (
                   <tr key={registration.id}>
                     <td>#{registration.id.slice(-6)}</td>
@@ -441,12 +551,12 @@ const Admin = () => {
                       >
                         {registration.paymentStatus}
                       </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       )}
     </div>
   );
@@ -475,17 +585,17 @@ const Admin = () => {
           <p>Loading users...</p>
         </div>
       ) : (
-        <div className="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
+      <div className="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
                 <th>School</th>
                 <th>Class</th>
-                <th>Join Date</th>
+              <th>Join Date</th>
               </tr>
             </thead>
             <tbody>
@@ -502,6 +612,114 @@ const Admin = () => {
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+    </div>
+  );
+
+  const renderExpenses = () => (
+    <div className="admin-expenses">
+      <div className="section-header">
+        <h2>Expense Management</h2>
+        <div className="header-actions">
+          <button className="add-btn" onClick={() => setShowAddExpenseModal(true)}>
+            ➕ Add Expense
+          </button>
+          <button className="refresh-btn" onClick={fetchExpenses}>
+            🔄 Refresh
+          </button>
+        </div>
+      </div>
+
+      <div className="expense-summary">
+        <div className="summary-card">
+          <h3>Total Expenses</h3>
+          <p className="total-amount">₹{calculateTotalExpenses().toLocaleString()}</p>
+        </div>
+      </div>
+
+      <div className="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Amount</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {expenses.map(expense => (
+              <tr key={expense._id}>
+                <td>{expense.name}</td>
+                <td>{expense.description}</td>
+                <td>₹{expense.amount.toLocaleString()}</td>
+                <td>{new Date(expense.createdAt || expense._id).toLocaleDateString()}</td>
+                <td>
+                  <button 
+                    className="action-btn delete" 
+                    onClick={() => deleteExpense(expense._id)}
+                  >
+                    🗑️ Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Add Expense Modal */}
+      {showAddExpenseModal && (
+        <div className="modal-overlay" onClick={() => setShowAddExpenseModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Add New Expense</h3>
+              <button className="modal-close" onClick={() => setShowAddExpenseModal(false)}>×</button>
+            </div>
+            <form onSubmit={addExpense} className="modal-body">
+              <div className="form-group">
+                <label>Expense Name</label>
+                <input
+                  type="text"
+                  value={newExpense.name}
+                  onChange={(e) => setNewExpense({...newExpense, name: e.target.value})}
+                  placeholder="Enter expense name"
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Description</label>
+                <textarea
+                  value={newExpense.description}
+                  onChange={(e) => setNewExpense({...newExpense, description: e.target.value})}
+                  placeholder="Enter expense description"
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Amount (₹)</label>
+                <input
+                  type="number"
+                  value={newExpense.amount}
+                  onChange={(e) => setNewExpense({...newExpense, amount: parseFloat(e.target.value) || ''})}
+                  placeholder="Enter amount"
+                  min="0"
+                  step="0.01"
+                  required
+                />
+              </div>
+              <div className="modal-actions">
+                <button type="button" onClick={() => setShowAddExpenseModal(false)} className="cancel-btn">
+                  Cancel
+                </button>
+                <button type="submit" className="save-btn">
+                  Add Expense
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>
@@ -684,6 +902,12 @@ const Admin = () => {
             👥 Users
           </button>
           <button 
+            className={`nav-item ${activeTab === 'expenses' ? 'active' : ''}`}
+            onClick={() => setActiveTab('expenses')}
+          >
+            💰 Expenses
+          </button>
+          <button 
             className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`}
             onClick={() => setActiveTab('settings')}
           >
@@ -718,6 +942,7 @@ const Admin = () => {
           {activeTab === 'dashboard' && renderDashboard()}
           {activeTab === 'registrations' && renderRegistrations()}
           {activeTab === 'users' && renderUsers()}
+          {activeTab === 'expenses' && renderExpenses()}
           {activeTab === 'settings' && renderSettings()}
         </div>
       </div>
