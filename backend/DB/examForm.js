@@ -65,7 +65,8 @@ const examSchema = new mongoose.Schema({
       },
       message: "Date of birth cannot be in the future"
     }
-  }
+  },
+  payment:{type:Boolean}
 }, { timestamps: true });
 
 export default mongoose.model("Registrations", examSchema);
