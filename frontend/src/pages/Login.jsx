@@ -5,6 +5,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { GoogleLogin } from '@react-oauth/google';
+import { Link } from 'react-router-dom';
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 const Login = () => {
@@ -139,7 +140,7 @@ const Login = () => {
           </div>
 
           <div className="forgotpassword">
-            <button onClick={() => navigate("/forgotPassword")}>Forgot Password?</button>
+            <Link to = "/forgotPassword">Forgot Password?</Link>
           </div>
 
           <button type="submit" className="sign-in-btn" disabled={loading}>
