@@ -1,31 +1,44 @@
 import React from 'react';
 import './OurTeams.css';
+import { FaLinkedin } from 'react-icons/fa';
 
 const teamMembers = [
-  {
-    name: "Farhan Khan",
-    role: "Founder & Co-Founder",
-    image: "/OurTeams.jpg",
-  },
-  {
-    name: "Rizwan Khan",
-    role: "CTO and Co-Founder",
-    image: "/OurTeams.jpg",
-  },
-  {
+   {
     name: "Saurabh Yadav",
     role: "Lead Developer and Co-Founder",
-    image: "/OurTeams.jpg",
+    image: "/Saurabh.jpeg",
+    linkedin:"https://www.linkedin.com/in/saurabh-yadav-5a1453231/"
+  },
+  {
+    name: "MD Farhan",
+    role: "Founder & Co-Founder",
+    image: "/FARHAN.jpg",
+    linkedin :"https://www.linkedin.com/in/md-farhan-635b80208/"
   },
   {
     name: "Ashish Maurya",
     role: "Marketing Head and Co-Founder",
-    image: "/OurTeams.jpg",
+    image: "/Ashish.jpeg",
+    linkedin:"https://www.linkedin.com/in/ashishmaurya06b68b212/"
+  },
+  {
+    name: " MD Rizwan ",
+    role: "CTO and Co-Founder",
+    image: "/Rizwan.jpg",
+     linkedin: "https://www.linkedin.com/in/md-rizwan-3b3141255/"
+  }, 
+  
+   {
+    name: "Avaneesh Maurya",
+    role: "Lead Developer and Co-Founder",
+    image: "/Avaneesh.jpg",
+    linkedin:"https://www.linkedin.com/in/avaneesh-maurya-ab1452295/"
   },
   {
     name: "MD Furkan",
     role: "An Engineering Student",
-    image: "/OurTeams.jpg",
+    image: "/Furkan.png",
+    linkedin: "https://www.linkedin.com/in/mohammad-furkan-13a4b7340/"   
   },
 ];
 
@@ -39,7 +52,12 @@ const Team = () => {
             <img src={member.image} alt={member.name} className="team-image" />
             <h3>{member.name}</h3>
             <p>{member.role}</p>
+            <a href= {member.linkedin} target="_blank" rel="noopener noreferrer" className="social-link">
+                        <FaLinkedin size={30} color="#0e76a8" />
+                      </a>
+            
           </div>
+          
         ))}
       </div>
     </div>
