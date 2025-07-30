@@ -4,11 +4,11 @@ import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
 
 const PrivateComponent = () => {
-  const auth = localStorage.getItem("email");
+  const auth = localStorage.getItem("token");
   const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
-    if (!auth) {
+    if (!auth ) {
       toast.warn("Please login or signup to visit these page", { toastId: "login-warning" });
       const timer = setTimeout(() => setRedirect(true), 1000);
       return () => clearTimeout(timer);

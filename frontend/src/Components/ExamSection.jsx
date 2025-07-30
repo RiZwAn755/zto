@@ -93,7 +93,7 @@ const ExamSection = () => {
   return (
     <section className="exam-section" id="exam-section">
       <div className="active-users-wrapper">
-        <div className="active-users"> Visitors count – {displayCount}+</div>
+        <div className="active-users"> Visitors count : {displayCount}+</div>
       </div>
 
       <div className="exam-categories">

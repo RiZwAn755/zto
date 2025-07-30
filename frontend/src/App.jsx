@@ -42,7 +42,6 @@ function App() {
 
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/admin" element={<Admin />} />
             <Route path="/landing" element={<Landing />} />
             <Route path="/forgotPassword" element={<ForgotPassword />} />
             <Route path="/resetPassword" element={<ResetPassword />} />
@@ -52,6 +51,7 @@ function App() {
            <Route  element = {<PrivateComponent/>}>
              <Route path="/UpcomingExams" element={<UpcomingExams />} />
             <Route path="/" element={<Home />} />
+             <Route path="/admin" element={<Admin />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/exams" element={<CardLayout />} />
             <Route path="/pastexams" element={<PastExams />} />
