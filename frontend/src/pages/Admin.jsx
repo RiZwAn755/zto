@@ -34,12 +34,24 @@ const Admin = () => {
     amount: ''
   });
   const [showAddExpenseModal, setShowAddExpenseModal] = useState(false);
+  
+  // Prompt management state
+  const [prompts, setPrompts] = useState([]);
+  const [newPrompt, setNewPrompt] = useState({
+    title: '',
+    prompt: '',
+    customResponse: '',
+    useCustomResponse: true
+  });
+  const [showAddPromptModal, setShowAddPromptModal] = useState(false);
+  const [editingPrompt, setEditingPrompt] = useState(null);
 
   // Fetch data on component mount
   useEffect(() => {
     fetchDashboardData();
     fetchAllUsers();
     fetchExpenses();
+    fetchPrompts();
   }, []);
 
   // Helper function to get auth config
@@ -368,6 +380,73 @@ const Admin = () => {
 
   const calculateTotalExpenses = () => {
     return expenses.reduce((total, expense) => total + expense.amount, 0);
+  };
+
+  // Prompt management functions
+  const fetchPrompts = async () => {
+    try {
+      const config = getAuthConfig();
+      const response = await axios.get(`${baseUrl}/admin/prompts`, config);
+      setPrompts(response.data.prompts || []);
+    } catch (err) {
+      console.error('Error fetching prompts:', err);
+      toast.error('Failed to fetch prompts');
+    }
+  };
+
+  const addPrompt = async (e) => {
+    e.preventDefault();
+    try {
+      const config = getAuthConfig();
+      const response = await axios.post(`${baseUrl}/admin/prompts`, newPrompt, config);
+      toast.success('Prompt added successfully');
+      setShowAddPromptModal(false);
+      setNewPrompt({ title: '', prompt: '', customResponse: '', useCustomResponse: true });
+      fetchPrompts();
+    } catch (err) {
+      console.error('Error adding prompt:', err);
+      toast.error('Failed to add prompt');
+    }
+  };
+
+  const updatePrompt = async (e) => {
+    e.preventDefault();
+    try {
+      const config = getAuthConfig();
+      const response = await axios.put(`${baseUrl}/admin/prompts/${editingPrompt.id}`, editingPrompt, config);
+      toast.success('Prompt updated successfully');
+      setShowAddPromptModal(false);
+      setEditingPrompt(null);
+      fetchPrompts();
+    } catch (err) {
+      console.error('Error updating prompt:', err);
+      toast.error('Failed to update prompt');
+    }
+  };
+
+  const deletePrompt = async (promptId) => {
+    if (window.confirm('Are you sure you want to delete this prompt?')) {
+      try {
+        const config = getAuthConfig();
+        await axios.delete(`${baseUrl}/admin/prompts/${promptId}`, config);
+        toast.success('Prompt deleted successfully');
+        fetchPrompts();
+      } catch (err) {
+        console.error('Error deleting prompt:', err);
+        toast.error('Failed to delete prompt');
+      }
+    }
+  };
+
+  const handleEditPrompt = (prompt) => {
+    setEditingPrompt(prompt);
+    setShowAddPromptModal(true);
+  };
+
+  const handleAddPrompt = () => {
+    setEditingPrompt(null);
+    setNewPrompt({ title: '', prompt: '', customResponse: '', useCustomResponse: true });
+    setShowAddPromptModal(true);
   };
 
   const renderDashboard = () => (
@@ -774,6 +853,143 @@ const Admin = () => {
     </div>
   );
 
+  const renderPrompts = () => (
+    <div className="admin-prompts">
+      <div className="section-header">
+        <h2>AI Assistant Prompts</h2>
+        <button className="add-btn" onClick={handleAddPrompt}>
+          ➕ Add New Prompt
+        </button>
+      </div>
+
+      <div className="prompts-grid">
+        {prompts.map((prompt) => (
+          <div key={prompt.id} className="prompt-card">
+            <div className="prompt-header">
+              <h3>{prompt.title}</h3>
+              <div className="prompt-actions">
+                <button 
+                  className="edit-btn" 
+                  onClick={() => handleEditPrompt(prompt)}
+                  title="Edit Prompt"
+                >
+                  ✏️
+                </button>
+                <button 
+                  className="delete-btn" 
+                  onClick={() => deletePrompt(prompt.id)}
+                  title="Delete Prompt"
+                >
+                  🗑️
+                </button>
+              </div>
+            </div>
+            <div className="prompt-content">
+              <div className="prompt-field">
+                <label>Question:</label>
+                <p>{prompt.prompt}</p>
+              </div>
+              <div className="prompt-field">
+                <label>Response Type:</label>
+                <span className={`response-type ${prompt.useCustomResponse ? 'custom' : 'ai'}`}>
+                  {prompt.useCustomResponse ? 'Custom Response' : 'AI Response'}
+                </span>
+              </div>
+              {prompt.useCustomResponse && prompt.customResponse && (
+                <div className="prompt-field">
+                  <label>Custom Response:</label>
+                  <div className="custom-response">
+                    {prompt.customResponse}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Add/Edit Prompt Modal */}
+      {showAddPromptModal && (
+        <div className="modal-overlay" onClick={() => setShowAddPromptModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>{editingPrompt ? 'Edit Prompt' : 'Add New Prompt'}</h3>
+              <button className="modal-close" onClick={() => setShowAddPromptModal(false)}>×</button>
+            </div>
+            
+            <div className="modal-body">
+              <form onSubmit={editingPrompt ? updatePrompt : addPrompt}>
+                <div className="form-group">
+                  <label>Title *</label>
+                  <input 
+                    type="text" 
+                    value={editingPrompt ? editingPrompt.title : newPrompt.title}
+                    onChange={(e) => editingPrompt 
+                      ? setEditingPrompt({...editingPrompt, title: e.target.value})
+                      : setNewPrompt({...newPrompt, title: e.target.value})
+                    }
+                    required
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label>Question/Prompt *</label>
+                  <textarea 
+                    value={editingPrompt ? editingPrompt.prompt : newPrompt.prompt}
+                    onChange={(e) => editingPrompt 
+                      ? setEditingPrompt({...editingPrompt, prompt: e.target.value})
+                      : setNewPrompt({...newPrompt, prompt: e.target.value})
+                    }
+                    required
+                    rows={3}
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label>Response Type</label>
+                  <select 
+                    value={editingPrompt ? editingPrompt.useCustomResponse : newPrompt.useCustomResponse}
+                    onChange={(e) => editingPrompt 
+                      ? setEditingPrompt({...editingPrompt, useCustomResponse: e.target.value === 'true'})
+                      : setNewPrompt({...newPrompt, useCustomResponse: e.target.value === 'true'})
+                    }
+                  >
+                    <option value={true}>Custom Response</option>
+                    <option value={false}>AI Response</option>
+                  </select>
+                </div>
+                
+                {(editingPrompt ? editingPrompt.useCustomResponse : newPrompt.useCustomResponse) && (
+                  <div className="form-group">
+                    <label>Custom Response</label>
+                    <textarea 
+                      value={editingPrompt ? editingPrompt.customResponse : newPrompt.customResponse}
+                      onChange={(e) => editingPrompt 
+                        ? setEditingPrompt({...editingPrompt, customResponse: e.target.value})
+                        : setNewPrompt({...newPrompt, customResponse: e.target.value})
+                      }
+                      rows={6}
+                      placeholder="Enter your custom response here..."
+                    />
+                  </div>
+                )}
+                
+                <div className="modal-actions">
+                  <button type="button" onClick={() => setShowAddPromptModal(false)}>
+                    Cancel
+                  </button>
+                  <button type="submit" className="save-btn">
+                    {editingPrompt ? 'Update Prompt' : 'Add Prompt'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
   const renderUserModal = () => {
     if (!showUserModal || !selectedUser) return null;
 
@@ -908,6 +1124,12 @@ const Admin = () => {
             💰 Expenses
           </button>
           <button 
+            className={`nav-item ${activeTab === 'prompts' ? 'active' : ''}`}
+            onClick={() => setActiveTab('prompts')}
+          >
+            🤖 AI Prompts
+          </button>
+          <button 
             className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`}
             onClick={() => setActiveTab('settings')}
           >
@@ -943,6 +1165,7 @@ const Admin = () => {
           {activeTab === 'registrations' && renderRegistrations()}
           {activeTab === 'users' && renderUsers()}
           {activeTab === 'expenses' && renderExpenses()}
+          {activeTab === 'prompts' && renderPrompts()}
           {activeTab === 'settings' && renderSettings()}
         </div>
       </div>

@@ -14,6 +14,7 @@ import forgotPassword from "./api/forrgot.api.js";
 import resetPassword from "./api/resetPassword.api.js";
 import updateRegistration from "./api/updateRegistration.api.js";
 import expensesApi from "./api/expenses.api.js";
+import adminPrompts from "./api/adminPrompts.api.js";
 
 import "./DB/config.js";
 
@@ -45,6 +46,7 @@ app.use("/forgotPassword", forgotPassword);
 app.use("/reset-password", resetPassword);
 app.use("/registered/update", updateRegistration);
 app.use("/expenses", expensesApi);
+app.use("/admin/prompts", adminPrompts);
 
 app.get("/", (req,resp) => {
     resp.send("hii");

@@ -5,18 +5,22 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
 
-const baseUrl = import.meta.env.VITE_BASE_URL ;
-
+const baseUrl = import.meta.env.VITE_BASE_URL;
 
 const AskAI = () => {
   const [prompt, setPrompt] = useState('');
-  const [messages, setMessages] = useState([]); // {role: 'user'|'assistant', content: string}
+  const [messages, setMessages] = useState([]);
   const [displayed, setDisplayed] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [listening, setListening] = useState(false);
   const [recognition, setRecognition] = useState(null);
+  const [predefinedPrompts, setPredefinedPrompts] = useState([]);
+  const [showPrompts, setShowPrompts] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const [abortController, setAbortController] = useState(null);
   const chatEndRef = useRef(null);
+  const inputRef = useRef(null);
 
   // Scroll to bottom on new message
   useEffect(() => {
@@ -30,18 +34,34 @@ const AskAI = () => {
     if (!messages.length) return;
     const lastMsg = messages[messages.length - 1];
     if (lastMsg.role !== 'assistant') return;
+    
+    console.log("Starting typewriter for:", lastMsg.content);
+    
     setDisplayed('');
+    setIsTyping(true);
     let i = 0;
-    const str = String(lastMsg.content);
+    const str = String(lastMsg.content || '');
+    console.log("Typewriter string:", str);
+    console.log("String length:", str.length);
+    
     const interval = setInterval(() => {
       if (i < str.length) {
-        setDisplayed(prev => prev + str[i]);
+        setDisplayed(prev => {
+          const newDisplayed = prev + str[i];
+          console.log(`Typewriter step ${i}: "${newDisplayed}"`);
+          return newDisplayed;
+        });
         i++;
       } else {
         clearInterval(interval);
+        setIsTyping(false);
+        console.log("Typewriter completed");
       }
-    }, 18);
-    return () => clearInterval(interval);
+    }, 15);
+    return () => {
+      clearInterval(interval);
+      setIsTyping(false);
+    };
   }, [messages]);
 
   // Voice assistant logic
@@ -72,35 +92,97 @@ const AskAI = () => {
 
   const token = localStorage.getItem('token');
 
+  // Fetch predefined prompts on component mount
+  useEffect(() => {
+    const fetchPrompts = async () => {
+      try {
+        const res = await fetch(`${baseUrl}/gemini/prompts`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setPredefinedPrompts(data.prompts || []);
+        }
+      } catch (err) {
+        console.error('Failed to fetch prompts:', err);
+      }
+    };
+    
+    if (token) {
+      fetchPrompts();
+    }
+  }, [token]);
+
+  const stopAIResponse = () => {
+    if (abortController) {
+      abortController.abort();
+      setAbortController(null);
+    }
+    setLoading(false);
+    setIsTyping(false);
+  };
+
   const handleAsk = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
+    await sendMessage(prompt);
+  };
+
+  const sendMessage = async (messageText) => {
     setLoading(true);
     setError('');
+    
     // Add user message
-    setMessages(prev => [...prev, { role: 'user', content: prompt }]);
+    setMessages(prev => [...prev, { role: 'user', content: messageText }]);
     setPrompt('');
+    
+    // Create abort controller for stopping the request
+    const controller = new AbortController();
+    setAbortController(controller);
+    
     try {
-      
-
       const res = await fetch(`${baseUrl}/gemini`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json',
+        headers: { 
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
-         },
-        body: JSON.stringify({ prompt }),
+        },
+        body: JSON.stringify({ prompt: messageText }),
+        signal: controller.signal
       });
+      
       if (!res.ok) throw new Error('Failed to get response');
       const data = await res.json();
+      console.log("Frontend received data:", data);
+      
       let x = data.result;
-      if (x === undefined || x === null || x === "undefined") x = "";
+      console.log("Raw result:", x);
+      
+      if (x === undefined || x === null || x === "undefined" || typeof x !== 'string') {
+        x = "No response available";
+      } else {
+        x = x.trim(); // Remove any leading/trailing whitespace
+      }
+      
+      console.log("Processed result:", x);
       x = x + `\n\n Thank you :)`;
       setMessages(prev => [...prev, { role: 'assistant', content: x }]);
     } catch (err) {
-      setError('Error: ' + err.message);
+      if (err.name === 'AbortError') {
+        setError('Response stopped by user');
+      } else {
+        setError('Error: ' + err.message);
+      }
     } finally {
       setLoading(false);
+      setAbortController(null);
     }
+  };
+
+  const handlePredefinedPrompt = (promptText) => {
+    sendMessage(promptText);
   };
 
   // Render chat bubbles
@@ -111,39 +193,26 @@ const AskAI = () => {
       return (
         <div
           key={idx}
-          style={{
-            display: 'flex',
-            justifyContent: isUser ? 'flex-end' : 'flex-start',
-            marginBottom: 10,
-          }}
+          className={`message-container ${isUser ? 'user-message' : 'ai-message'}`}
         >
-          <div
-            style={{
-              maxWidth: '80%',
-              background: isUser ? '#2b4eff' : '#f4f8ff',
-              color: isUser ? '#fff' : '#222',
-              borderRadius: isUser ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
-              padding: '12px 16px',
-              fontSize: 16,
-              fontFamily: 'inherit',
-              boxShadow: isUser ? '0 2px 8px #2b4eff22' : '0 2px 8px #2b4eff11',
-              border: isUser ? '1.5px solid #2b4eff' : '1.5px solid #e6e8ec',
-              wordBreak: 'break-word',
-              whiteSpace: 'pre-wrap',
-              position: 'relative',
-              minWidth: 40,
-            }}
-          >
+          <div className={`message-bubble ${isUser ? 'user-bubble' : 'ai-bubble'}`}>
             {isUser ? (
-              msg.content
-            ) : isLastAssistant ? (
-              <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
-                {displayed || ''}
-              </ReactMarkdown>
-            ) : (
-              <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+              <div className="message-content user-content">
                 {msg.content}
-              </ReactMarkdown>
+              </div>
+            ) : isLastAssistant ? (
+              <div className="message-content ai-content">
+                <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+                  {displayed || ''}
+                </ReactMarkdown>
+                {isTyping && <span className="typing-indicator">▋</span>}
+              </div>
+            ) : (
+              <div className="message-content ai-content">
+                <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+                  {msg.content}
+                </ReactMarkdown>
+              </div>
             )}
           </div>
         </div>
@@ -152,113 +221,168 @@ const AskAI = () => {
   };
 
   return (
-    <div className="ask-ai-chatgpt" style={{ maxWidth: 650, margin: '32px auto', height: '80vh', display: 'flex', flexDirection: 'column', background: '#fff', borderRadius: 16, boxShadow: '0 4px 24px rgba(43,78,255,0.08)', border: '1.5px solid #e6e8ec', overflow: 'hidden' }}>
-      <h3 style={{ color: '#2b4eff', fontWeight: 700, fontSize: 28, margin: '18px 0 0 0', textAlign: 'center', letterSpacing: 0.5, flexShrink: 0 }}>ZTO Doubt Assistant</h3>
-      <div style={{ flex: 1, overflowY: 'auto', padding: '24px 12px 12px 12px', background: '#f8f9fa', marginTop: 10 }}>
+    <div className="doubt-assistant-container">
+      <div className="chat-header">
+        <div className="header-content">
+          <div className="ai-avatar">
+            <div className="avatar-icon">🤖</div>
+            <div className="status-indicator"></div>
+          </div>
+          <div className="header-text">
+            <h3>ZTO AI Assistant</h3>
+            <p>Ask me anything about your studies!</p>
+          </div>
+        </div>
+        <button
+          className={`toggle-prompts-btn ${showPrompts ? 'active' : ''}`}
+          onClick={() => setShowPrompts(!showPrompts)}
+        >
+          <span className="btn-icon">💡</span>
+          {showPrompts ? 'Hide' : 'Show'} Quick Questions
+        </button>
+      </div>
+      
+      {/* Predefined Prompts Section */}
+      {showPrompts && predefinedPrompts.length > 0 && (
+        <div className="quick-questions-section">
+          <div className="section-header">
+            <h4>Quick Questions</h4>
+            <p>Tap to ask instantly</p>
+          </div>
+          <div className="prompts-grid">
+            {predefinedPrompts.map((prompt) => (
+              <button
+                key={prompt.id}
+                className="prompt-button"
+                onClick={() => handlePredefinedPrompt(prompt.prompt)}
+                disabled={loading}
+              >
+                <span className="prompt-icon">⚡</span>
+                <span className="prompt-text">{prompt.title}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+      
+      <div className="chat-messages">
+        {messages.length === 0 && (
+          <div className="welcome-message">
+            <div className="welcome-icon">👋</div>
+            <h2>Welcome to ZTO AI Assistant!</h2>
+            <p>I'm here to help you with your studies. Ask me anything!</p>
+            <div className="welcome-features">
+              <div className="feature">
+                <span className="feature-icon">🎯</span>
+                <span>Quick answers</span>
+              </div>
+              <div className="feature">
+                <span className="feature-icon">📚</span>
+                <span>Study help</span>
+              </div>
+              <div className="feature">
+                <span className="feature-icon">🎤</span>
+                <span>Voice input</span>
+              </div>
+            </div>
+          </div>
+        )}
         {renderMessages()}
         <div ref={chatEndRef} />
       </div>
-      <form onSubmit={handleAsk} style={{ display: 'flex', gap: 8, padding: 12, background: '#fff', borderTop: '1.5px solid #e6e8ec', alignItems: 'center', flexShrink: 0, position: 'relative' }}>
-        <input
-          type="text"
-          value={prompt}
-          onChange={e => setPrompt(e.target.value)}
-          placeholder="Ask ZTO Assistant anything..."
-          style={{ flex: 1, minWidth: 0, padding: 14, borderRadius: 8, border: '1.5px solid #d1d5db', fontSize: 16, background: '#f4f6fb', outline: 'none', transition: 'border 0.2s' }}
-          disabled={loading}
-        />
-        <button
-          type="button"
-          onClick={() => {
-            if (!recognition) {
-              setError('Voice recognition not supported in this browser.');
-              return;
-            }
-            if (!listening) {
-              setError('');
-              recognition.start();
-              setListening(true);
-            } else {
-              recognition.stop();
-              setListening(false);
-            }
-          }}
-          style={{
-            width: 44,
-            height: 44,
-            borderRadius: '50%',
-            background: listening ? '#ff4d4f' : '#2b4eff',
-            color: '#fff',
-            border: 'none',
-            cursor: 'pointer',
-            fontSize: 22,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: listening ? '0 0 0 2px #ff4d4f33' : '0 0 0 2px #2b4eff22',
-            transition: 'background 0.2s, box-shadow 0.2s'
-          }}
-          disabled={loading}
-          aria-label="Start voice input"
-        >
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="9" y="2" width="6" height="12" rx="3" fill="white" stroke="white"/>
-            <path d="M5 10v2a7 7 0 0 0 14 0v-2" stroke="white" fill="none"/>
-            <line x1="12" y1="19" x2="12" y2="22" stroke="white"/>
-            <line x1="8" y1="22" x2="16" y2="22" stroke="white"/>
-          </svg>
-        </button>
-        <button type="submit" disabled={loading || !prompt.trim()} style={{ padding: '0 18px', height: 44, borderRadius: 8, background: '#2b4eff', color: '#fff', border: 'none', fontWeight: 600, fontSize: 16, boxShadow: '0 2px 8px rgba(43,78,255,0.07)', transition: 'background 0.2s' }}>
-          {loading ? 'Asking...' : 'Send'}
-        </button>
-      </form>
-      {listening && <span style={{ marginLeft: 18, color: '#2b4eff', fontWeight: 500, fontSize: 15, position: 'absolute', bottom: 60, left: 24 }}>Listening...</span>}
-      {error && <div style={{ color: 'red', margin: '8px 0', fontWeight: 500, textAlign: 'center' }}>{error}</div>}
-      <style>
-        {`
-          .blinking-cursor {
-            display: inline-block;
-            width: 10px;
-            animation: blink 1s steps(1) infinite;
-          }
-          @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-          }
-          @media (max-width: 600px) {
-            .ask-ai-chatgpt {
-              max-width: 99vw !important;
-              padding: 0 !important;
-              border-radius: 8px !important;
-              margin: 8px auto !important;
-              box-shadow: 0 2px 8px rgba(43,78,255,0.08) !important;
-              height: 98vh !important;
-            }
-            .ask-ai-chatgpt h3 {
-              font-size: 20px !important;
-              margin-bottom: 6px !important;
-            }
-            .ask-ai-chatgpt form {
-              flex-direction: column !important;
-              gap: 8px !important;
-              padding: 8px !important;
-            }
-            .ask-ai-chatgpt input {
-              font-size: 15px !important;
-              padding: 10px !important;
-            }
-            .ask-ai-chatgpt button {
-              font-size: 15px !important;
-              height: 40px !important;
-              padding: 0 10px !important;
-            }
-            .ask-ai-chatgpt div[style*='background: #f4f8ff'] {
-              font-size: 15px !important;
-              padding: 12px !important;
-            }
-          }
-        `}
-      </style>
+
+      <div className="chat-input-container">
+        <form onSubmit={handleAsk} className="input-form">
+          <div className="input-wrapper">
+            <input
+              ref={inputRef}
+              type="text"
+              value={prompt}
+              onChange={e => setPrompt(e.target.value)}
+              placeholder="Ask ZTO Assistant anything..."
+              className="message-input"
+              disabled={loading}
+            />
+            <div className="input-actions">
+              <button
+                type="button"
+                className={`voice-btn ${listening ? 'listening' : ''}`}
+                onClick={() => {
+                  if (!recognition) {
+                    setError('Voice recognition not supported in this browser.');
+                    return;
+                  }
+                  if (!listening) {
+                    setError('');
+                    recognition.start();
+                    setListening(true);
+                  } else {
+                    recognition.stop();
+                    setListening(false);
+                  }
+                }}
+                disabled={loading}
+                aria-label="Start voice input"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                  <line x1="12" y1="19" x2="12" y2="23"/>
+                  <line x1="8" y1="23" x2="16" y2="23"/>
+                </svg>
+              </button>
+              
+              {loading && (
+                <button
+                  type="button"
+                  className="stop-btn"
+                  onClick={stopAIResponse}
+                  aria-label="Stop AI response"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="6" y="6" width="12" height="12"/>
+                  </svg>
+                </button>
+              )}
+              
+              <button 
+                type="submit" 
+                className={`send-btn ${loading ? 'loading' : ''}`}
+                disabled={loading || !prompt.trim()}
+              >
+                {loading ? (
+                  <div className="loading-spinner">
+                    <div className="spinner"></div>
+                  </div>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"/>
+                    <polygon points="22,2 15,22 11,13 2,9"/>
+                  </svg>
+                )}
+              </button>
+            </div>
+          </div>
+        </form>
+        
+        {listening && (
+          <div className="listening-indicator">
+            <div className="listening-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <span>Listening...</span>
+          </div>
+        )}
+        
+        {error && (
+          <div className="error-message">
+            <span className="error-icon">⚠️</span>
+            {error}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

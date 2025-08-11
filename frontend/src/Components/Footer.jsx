@@ -25,11 +25,7 @@ const Footer = () => {
             <p>Contact us</p>
             <p>History</p>
           </div>
-          <div className="footer-right">
-            <Link className="btn-register" to ="/login">Register</Link>
-            <Link className="btn-outline" to="/login">Log In</Link>
-            <Link className="btn-outline" to = "/login">ADMIN</Link>
-          </div>
+        
         </div>
       </div>
 

@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
 
 const PrivateComponent = () => {
-  const auth = localStorage.getItem("token");
+  const auth = localStorage.getItem("email");
   const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
