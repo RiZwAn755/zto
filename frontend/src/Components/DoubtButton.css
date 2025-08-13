@@ -41,7 +41,7 @@
   .doubtButton-fixed {
     width: 56px;
     height: 56px;
-    /* Removed bottom, left, right, top overrides to allow dragging */
+   
   }
   .chatbot-icon {
     font-size: 1.5rem;
