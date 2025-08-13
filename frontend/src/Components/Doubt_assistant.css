@@ -416,6 +416,226 @@
 
 .ai-content {
   color: #1f2937;
+  line-height: 1.4;
+  font-size: 14px;
+}
+
+.ai-content p {
+  margin: 0 0 6px 0;
+  line-height: 1.4;
+}
+
+.ai-content p:last-child {
+  margin-bottom: 0;
+}
+
+.ai-content strong {
+  color: #7c3aed;
+  font-weight: 700;
+  background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ai-content em {
+  font-style: italic;
+  color: #059669;
+  font-weight: 500;
+}
+
+.ai-content ul, .ai-content ol {
+  margin: 4px 0 6px 0;
+  padding-left: 18px;
+}
+
+.ai-content li {
+  margin: 1px 0;
+  line-height: 1.3;
+  color: #374151;
+}
+
+.ai-content li::marker {
+  color: #7c3aed;
+  font-weight: bold;
+}
+
+.ai-content h1, .ai-content h2, .ai-content h3, .ai-content h4, .ai-content h5, .ai-content h6 {
+  margin: 8px 0 4px 0;
+  background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+  line-height: 1.2;
+  font-size: 16px;
+}
+
+.ai-content h1:first-child, .ai-content h2:first-child, .ai-content h3:first-child, 
+.ai-content h4:first-child, .ai-content h5:first-child, .ai-content h6:first-child {
+  margin-top: 0;
+}
+
+.ai-content blockquote {
+  margin: 6px 0;
+  padding: 8px 12px;
+  border-left: 4px solid #10b981;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
+  border-radius: 6px;
+  font-style: italic;
+  color: #065f46;
+}
+
+.ai-content code {
+  background: linear-gradient(135deg, #f59e0b, #f97316);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ai-content pre {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(139, 92, 246, 0.05));
+  padding: 8px 12px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 6px 0;
+  border: 1px solid rgba(124, 58, 237, 0.2);
+}
+
+.ai-content pre code {
+  background: none;
+  padding: 0;
+  color: #7c3aed;
+  font-weight: 600;
+}
+
+.ai-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 6px 0;
+  font-size: 12px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.1);
+}
+
+.ai-content th, .ai-content td {
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  padding: 6px 8px;
+  text-align: left;
+}
+
+.ai-content th {
+  background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+  color: white;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.ai-content td {
+  background: rgba(255, 255, 255, 0.8);
+  color: #374151;
+}
+
+.ai-content hr {
+  border: none;
+  border-top: 2px solid;
+  border-image: linear-gradient(135deg, #7c3aed, #8b5cf6) 1;
+  margin: 8px 0;
+}
+
+/* Special formatting for definition-like content */
+.ai-content p:has(strong:first-child) {
+  margin-bottom: 8px;
+  padding: 6px 8px;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.05), rgba(139, 92, 246, 0.02));
+  border-radius: 6px;
+  border-left: 3px solid #7c3aed;
+}
+
+.ai-content p:has(strong:first-child) strong {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 15px;
+  color: #7c3aed;
+  background: none;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+}
+
+/* Better spacing for lists */
+.ai-content ol > li, .ai-content ul > li {
+  margin-bottom: 2px;
+  position: relative;
+}
+
+.ai-content ol > li:last-child, .ai-content ul > li:last-child {
+  margin-bottom: 0;
+}
+
+/* Highlight important terms with colorful backgrounds */
+.ai-content strong:not(:first-child) {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(139, 92, 246, 0.1));
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-weight: 600;
+  color: #7c3aed;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+}
+
+/* Add colorful bullet points for unordered lists */
+.ai-content ul li::marker {
+  color: #f59e0b;
+  font-weight: bold;
+}
+
+/* Add colorful numbers for ordered lists */
+.ai-content ol li::marker {
+  color: #10b981;
+  font-weight: bold;
+}
+
+/* Special styling for key terms */
+.ai-content p:contains("Key characteristics:"),
+.ai-content p:contains("Characteristics:"),
+.ai-content p:contains("Features:"),
+.ai-content p:contains("Definition:"),
+.ai-content p:contains("Examples:"),
+.ai-content p:contains("Types:"),
+.ai-content p:contains("Structure:"),
+.ai-content p:contains("Function:"),
+.ai-content p:contains("Process:"),
+.ai-content p:contains("Benefits:"),
+.ai-content p:contains("Advantages:"),
+.ai-content p:contains("Disadvantages:") {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin: 4px 0;
+  border-left: 3px solid #10b981;
+}
+
+/* Add subtle animations for interactive elements */
+.ai-content strong:hover {
+  transform: scale(1.02);
+  transition: transform 0.2s ease;
+}
+
+/* Colorful links */
+.ai-content a {
+  color: #3b82f6;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+  transition: all 0.2s ease;
+}
+
+.ai-content a:hover {
+  color: #1d4ed8;
+  border-bottom-color: #1d4ed8;
 }
 
 .typing-indicator {

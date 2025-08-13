@@ -121,6 +121,70 @@ const AskAI = () => {
     sendMessage(promptText);
   };
 
+  // Function to preprocess AI response for better formatting
+  const preprocessAIResponse = (content) => {
+    if (!content) return '';
+    
+    let processed = content;
+    
+    // Add line breaks after sentences but be very conservative
+    processed = processed.replace(/([.!?])\s+/g, '$1 ');
+    
+    // Add line breaks before numbered lists
+    processed = processed.replace(/(\d+\.\s)/g, '\n$1');
+    
+    // Add line breaks before bullet points
+    processed = processed.replace(/(\*\s)/g, '\n$1');
+    processed = processed.replace(/(-\s)/g, '\n$1');
+    
+    // Add colorful formatting for common section headers
+    const headers = ['Key characteristics:', 'Characteristics:', 'Features:', 'Definition:', 'Examples:', 'Types:', 'Structure:', 'Function:', 'Process:', 'Benefits:', 'Advantages:', 'Disadvantages:'];
+    headers.forEach(header => {
+      const regex = new RegExp(`(${header})`, 'gi');
+      processed = processed.replace(regex, `\n**${header}**`);
+    });
+    
+    // Add colorful formatting for important terms
+    const importantTerms = ['Exoskeleton', 'Segmented Body', 'Jointed appendages', 'Chitin', 'Molting', 'Ecdysis', 'Tagmata', 'Cephalothorax', 'Thorax', 'Head'];
+    importantTerms.forEach(term => {
+      const regex = new RegExp(`\\b(${term})\\b`, 'gi');
+      processed = processed.replace(regex, '**$1**');
+    });
+    
+    // Add line breaks before bold text patterns (but minimal)
+    processed = processed.replace(/(\*\*[^*]+\*\*)/g, ' $1 ');
+    
+    // Clean up multiple line breaks - keep only single line breaks
+    processed = processed.replace(/\n{2,}/g, '\n');
+    
+    // Add markdown formatting for better structure
+    processed = processed.replace(/^(.+)$/gm, (match, line) => {
+      // If line starts with a number and period, make it a list item
+      if (/^\d+\./.test(line)) {
+        return line;
+      }
+      // If line is all caps or looks like a header, make it bold
+      if (/^[A-Z\s]+$/.test(line.trim()) && line.trim().length > 3 && line.trim().length < 50) {
+        return `**${line.trim()}**`;
+      }
+      return line;
+    });
+    
+    // Add colorful emojis for different content types
+    processed = processed.replace(/\*\*Definition:\*\*/g, '📖 **Definition:**');
+    processed = processed.replace(/\*\*Key characteristics:\*\*/g, '🔑 **Key characteristics:**');
+    processed = processed.replace(/\*\*Examples:\*\*/g, '💡 **Examples:**');
+    processed = processed.replace(/\*\*Types:\*\*/g, '📋 **Types:**');
+    processed = processed.replace(/\*\*Structure:\*\*/g, '🏗️ **Structure:**');
+    processed = processed.replace(/\*\*Function:\*\*/g, '⚙️ **Function:**');
+    processed = processed.replace(/\*\*Process:\*\*/g, '🔄 **Process:**');
+    processed = processed.replace(/\*\*Benefits:\*\*/g, '✅ **Benefits:**');
+    processed = processed.replace(/\*\*Advantages:\*\*/g, '👍 **Advantages:**');
+    processed = processed.replace(/\*\*Disadvantages:\*\*/g, '👎 **Disadvantages:**');
+    
+    return processed.trim();
+  };
+
   // Render chat bubbles
   const renderMessages = () => {
     return messages.map((msg, idx) => {
@@ -138,7 +202,7 @@ const AskAI = () => {
             ) : (
               <div className="message-content ai-content">
                 <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
-                  {msg.content}
+                  {preprocessAIResponse(msg.content)}
                 </ReactMarkdown>
               </div>
             )}
