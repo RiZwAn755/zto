@@ -13,13 +13,13 @@ const router = new Router();
 router.get("/" ,  async (req , res) => {
     try {
 
-        let students = await redis.get("students");
+        const students = await redis.get("students");
         if(students){
             console.log("response from Redis");
             return res.send(JSON.parse(students));
         }
 
-        students = await Student.find();
+         students = await Student.find();
         await redis.set("students", JSON.stringify(students) );
         res.send(students);
 
