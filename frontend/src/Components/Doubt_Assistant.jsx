@@ -6,6 +6,7 @@ import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
 import { FiSend, FiSquare } from 'react-icons/fi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { handleFetchRateLimitError } from '../utils/rateLimitHandler.js';
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -88,6 +89,14 @@ const AskAI = () => {
         body: JSON.stringify({ prompt: messageText }),
         signal: controller.signal
       });
+      
+      // Handle rate limit error
+      if (res.status === 429) {
+        const isRateLimitHandled = await handleFetchRateLimitError(res);
+        if (isRateLimitHandled) {
+          return; // Exit early if rate limit was handled
+        }
+      }
       
       if (!res.ok) throw new Error('Failed to get response');
       const data = await res.json();

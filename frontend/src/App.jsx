@@ -23,6 +23,11 @@ import Landing from './pages/Landing';
 import DoubtButton from './Components/DoubtButton';
 import ForgotPassword from './Components/ForgotPassword';
 import ResetPassword from './Components/resetpassword';
+import withSessionCheck from './utils/withSessionCheck.jsx';
+import './utils/testSessionExpiration.js'; // Import test utilities
+
+// Create session-checked version of DoubtButton
+const SessionCheckedDoubtButton = withSessionCheck(DoubtButton);
 
 function App() {
   
@@ -33,7 +38,7 @@ function App() {
 
   // Debug: Log the Google Client ID
   const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-  console.log('Google Client ID:', googleClientId);
+  
   return (
     <GoogleOAuthProvider clientId={googleClientId}>
       <div className="App">
@@ -47,9 +52,9 @@ function App() {
             <Route path="/resetPassword" element={<ResetPassword />} />
             <Route path="*" element={<PageNotFound />} />
 
-            // private hai ye Components
+                        // private hai ye Components
            <Route  element = {<PrivateComponent/>}>
-             <Route path="/UpcomingExams" element={<UpcomingExams />} />
+            <Route path="/UpcomingExams" element={<UpcomingExams />} />
             <Route path="/" element={<Home />} />
              <Route path="/admin" element={<Admin />} />
             <Route path="/resources" element={<Resources />} />
@@ -59,13 +64,13 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/enroll-exams" element={<EnrollExams />} />
             <Route path="/rewards" element={<Rewards />} />
-            <Route path="/checkresult" element={<CheckResult  />} />
-            <Route path='/AskAI' element = {<AskAI/>} />
+            <Route path="/checkresult" element={<CheckResult />} />
+            <Route path='/AskAI' element = {<AskAI />} />
             </Route>
 
 
           </Routes>
-          <DoubtButton />
+          <SessionCheckedDoubtButton />
         </div>
       </GoogleOAuthProvider>
      

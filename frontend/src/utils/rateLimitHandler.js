@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify';
+import sessionManager from './sessionManager.js';
 
 /**
  * Handles rate limit errors (429 status) and shows appropriate toast message
@@ -22,6 +23,12 @@ export const handleRateLimitError = (error, defaultMessage = ' limit exceeded. P
     
     // Fallback if we can't parse the time
     toast.error(errorMessage || defaultMessage);
+    return;
+  }
+  
+  // Check for authentication errors (401) and handle session expiration
+  if (error.response?.status === 401) {
+    sessionManager.handleSessionExpired();
     return;
   }
   

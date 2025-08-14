@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
         if (!student && !admin) {
             return res.status(401).json({ message: "Invalid credentials" });
         }
-       const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "1h" });
+       const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "5m" });
         res.status(200).json({ message: "Login successful", role: student ? "student" : "admin" , token : token });
     } catch (error) {
         console.error(error); // This will show up in Vercel logs
