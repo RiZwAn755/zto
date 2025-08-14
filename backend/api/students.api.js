@@ -1,17 +1,13 @@
 // api to get all students
 
-import express from "express";
+
 import Student from "../DB/student.js";
-import {Redis} from "ioredis";
+import redis from "../DB/redis.js";
+import Router from "express";
+
+const router = new Router();
+
 // import { verifyToken } from "../middlewares/jwt.middleware.js";
-const router = express.Router();
-
-const redis = new Redis({
-
-      host: 'redis-16352.c305.ap-south-1-1.ec2.redns.redis-cloud.com',
-  port: 16352,
-  password: 'M2L1nPscU6PMBOlXgNMnJp43AQgcvyvN',    
-})
 
 
 router.get("/" ,  async (req , res) => {
@@ -24,7 +20,7 @@ router.get("/" ,  async (req , res) => {
         }
 
         students = await Student.find();
-        await redis.set("students", JSON.stringify(students) ,"EX", 60);
+        await redis.set("students", JSON.stringify(students) );
         res.send(students);
 
     } catch (error) {

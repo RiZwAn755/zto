@@ -15,18 +15,14 @@ import resetPassword from "./api/resetPassword.api.js";
 import updateRegistration from "./api/updateRegistration.api.js";
 import expensesApi from "./api/expenses.api.js";
 import adminPrompts from "./api/adminPrompts.api.js";
-import {Redis} from "ioredis";
+import redis from "./DB/redis.js";
 import "./DB/config.js";
 import rateLimitter from "./middlewares/rateLimitter.middleware.js";
 
 const app = express();
 dotenv.config();
 
-const redis = new Redis({
-  host: 'redis-16352.c305.ap-south-1-1.ec2.redns.redis-cloud.com',
-  port: 16352,
-  password: 'M2L1nPscU6PMBOlXgNMnJp43AQgcvyvN',
-})
+
 
 app.use(express.json());
 app.use(cors({
@@ -51,7 +47,7 @@ app.use("/Login", loginApi);
 app.use("/adminSignup", adminSignup);
 app.use("/adminLogin" , adminLogin);
 app.use("/regForm", examform);
-app.use("/students", rateLimitter({limit:10 , time:17 , key:"students"}), studentsApi);
+app.use("/students", studentsApi);
 app.use("/registered" ,rateLimitter({limit:10 , time:17 , key:"registered"}), registeredApi);
 app.use('/gemini', rateLimitter({limit:6 , time:17 , key:"AI_response"}) , gemini);
 app.use("/auth/google", googleAuth);
