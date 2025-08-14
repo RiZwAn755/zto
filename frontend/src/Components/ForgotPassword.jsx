@@ -3,6 +3,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import { handleRateLimitError } from '../utils/rateLimitHandler.js';
 import './ForgotPassword.css';
 
 const ForgotPassword = () => {      
@@ -33,10 +34,14 @@ const ForgotPassword = () => {
             setEmailSent(true);
             setError('');
         } catch (error) {
-            if (error.response?.data?.error) {
-                setError(error.response.data.error);
-            } else {
-                setError('Failed to send reset link. Please try again.');
+            try {
+                handleRateLimitError(error, 'Failed to send reset link. Please try again.');
+            } catch (handledError) {
+                if (handledError.response?.data?.error) {
+                    setError(handledError.response.data.error);
+                } else {
+                    setError('Failed to send reset link. Please try again.');
+                }
             }
             setEmailSent(false);
         } finally {

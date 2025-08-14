@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { handleRateLimitError } from '../utils/rateLimitHandler.js';
 import './Admin.css';
 
 const AdminEdit = ({ 
@@ -74,23 +75,27 @@ const AdminEdit = ({
       console.error('Error response:', error.response?.data);
       console.error('Error status:', error.response?.status);
       
-      if (error.response?.status === 401) {
-        toast.error('Authentication required. Please login again.');
-        window.location.href = '/login';
-        return;
+      try {
+        handleRateLimitError(error, 'Failed to update registration');
+      } catch (handledError) {
+        if (handledError.response?.status === 401) {
+          toast.error('Authentication required. Please login again.');
+          window.location.href = '/login';
+          return;
+        }
+        
+        if (handledError.response?.status === 404) {
+          toast.error('Registration not found');
+          return;
+        }
+        
+        if (handledError.response?.status === 500) {
+          toast.error('Server error. Please try again.');
+          return;
+        }
+        
+        toast.error('Failed to update registration');
       }
-      
-      if (error.response?.status === 404) {
-        toast.error('Registration not found');
-        return;
-      }
-      
-      if (error.response?.status === 500) {
-        toast.error('Server error. Please try again.');
-        return;
-      }
-      
-      toast.error('Failed to update registration');
     }
   };
 
@@ -104,13 +109,17 @@ const AdminEdit = ({
     } catch (error) {
       console.error('Error deleting registration:', error);
       
-      if (error.response && error.response.status === 401) {
-        toast.error('Authentication required. Please login again.');
-        window.location.href = '/login';
-        return;
+      try {
+        handleRateLimitError(error, 'Failed to delete registration');
+      } catch (handledError) {
+        if (handledError.response && handledError.response.status === 401) {
+          toast.error('Authentication required. Please login again.');
+          window.location.href = '/login';
+          return;
+        }
+        
+        toast.error('Failed to delete registration');
       }
-      
-      toast.error('Failed to delete registration');
     }
   };
 
@@ -183,23 +192,27 @@ const AdminEdit = ({
       console.error('Error response:', error.response?.data);
       console.error('Error status:', error.response?.status);
       
-      if (error.response?.status === 401) {
-        toast.error('Authentication required. Please login again.');
-        window.location.href = '/login';
-        return;
+      try {
+        handleRateLimitError(error, 'Failed to update field');
+      } catch (handledError) {
+        if (handledError.response?.status === 401) {
+          toast.error('Authentication required. Please login again.');
+          window.location.href = '/login';
+          return;
+        }
+        
+        if (handledError.response?.status === 404) {
+          toast.error('Registration not found');
+          return;
+        }
+        
+        if (handledError.response?.status === 500) {
+          toast.error('Server error. Please try again.');
+          return;
+        }
+        
+        toast.error('Failed to update field');
       }
-      
-      if (error.response?.status === 404) {
-        toast.error('Registration not found');
-        return;
-      }
-      
-      if (error.response?.status === 500) {
-        toast.error('Server error. Please try again.');
-        return;
-      }
-      
-      toast.error('Failed to update field');
     }
   };
 
@@ -230,13 +243,17 @@ const AdminEdit = ({
     } catch (error) {
       console.error('Error updating payment status:', error);
       
-      if (error.response && error.response.status === 401) {
-        toast.error('Authentication required. Please login again.');
-        window.location.href = '/login';
-        return;
+      try {
+        handleRateLimitError(error, 'Failed to update payment status');
+      } catch (handledError) {
+        if (handledError.response && handledError.response.status === 401) {
+          toast.error('Authentication required. Please login again.');
+          window.location.href = '/login';
+          return;
+        }
+        
+        toast.error('Failed to update payment status');
       }
-      
-      toast.error('Failed to update payment status');
     }
   };
 

@@ -6,6 +6,7 @@ import Footer from '../Components/Footer';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { handleRateLimitError } from '../utils/rateLimitHandler.js';
 const baseURL = import.meta.env.VITE_BASE_URL;
 
 const EnrollExams = () => {
@@ -69,10 +70,14 @@ const EnrollExams = () => {
       toast.success('Registration successful!');
       setTimeout(() => navigate('/'), 1500);
     } catch (err) {
-      if (err.response && err.response.data && err.response.data.error) {
-        toast.error(`Registration failed: ${err.response.data.error}`);
-      } else {
-        toast.error('Registration failed. Please check your details.');
+      try {
+        handleRateLimitError(err, 'Registration failed. Please check your details.');
+      } catch (handledError) {
+        if (handledError.response && handledError.response.data && handledError.response.data.error) {
+          toast.error(`Registration failed: ${handledError.response.data.error}`);
+        } else {
+          toast.error('Registration failed. Please check your details.');
+        }
       }
     } finally {
       setLoading(false);

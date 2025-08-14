@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { GoogleLogin } from '@react-oauth/google';
 import { Link } from 'react-router-dom';
+import { handleRateLimitError } from '../utils/rateLimitHandler.js';
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 const Login = () => {
@@ -53,11 +54,15 @@ const Login = () => {
         toast.error('Unable to login');
       }
     } catch (err) {
-      // Show backend error if available
-      if (err.response && err.response.data && err.response.data.error) {
-        toast.error(`Login failed: ${err.response.data.error}`);
-      } else {
-        toast.error('Login failed. Please check your credentials or try again later.');
+      try {
+        handleRateLimitError(err, 'Login failed. Please check your credentials or try again later.');
+      } catch (handledError) {
+        // Show backend error if available
+        if (handledError.response && handledError.response.data && handledError.response.data.error) {
+          toast.error(`Login failed: ${handledError.response.data.error}`);
+        } else {
+          toast.error('Login failed. Please check your credentials or try again later.');
+        }
       }
     } finally {
       setLoading(false);
@@ -87,10 +92,14 @@ const Login = () => {
       }
     } catch (err) {
       console.error('Google login error:', err);
-      if (err.response && err.response.data && err.response.data.error) {
-        toast.error(`Google login failed: ${err.response.data.error}`);
-      } else {
-        toast.error('Google login failed. Please try again.');
+      try {
+        handleRateLimitError(err, 'Google login failed. Please try again.');
+      } catch (handledError) {
+        if (handledError.response && handledError.response.data && handledError.response.data.error) {
+          toast.error(`Google login failed: ${handledError.response.data.error}`);
+        } else {
+          toast.error('Google login failed. Please try again.');
+        }
       }
     } finally {
       setLoading(false);

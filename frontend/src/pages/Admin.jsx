@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { handleRateLimitError } from '../utils/rateLimitHandler.js';
 import AdminEdit from './adminEdit.jsx';
 import './Admin.css';
 
@@ -18,6 +19,7 @@ const Admin = () => {
     totalExpenses: 0,
     netProfit: 0
   });
+
   const [recentUsers, setRecentUsers] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [examRegistrations, setExamRegistrations] = useState([]);
@@ -70,17 +72,18 @@ const Admin = () => {
       
       const config = getAuthConfig();
       
-      // Fetch all registered users from your site
+     
       const usersResponse = await axios.get(`${baseUrl}/students`, config);
       const users = usersResponse.data || [];
-      console.log('All users:', users.length, users);
+     
       
       // Fetch students who have filled exam forms
       const registeredStudentsResponse = await axios.get(`${baseUrl}/registered`, config);
       const registeredStudents = registeredStudentsResponse.data || [];
-      console.log('Exam registrations:', registeredStudents.length, registeredStudents);
+
+
       
-      // Debug: Log the first registration to see available fields
+      // Log the first registration to see available fields
       if (registeredStudents.length > 0) {
         console.log('Sample exam registration data structure:', registeredStudents[0]);
       }
@@ -149,15 +152,19 @@ const Admin = () => {
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
       
-      // Check if it's an authentication error
-      if (error.response && error.response.status === 401) {
-        toast.error('Authentication required. Please login again.');
-        // Redirect to login page
-        window.location.href = '/login';
-        return;
+      try {
+        handleRateLimitError(error, 'Failed to load dashboard data');
+      } catch (handledError) {
+        // Check if it's an authentication error
+        if (handledError.response && handledError.response.status === 401) {
+          toast.error('Authentication required. Please login again.');
+          // Redirect to login page
+          window.location.href = '/login';
+          return;
+        }
+        
+        toast.error('Failed to load dashboard data');
       }
-      
-      toast.error('Failed to load dashboard data');
       
       // Fallback to empty data
       setStats({ 
@@ -202,14 +209,18 @@ const Admin = () => {
     } catch (error) {
       console.error('Error fetching all users:', error);
       
-      // Check if it's an authentication error
-      if (error.response && error.response.status === 401) {
-        toast.error('Authentication required. Please login again.');
-        window.location.href = '/login';
-        return;
+      try {
+        handleRateLimitError(error, 'Failed to load all users');
+      } catch (handledError) {
+        // Check if it's an authentication error
+        if (handledError.response && handledError.response.status === 401) {
+          toast.error('Authentication required. Please login again.');
+          window.location.href = '/login';
+          return;
+        }
+        
+        toast.error('Failed to load all users');
       }
-      
-      toast.error('Failed to load all users');
     }
   };
 
@@ -244,14 +255,18 @@ const Admin = () => {
     } catch (error) {
       console.error('Error deleting user:', error);
       
-      // Check if it's an authentication error
-      if (error.response && error.response.status === 401) {
-        toast.error('Authentication required. Please login again.');
-        window.location.href = '/login';
-        return;
+      try {
+        handleRateLimitError(error, 'Failed to delete user');
+      } catch (handledError) {
+        // Check if it's an authentication error
+        if (handledError.response && handledError.response.status === 401) {
+          toast.error('Authentication required. Please login again.');
+          window.location.href = '/login';
+          return;
+        }
+        
+        toast.error('Failed to delete user');
       }
-      
-      toast.error('Failed to delete user');
     }
   };
 
@@ -329,12 +344,16 @@ const Admin = () => {
       setExpenses(response.data || []);
     } catch (error) {
       console.error('Error fetching expenses:', error);
-      if (error.response?.status === 401) {
-        toast.error('Authentication required. Please login again.');
-        window.location.href = '/login';
-        return;
+      try {
+        handleRateLimitError(error, 'Failed to load expenses');
+      } catch (handledError) {
+        if (handledError.response?.status === 401) {
+          toast.error('Authentication required. Please login again.');
+          window.location.href = '/login';
+          return;
+        }
+        toast.error('Failed to load expenses');
       }
-      toast.error('Failed to load expenses');
     }
   };
 
@@ -349,12 +368,16 @@ const Admin = () => {
       fetchExpenses(); // Refresh the expenses list
     } catch (error) {
       console.error('Error adding expense:', error);
-      if (error.response?.status === 401) {
-        toast.error('Authentication required. Please login again.');
-        window.location.href = '/login';
-        return;
+      try {
+        handleRateLimitError(error, 'Failed to add expense');
+      } catch (handledError) {
+        if (handledError.response?.status === 401) {
+          toast.error('Authentication required. Please login again.');
+          window.location.href = '/login';
+          return;
+        }
+        toast.error('Failed to add expense');
       }
-      toast.error('Failed to add expense');
     }
   };
 
@@ -369,12 +392,16 @@ const Admin = () => {
       fetchExpenses(); // Refresh the expenses list
     } catch (error) {
       console.error('Error deleting expense:', error);
-      if (error.response?.status === 401) {
-        toast.error('Authentication required. Please login again.');
-        window.location.href = '/login';
-        return;
+      try {
+        handleRateLimitError(error, 'Failed to delete expense');
+      } catch (handledError) {
+        if (handledError.response?.status === 401) {
+          toast.error('Authentication required. Please login again.');
+          window.location.href = '/login';
+          return;
+        }
+        toast.error('Failed to delete expense');
       }
-      toast.error('Failed to delete expense');
     }
   };
 

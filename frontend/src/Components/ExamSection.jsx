@@ -5,6 +5,7 @@ import { FaSquareRootAlt, FaAtom, FaVial, FaDna, FaGlobeAmericas, FaPuzzlePiece 
 import { Typewriter } from 'react-simple-typewriter';
 import { useInView } from 'react-intersection-observer';
 import axios from 'axios';
+import { handleRateLimitError } from '../utils/rateLimitHandler.js';
 
 const categories = [
   { title: 'Primary Exam', color: '#E1F0FA', image: '/Exams_1.jpg' },
@@ -67,6 +68,12 @@ const ExamSection = () => {
         }
       } catch (error) {
         console.error('Error fetching visitor count:', error);
+        try {
+          handleRateLimitError(error, 'Failed to fetch visitor count');
+        } catch (handledError) {
+          // For visitor count, we just set to 0 on any error
+          console.error('Error handling visitor count:', handledError);
+        }
         setVisitorCount(0);
       }
     };

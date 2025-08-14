@@ -17,6 +17,7 @@ import expensesApi from "./api/expenses.api.js";
 import adminPrompts from "./api/adminPrompts.api.js";
 import {Redis} from "ioredis";
 import "./DB/config.js";
+import rateLimitter from "./middlewares/rateLimitter.middleware.js";
 
 const app = express();
 dotenv.config();
@@ -50,17 +51,17 @@ app.use("/Login", loginApi);
 app.use("/adminSignup", adminSignup);
 app.use("/adminLogin" , adminLogin);
 app.use("/regForm", examform);
-app.use("/students", studentsApi);
-app.use("/registered" , registeredApi);
-app.use('/gemini' , gemini);
+app.use("/students", rateLimitter({limit:10 , time:17 , key:"students"}), studentsApi);
+app.use("/registered" ,rateLimitter({limit:10 , time:17 , key:"registered"}), registeredApi);
+app.use('/gemini', rateLimitter({limit:6 , time:17 , key:"AI_response"}) , gemini);
 app.use("/auth/google", googleAuth);
 app.use("/forgotPassword", forgotPassword);
 app.use("/reset-password", resetPassword);
 app.use("/registered/update", updateRegistration);
-app.use("/expenses", expensesApi);
+app.use("/expenses", rateLimitter({limit:10 , time:17 , key:"expenses"}) , expensesApi);
 app.use("/admin/prompts", adminPrompts);
 
-app.get("/", (req,resp) => {
+app.get("/", rateLimitter({limit:5 , time:17 , key:"home"}), (req,resp) => {
     resp.send("hii");
 })
 
