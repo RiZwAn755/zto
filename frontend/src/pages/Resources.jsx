@@ -7,20 +7,32 @@ import AskAI from '../Components/Doubt_Assistant';
 
 const Resources = () => {
   const [activeTab, setActiveTab] = useState('grades');
-  const [selectedGrade, setSelectedGrade] = useState(null);
+  const [selectedGrade, setSelectedGrade] = useState(6);
   const [selectedSubject, setSelectedSubject] = useState(null);
 
-  const grades = ["Grade 6", "Grade 7", "Grade 8", "Grade 9", "Grade 10", "Grade 11", "Grade 12"];
+ const handleSample = (paper)=> (e) => {
+    e.preventDefault();
+    navigate(`${paper}`);
+
+ }
+
+const  handleSubject = (subject, grade) => (e) => {
+    e.preventDefault();
+    subject = subject.toLowerCase();
+    const url = `https://bit.ly/${subject}_${grade}`;
+    console.log(url);
+    window.open(url);
+ 
+}
+
+  const grades = [6, 7, 8 , 9, 10, 11, 12];
   const subjects = ["Physics", "Chemistry", "Maths", "English", "Biology"];
-  const samplePapers = ["2023 Papers", "2022 Papers", "2021 Papers", "Model Papers"];
+  const subjectsSmall = ["Science", "Maths", "English"];
+  const samplePapers = [ 2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018];
 
   const navigate = useNavigate();
 
-  const handleDoubt = (e) => {
-      
-    e.preventDefault();
-    navigate('/AskAI');
-  }
+ 
 
   return (
     <>
@@ -36,14 +48,9 @@ const Resources = () => {
             className={`tab-btn ${activeTab === 'grades' ? 'active' : ''}`}
             onClick={() => setActiveTab('grades')}
           >
-            By Grade
+            Class-wise Resources
           </button>
-          <button 
-            className={`tab-btn ${activeTab === 'subjects' ? 'active' : ''}`}
-            onClick={() => setActiveTab('subjects')}
-          >
-            By Subject
-          </button>
+          
           <button 
             className={`tab-btn ${activeTab === 'samples' ? 'active' : ''}`}
             onClick={() => setActiveTab('samples')}
@@ -68,48 +75,47 @@ const Resources = () => {
                 ))}
               </div>
               
-              {selectedGrade && (
+              {selectedGrade <= 8 ?  (
                 <div className="subject-selection">
                   <h3>Subjects for {selectedGrade}</h3>
                   <div className="subject-grid">
-                    {subjects.map(subject => (
+                    {subjectsSmall.map(subject => (
                       <div 
                         key={subject}
                         className="subject-card"
-                        onClick={() => setSelectedSubject(subject)}
+                       onClick={handleSubject(subject, selectedGrade)}
                       >
-                        <div className="subject-icon">{subject.charAt(0)}</div>
+                         
+                        <div className="subject-icon" >{subject.charAt(0)}</div>
                         <h4>{subject}</h4>
                       </div>
                     ))}
                   </div>
                 </div>
-              )}
+              ): (<div className="subject-selection">
+                  <h3>Subjects for {selectedGrade}</h3>
+                  <div className="subject-grid" >
+                    {subjects.map(subject => (
+                      <div 
+                        key={subject}
+                        className="subject-card"
+                       
+                       onClick={handleSubject(subject, selectedGrade)}
+
+                      >
+                       
+                        <div className="subject-icon"  >{subject.charAt(0)}</div>
+                        <h4>{subject}</h4>
+                         
+                      </div>
+                      
+                    ))}
+                  </div>
+                </div>)}
+
             </div>
           )}
 
-          {activeTab === 'subjects' && (
-            <div className="subject-selector">
-              <h2>Browse By Subject</h2>
-              <div className="subject-grid">
-                {subjects.map(subject => (
-                  <div key={subject} className="subject-card-wide">
-                    <h3>{subject}</h3>
-                    <div className="grade-buttons">
-                      {grades.map(grade => (
-                        <button
-                          key={`${subject}-${grade}`}
-                          className="grade-chip"
-                        >
-                          {grade.split(' ')[1]}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
 
           {activeTab === 'samples' && (
             <div className="sample-papers">
@@ -119,7 +125,8 @@ const Resources = () => {
                   <div key={paper} className="paper-card">
                     <div className="paper-icon">📄</div>
                     <h3>{paper}</h3>
-                    <button className="download-btn">Download</button>
+                    
+                    <button className="download-btn" onClick={handleSample(paper)} >Download</button>
                   </div>
                 ))}
               </div>
