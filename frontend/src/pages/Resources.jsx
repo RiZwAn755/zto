@@ -19,7 +19,7 @@ const Resources = () => {
 const  handleSubject = (subject, grade) => (e) => {
     e.preventDefault();
     subject = subject.toLowerCase();
-    const url = `https://bit.ly/${subject}_${grade}`;
+    const url = `https://bit.ly/${subject}__${grade}`;
     console.log(url);
     window.open(url);
  
