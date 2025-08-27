@@ -47,6 +47,7 @@ app.use("/stReg", signupApi);
 app.use("/Login", loginApi);
 app.use("/adminSignup", adminSignup);
 app.use("/adminLogin" , adminLogin);
+app.use("/regForm", examform);
 app.use("/students",   cachedData("students"), studentsApi);
 app.use("/registered" , cachedData("registered"), rateLimitter({limit:10 , time:17 , key:"registered"}), registeredApi);
 app.use('/gemini', rateLimitter({limit:6 , time:17 , key:"AI_response"}) , gemini);

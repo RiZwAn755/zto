@@ -41,7 +41,8 @@ router.post("/", verifyToken, async (req, res) => {
             email,
             parentName,
             parentPhone,
-            dob
+            dob,
+            
         });
 
         await newForm.save();
