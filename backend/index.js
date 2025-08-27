@@ -19,6 +19,7 @@ import redis from "./DB/redis.js";
 import "./DB/config.js";
 import rateLimitter from "./middlewares/rateLimitter.middleware.js";
 import cachedData from "./middlewares/redis.middlware.js";
+import me from "./api/me.js"
 
 const app = express();
 dotenv.config();
@@ -57,7 +58,7 @@ app.use("/reset-password", resetPassword);
 app.use("/registered/update", updateRegistration);
 app.use("/expenses", cachedData("expenses"), rateLimitter({limit:10 , time:17 , key:"expenses"}) , expensesApi);
 app.use("/admin/prompts", adminPrompts);
-
+app.use("/me" , me);
 app.get("/", rateLimitter({limit:5 , time:17 , key:"home"}), (req,resp) => {
   console.log(process.pid);
     resp.send("hii");
