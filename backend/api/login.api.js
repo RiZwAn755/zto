@@ -32,7 +32,7 @@ router.post("/", async (req, res) => {
       httpOnly: true,
       secure: true, // only works over HTTPS
       sameSite: "Strict", // or 'Lax' depending on your frontend/backend setup
-      maxAge: 5 * 60 * 1000 // 5 minutes
+      maxAge: 1 * 60 * 1000 // 5 minutes
     });
 
     return res.status(200).json({

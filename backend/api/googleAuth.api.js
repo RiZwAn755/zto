@@ -81,9 +81,9 @@ router.post("/", async (req, res) => {
     // Set JWT as HTTP-only cookie
     res.cookie('token', jwtToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // send only over HTTPS in production
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+      secure: true, // must be true for HTTPS
+      sameSite: 'none', // must be 'none' for cross-site cookies
+      maxAge: 1 * 60 * 60 * 1000 // 1 hour
     });
 
     res.status(200).json({
