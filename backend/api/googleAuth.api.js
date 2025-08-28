@@ -75,7 +75,7 @@ router.post("/", async (req, res) => {
         googleId: googleId 
       }, 
       process.env.JWT_SECRET, 
-      { expiresIn: "1m" }
+      { expiresIn: "1hr" }
     );
 
     // Set JWT as HTTP-only cookie

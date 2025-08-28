@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "2m" });
+    const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "1hr" });
 
     // Set token in secure cookie
     res.cookie("token", token, {
