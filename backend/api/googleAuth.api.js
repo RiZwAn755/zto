@@ -55,13 +55,12 @@ router.post("/", async (req, res) => {
       user = new Student({
         name: name,
         email: email,
-        password: googleId, // Use Google ID as password for OAuth users
+        password: googleId,
         googleId: googleId,
         profilePicture: picture,
-        // Set default values for required fields
-        phone: "0000000000", // You might want to prompt for this later
+        phone: "0000000000", 
         school: "Google Signup",
-        classs: 10 // Default class, can be updated later
+        classs: 10 
       });
       await user.save();
       userType = "student";
@@ -76,12 +75,19 @@ router.post("/", async (req, res) => {
         googleId: googleId 
       }, 
       process.env.JWT_SECRET, 
-      { expiresIn: "7d" }
+      { expiresIn: "1m" }
     );
+
+    // Set JWT as HTTP-only cookie
+    res.cookie('token', jwtToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // send only over HTTPS in production
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
 
     res.status(200).json({
       message: "Google authentication successful",
-      token: jwtToken,
       user: {
         id: user._id,
         name: user.name,

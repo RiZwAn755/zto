@@ -3,11 +3,14 @@ import './Navbar.css';
 import { useNavigate, Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
+
+const baseUrl = import.meta.env.VITE_BASE_URL;
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("email"));
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   // Toggle mobile menu
@@ -24,13 +27,17 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Listen for login/logout changes in localStorage (optional, for multi-tab support)
+  // Check login status using /me endpoint
   useEffect(() => {
-    const handleStorage = () => {
-      setIsLoggedIn(!!localStorage.getItem("email"));
+    const checkAuth = async () => {
+      try {
+        await axios.get(`${baseUrl}/me`, { withCredentials: true });
+        setIsLoggedIn(true);
+      } catch {
+        setIsLoggedIn(false);
+      }
     };
-    window.addEventListener('storage', handleStorage);
-    return () => window.removeEventListener('storage', handleStorage);
+    checkAuth();
   }, []);
 
   const handleLogin = (e) => {
@@ -38,14 +45,18 @@ const Navbar = () => {
     navigate("/login");
   };
 
-  const handleLogout = (e) => {
+  const handleLogout = async (e) => {
     e.preventDefault();
+    try {
+      // Optional: call backend to clear cookie if you have a logout endpoint
+      await axios.post(`${baseUrl}/logout`, {}, { withCredentials: true });
+    } catch {}
     toast.success('Log out successful!');
     localStorage.removeItem("email");
     setIsLoggedIn(false);
     setTimeout(() => {
       navigate("/landing");
-    }, 1000); // Wait for toast before redirecting
+    }, 1000);
   };
 
   return (

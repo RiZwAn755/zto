@@ -6,7 +6,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { GoogleLogin } from '@react-oauth/google';
-import { handleRateLimitError } from '../utils/rateLimitHandler.js';
+
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 const RegisterPage = () => {
@@ -51,7 +51,7 @@ const RegisterPage = () => {
         break;
       case "email":
         if (!value) error = "Email is required";
-        else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value)) error = "Please enter a valid email address";
+        else if (!/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/.test(value)) error = "Please enter a valid email address";
         break;
       case "password":
         if (!value) error = "Password is required";
@@ -81,7 +81,7 @@ const RegisterPage = () => {
     e.preventDefault();
     setErrors({}); // Clear previous errors
 
-    try {
+    
       const {data} = await axios.post(`${baseUrl}/stReg` , formData);
       setIsSubmitting(true);
       toast.success('Registered successfully , You can login now');
@@ -89,19 +89,8 @@ const RegisterPage = () => {
         setIsSubmitting(false);
         navigate('/login');
       }, 1500);
-    } catch (err) {
-      try {
-        handleRateLimitError(err, 'Registration failed. Please try again.');
-      } catch (handledError) {
-        if (handledError.response && handledError.response.status === 409 && handledError.response.data && handledError.response.data.error === "Email already exists") {
-          toast.error('Email already exists');
-        } else if (handledError.response && handledError.response.data && handledError.response.data.errors) {
-          setErrors(handledError.response.data.errors);
-        } else {
-          toast.error('Registration failed. Please try again.');
-        }
-      }
-    }
+   
+    
   };
 
   const handleGoogleSuccess = async (credentialResponse) => {
@@ -127,15 +116,7 @@ const RegisterPage = () => {
       }
     } catch (err) {
       console.error('Google registration error:', err);
-      try {
-        handleRateLimitError(err, 'Google registration failed. Please try again.');
-      } catch (handledError) {
-        if (handledError.response && handledError.response.data && handledError.response.data.error) {
-          toast.error(`Google registration failed: ${handledError.response.data.error}`);
-        } else {
-          toast.error('Google registration failed. Please try again.');
-        }
-      }
+    
     } finally {
       setIsSubmitting(false);
     }

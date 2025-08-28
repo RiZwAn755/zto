@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { handleRateLimitError } from '../utils/rateLimitHandler.js';
+// import { handleRateLimitError } from '../utils/rateLimitHandler.js';
 import './ResetPassword.css';
 
 const ResetPassword = () => {
@@ -84,8 +84,7 @@ const ResetPassword = () => {
         }
 
         setLoading(true);
-        try {
-            const response = await axios.post(`${baseUrl}/reset-password`, {
+        const response = await axios.post(`${baseUrl}/reset-password`, {
                 token: token,
                 password: formData.password
             });
@@ -94,19 +93,8 @@ const ResetPassword = () => {
             setTimeout(() => {
                 navigate('/login');
             }, 2000);
-        } catch (error) {
-            try {
-                handleRateLimitError(error, 'Failed to reset password. Please try again.');
-            } catch (handledError) {
-                if (handledError.response?.data?.message) {
-                    toast.error(handledError.response.data.message);
-                } else {
-                    toast.error('Failed to reset password. Please try again.');
-                }
-            }
-        } finally {
-            setLoading(false);
-        }
+            
+        
     };
 
     if (!tokenValid) {

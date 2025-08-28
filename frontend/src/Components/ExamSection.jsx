@@ -3,9 +3,9 @@ import './ExamSection.css';
 import { useNavigate } from 'react-router-dom';
 import { FaSquareRootAlt, FaAtom, FaVial, FaDna, FaGlobeAmericas, FaPuzzlePiece } from 'react-icons/fa';
 import { Typewriter } from 'react-simple-typewriter';
-import { useInView } from 'react-intersection-observer';
+// import { useInView } from 'react-intersection-observer';
 import axios from 'axios';
-import { handleRateLimitError } from '../utils/rateLimitHandler.js';
+// import { handleRateLimitError } from '../utils/rateLimitHandler.js';
 
 const categories = [
   { title: 'Primary Exam', color: '#E1F0FA', image: '/Exams_1.jpg' },
@@ -68,12 +68,6 @@ const ExamSection = () => {
         }
       } catch (error) {
         console.error('Error fetching visitor count:', error);
-        try {
-          handleRateLimitError(error, 'Failed to fetch visitor count');
-        } catch (handledError) {
-          // For visitor count, we just set to 0 on any error
-          console.error('Error handling visitor count:', handledError);
-        }
         setVisitorCount(0);
       }
     };
@@ -82,6 +76,7 @@ const ExamSection = () => {
   }, []);
 
   // Animate the count-up effect
+
   useEffect(() => {
     if (displayCount === visitorCount) return;
     const increment = visitorCount > 100 ? Math.ceil(visitorCount / 50) : 1;
@@ -121,25 +116,8 @@ const ExamSection = () => {
         </div>
 
         <div className="subject-grid">
-          {subjects.map((sub, idx) => {
-            const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 });
-            return (
-              <div key={idx} className="subject-card" ref={ref}>
-                {sub.icon}
-                <h4>{sub.name}</h4>
-                <p className="subject-quote">
-                  {inView ? (
-                    <Typewriter
-                      words={[sub.quote]}
-                      typeSpeed={28}
-                      cursor
-                      cursorStyle="|"
-                    />
-                  ) : ''}
-                </p>
-                <p className="subject-author">{sub.author}</p>
-              </div>
-            );
+          {subjects.map(() => {
+            return null; // placeholder, will be replaced below
           })}
         </div>
       </div>

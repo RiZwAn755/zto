@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from 'react-router-dom';
-import { handleRateLimitError } from '../utils/rateLimitHandler.js';
+
 import './ForgotPassword.css';
 
 const ForgotPassword = () => {      
@@ -11,7 +10,6 @@ const ForgotPassword = () => {
     const [loading, setLoading] = useState(false);
     const [emailSent, setEmailSent] = useState(false);
     const [error, setError] = useState('');
-    const navigate = useNavigate();
     const baseUrl = import.meta.env.VITE_BASE_URL;
 
     const handleSubmit = async (e) => {
@@ -23,7 +21,7 @@ const ForgotPassword = () => {
             return;
         }
 
-        if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+        if (!/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
             setError('Please enter a valid email address');
             return;
         }
@@ -33,16 +31,8 @@ const ForgotPassword = () => {
             const response = await axios.post(`${baseUrl}/forgotPassword`, { email });
             setEmailSent(true);
             setError('');
-        } catch (error) {
-            try {
-                handleRateLimitError(error, 'Failed to send reset link. Please try again.');
-            } catch (handledError) {
-                if (handledError.response?.data?.error) {
-                    setError(handledError.response.data.error);
-                } else {
-                    setError('Failed to send reset link. Please try again.');
-                }
-            }
+        } catch  {
+            
             setEmailSent(false);
         } finally {
             setLoading(false);

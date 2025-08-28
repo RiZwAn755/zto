@@ -6,7 +6,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { GoogleLogin } from '@react-oauth/google';
 import { Link } from 'react-router-dom';
-import { handleRateLimitError } from '../utils/rateLimitHandler.js';
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 const Login = () => {
@@ -14,13 +13,6 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const handleGoogle = (e) =>{
-
-    e.preventDefault();
-    console.log("login with google");
-
-  } 
 
   const handleChange = (e) => {
     setFormData(prev => ({
@@ -32,16 +24,18 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // Trim email and password before sending
     const trimmedFormData = {
       email: formData.email.trim(),
       password: formData.password.trim()
     };
     try {
-      const { data } = await axios.post(`${baseUrl}/Login`, trimmedFormData);
+      const { data } = await axios.post(
+        `${baseUrl}/Login`,
+        trimmedFormData,
+        { withCredentials: true }
+      );
       if (data) {
         localStorage.setItem("email", formData.email);
-        localStorage.setItem('token' , data.token);
         toast.success('Logged in successfully!');
         setTimeout(() => {
           if (data.role === "admin") {
@@ -54,16 +48,7 @@ const Login = () => {
         toast.error('Unable to login');
       }
     } catch (err) {
-      try {
-        handleRateLimitError(err, 'Login failed. Please check your credentials or try again later.');
-      } catch (handledError) {
-        // Show backend error if available
-        if (handledError.response && handledError.response.data && handledError.response.data.error) {
-          toast.error(`Login failed: ${handledError.response.data.error}`);
-        } else {
-          toast.error('Login failed. Please check your credentials or try again later.');
-        }
-      }
+      toast.error('Unable to login');
     } finally {
       setLoading(false);
     }
@@ -72,14 +57,13 @@ const Login = () => {
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
       setLoading(true);
-      console.log('Attempting Google auth with URL:', `${baseUrl}/auth/google`);
-      const { data } = await axios.post(`${baseUrl}/auth/google`, {
-        token: credentialResponse.credential
-      });
-      
-      if (data && data.token) {
+      const { data } = await axios.post(
+        `${baseUrl}/auth/google`,
+        { token: credentialResponse.credential },
+        { withCredentials: true }
+      );
+      if (data && data.user) {
         localStorage.setItem("email", data.user.email);
-        localStorage.setItem('token', data.token);
         localStorage.setItem('userType', data.user.userType);
         toast.success('Google login successful!');
         setTimeout(() => {
@@ -89,18 +73,11 @@ const Login = () => {
             navigate("/");
           }
         }, 1000);
+      } else {
+        toast.error('Google login failed. Please try again.');
       }
     } catch (err) {
-      console.error('Google login error:', err);
-      try {
-        handleRateLimitError(err, 'Google login failed. Please try again.');
-      } catch (handledError) {
-        if (handledError.response && handledError.response.data && handledError.response.data.error) {
-          toast.error(`Google login failed: ${handledError.response.data.error}`);
-        } else {
-          toast.error('Google login failed. Please try again.');
-        }
-      }
+      toast.error('Google login failed. Please try again.');
     } finally {
       setLoading(false);
     }

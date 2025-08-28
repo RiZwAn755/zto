@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -23,20 +23,15 @@ import Landing from './pages/Landing';
 import DoubtButton from './Components/DoubtButton';
 import ForgotPassword from './Components/ForgotPassword';
 import ResetPassword from './Components/resetpassword';
-import withSessionCheck from './utils/withSessionCheck.jsx';
-import './utils/testSessionExpiration.js'; // Import test utilities
 
-// Create session-checked version of DoubtButton
-const SessionCheckedDoubtButton = withSessionCheck(DoubtButton);
+
+
+
 
 function App() {
   
-  const handleDoubt = (e) => {
-    e.preventDefault();
-    navigate('/AskAI');
-  };
 
-  // Debug: Log the Google Client ID
+
   const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
   
   return (
@@ -70,7 +65,7 @@ function App() {
 
 
           </Routes>
-          <SessionCheckedDoubtButton />
+         
         </div>
       </GoogleOAuthProvider>
      
