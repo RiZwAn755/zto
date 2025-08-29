@@ -1,28 +1,17 @@
-// apis/me.js
-
 import express from "express";
-import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
+import { verifyToken } from "../middlewares/jwt.middleware.js";
 
 const router = express.Router();
 router.use(cookieParser());
 
-router.get("/", (req, res) => {
-  const token = req.cookies.token;
+router.get("/", verifyToken, (req, res) => {
 
-  if (!token) {
-    return res.status(401).json({ message: "Not authenticated" });
-  }
+ res.status(200).json({
+    email: req.user.email,
+    role: req.user.role
+  });
 
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    res.status(200).json({
-      email: decoded.email,
-      role: decoded.role // only if you include it in your token
-    });
-  } catch (err) {
-    return res.status(403).json({ message: "Invalid or expired token" });
-  }
 });
 
 export default router;

@@ -11,16 +11,19 @@ const PrivateComponent = () => {
   const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
+
     const checkAuth = async () => {
       try {
         await axios.get(`${baseUrl}/me`, { withCredentials: true });
         setChecking(false);
-      } catch (err) {
+      } catch {
         toast.warn("Please login or signup to visit these page", { toastId: "login-warning" });
         setTimeout(() => setRedirect(true), 1000);
       }
     };
+
     checkAuth();
+
   }, []);
 
   if (redirect) {

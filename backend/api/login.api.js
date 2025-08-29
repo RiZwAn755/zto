@@ -10,6 +10,7 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
   try {
+    
     let { email, password } = req.body;
     email = email?.trim();
     password = password?.trim();
@@ -32,13 +33,13 @@ router.post("/", async (req, res) => {
       httpOnly: true,
       secure: true, // only works over HTTPS
       sameSite: "Strict", // or 'Lax' depending on your frontend/backend setup
-      maxAge: 1 * 60 * 1000 // 5 minutes
+      maxAge: 1 * 60 * 1000 // 1 hr
     });
 
     return res.status(200).json({
       message: "Login successful",
       role: student ? "student" : "admin"
-      //  don't send token in JSON anymore!
+   
     });
 
   } catch (error) {

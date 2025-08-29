@@ -1,17 +1,17 @@
 import jwt from "jsonwebtoken";
 
-const jwtsecret = process.env.JWT_SECRET || "your_jwt_secret";
+const jwtsecret = process.env.JWT_SECRET ;
 
 export const verifyToken = (req, res, next) => 
     {
-    const authHeader = req.headers.authorization;
+       const token = req.cookies.token;
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) 
+    if (!token) 
     {
         return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const token = authHeader.split(" ")[1];
+   
     jwt.verify(token, jwtsecret, (err, decoded) => 
         {
         if (err) 
