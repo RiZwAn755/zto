@@ -56,7 +56,7 @@ const Admin = () => {
     fetchPrompts();
   }, []);
 
-  // Helper function to get auth config
+  
   const getAuthConfig = () => {
     const token = localStorage.getItem('token');
     return {
@@ -148,6 +148,7 @@ const Admin = () => {
       
       setRecentUsers(recentUsersData);
       setExamRegistrations(examRegistrationsData);
+      setLoading(false);
       
   };
 

@@ -75,19 +75,13 @@ router.post("/", async (req, res) => {
         googleId: googleId 
       }, 
       process.env.JWT_SECRET, 
-      { expiresIn: "1m" }
+      { expiresIn: "7d" } // changed to 7 days for frontend storage
     );
 
-    // Set JWT as HTTP-only cookie
-    res.cookie('token', jwtToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // send only over HTTPS in production
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-    });
-
+    // Return token in JSON response for frontend localStorage
     res.status(200).json({
       message: "Google authentication successful",
+      token: jwtToken,
       user: {
         id: user._id,
         name: user.name,

@@ -25,20 +25,14 @@ router.post("/", async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "2m" });
+    const role = student ? "student" : "admin";
 
-    // Set token in secure cookie
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true, // only works over HTTPS
-      sameSite: "Strict", // or 'Lax' depending on your frontend/backend setup
-      maxAge: 5 * 60 * 1000 // 5 minutes
-    });
+    const token = jwt.sign({ email, role }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
     return res.status(200).json({
       message: "Login successful",
-      role: student ? "student" : "admin"
-      //  don't send token in JSON anymore!
+      role,
+      token
     });
 
   } catch (error) {

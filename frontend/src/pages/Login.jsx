@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import './Login.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { GoogleLogin } from '@react-oauth/google';
-import { Link } from 'react-router-dom';
+
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 const Login = () => {
@@ -24,59 +24,80 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const trimmedFormData = {
-      email: formData.email.trim(),
-      password: formData.password.trim()
-    };
+
     try {
+      console.log('Submitting login:', formData);
       const { data } = await axios.post(
         `${baseUrl}/Login`,
-        trimmedFormData,
-        { withCredentials: true }
+        {
+          email: formData.email.trim(),
+          password: formData.password.trim()
+        },
+        { headers: { 'Content-Type': 'application/json' } }
       );
-      if (data) {
-        localStorage.setItem("email", formData.email);
+
+      console.log('Backend response:', data);
+
+      if (data && data.token) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('email', data.email || formData.email);
+        localStorage.setItem('role', data.role || 'user');
+
         toast.success('Logged in successfully!');
+
         setTimeout(() => {
-          if (data.role === "admin") {
-            navigate("/admin");
-          } else {
-            navigate("/");
-          }
+          if (data.role === 'admin') navigate('/admin');
+          else navigate('/');
         }, 1000);
       } else {
-        toast.error('Unable to login');
+        toast.error(data.message || 'Invalid credentials. Please try again.');
       }
     } catch (err) {
-      toast.error('Unable to login');
+      console.error('Login error:', err);
+      if (err.response) {
+        // Backend responded with error
+        console.log('Error data:', err.response.data);
+        toast.error(err.response.data.message || 'Unable to login');
+      } else if (err.request) {
+        // Request made but no response
+        toast.error('No response from server. Please check your backend.');
+      } else {
+        // Something else
+        toast.error(err.message || 'Login failed');
+      }
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleSuccess = async (credentialResponse) => {
+    setLoading(true);
     try {
-      setLoading(true);
+      console.log('Google credential:', credentialResponse);
       const { data } = await axios.post(
         `${baseUrl}/auth/google`,
         { token: credentialResponse.credential },
-        { withCredentials: true }
+        { headers: { 'Content-Type': 'application/json' } }
       );
-      if (data && data.user) {
-        localStorage.setItem("email", data.user.email);
-        localStorage.setItem('userType', data.user.userType);
+
+      console.log('Google login response:', data);
+
+      if (data && data.user && data.token) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('email', data.user.email);
+        localStorage.setItem('role', data.user.userType || 'user');
+
         toast.success('Google login successful!');
+
         setTimeout(() => {
-          if (data.user.userType === "admin") {
-            navigate("/admin");
-          } else {
-            navigate("/");
-          }
+          if (data.user.userType === 'admin') navigate('/admin');
+          else navigate('/');
         }, 1000);
       } else {
-        toast.error('Google login failed. Please try again.');
+        toast.error(data.message || 'Google login failed.');
       }
     } catch (err) {
+      console.error('Google login error:', err);
       toast.error('Google login failed. Please try again.');
     } finally {
       setLoading(false);
@@ -91,11 +112,12 @@ const Login = () => {
     <div className="login-wrapper">
       <ToastContainer />
       <div className="login-card">
-        <h2>Lets Sign you in</h2>
+        <h2>Let's Sign you in</h2>
         <p>Welcome Back,<br />You have been missed</p>
+
         <form onSubmit={handleSubmit} className="login-form">
           <input
-            type="text"
+            type="email"
             name="email"
             placeholder="Email"
             value={formData.email}
@@ -107,7 +129,7 @@ const Login = () => {
           <div className="password-field">
             <div className="password-input-wrapper">
               <input
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 name="password"
                 placeholder="Password"
                 value={formData.password}
@@ -118,7 +140,7 @@ const Login = () => {
               <span
                 className="toggle-password"
                 onClick={() => setShowPassword(!showPassword)}
-                style={{ cursor: "pointer" }}
+                style={{ cursor: 'pointer' }}
               >
                 {showPassword ? '🙈' : '👁️'}
               </span>
@@ -126,16 +148,14 @@ const Login = () => {
           </div>
 
           <div className="forgotpassword">
-            <Link to = "/forgotPassword">Forgot Password?</Link>
+            <Link to="/forgotPassword">Forgot Password?</Link>
           </div>
 
           <button type="submit" className="sign-in-btn" disabled={loading}>
-            {loading ? "Signing in..." : "Sign in"}
+            {loading ? 'Signing in...' : 'Sign in'}
           </button>
 
-          <div className="divider">
-            <span>or</span>
-          </div>
+          <div className="divider"><span>or</span></div>
 
           <div className="social-icons">
             <GoogleLogin
@@ -151,7 +171,7 @@ const Login = () => {
           </div>
 
           <p className="register-link">
-            Don’t have an account? <a href="/register">Register Now</a>
+            Don’t have an account? <Link to="/register">Register Now</Link>
           </p>
         </form>
       </div>

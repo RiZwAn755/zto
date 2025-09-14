@@ -19,7 +19,7 @@ import redis from "./DB/redis.js";
 import "./DB/config.js";
 import rateLimitter from "./middlewares/rateLimitter.middleware.js";
 import cachedData from "./middlewares/redis.middlware.js";
-import me from "./api/me.js"
+
 
 const app = express();
 dotenv.config();
@@ -28,14 +28,9 @@ dotenv.config();
 
 app.use(express.json());
 app.use(cors({
-  origin: [
-    'https://zto-fe.vercel.app',
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'https://ztobackend.vercel.app'
-  ],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  origin:"*",
+ 
+ methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
@@ -58,7 +53,7 @@ app.use("/reset-password", resetPassword);
 app.use("/registered/update", updateRegistration);
 app.use("/expenses", cachedData("expenses"), rateLimitter({limit:10 , time:17 , key:"expenses"}) , expensesApi);
 app.use("/admin/prompts", adminPrompts);
-app.use("/me" , me);
+
 app.get("/", rateLimitter({limit:5 , time:17 , key:"home"}), (req,resp) => {
   console.log(process.pid);
     resp.send("hii");
