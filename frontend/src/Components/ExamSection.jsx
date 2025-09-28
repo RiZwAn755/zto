@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './ExamSection.css';
+import DoubtButton from "./DoubtButton"
 import { useNavigate } from 'react-router-dom';
 import { FaSquareRootAlt, FaAtom, FaVial, FaDna, FaGlobeAmericas, FaPuzzlePiece } from 'react-icons/fa';
 import { Typewriter } from 'react-simple-typewriter';
@@ -93,6 +94,8 @@ const ExamSection = () => {
   }, [visitorCount, displayCount]);
 
   return (
+    <>
+     <DoubtButton/>
     <section className="exam-section" id="exam-section">
       <div className="active-users-wrapper">
         <div className="active-users"> Visitors count : {displayCount}+</div>
@@ -122,6 +125,7 @@ const ExamSection = () => {
         </div>
       </div>
     </section>
+    </>
   );
 };
 

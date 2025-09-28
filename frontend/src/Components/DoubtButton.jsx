@@ -1,127 +1,61 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './DoubtButton.css';
+import React, { useRef } from "react";
+import "./DoubtButton.css";
+import { Link } from "react-router-dom";
 
 const DoubtButton = () => {
-  const navigate = useNavigate();
-  // Set default position: bottom right for mobile, bottom right for desktop
-  const getDefaultPosition = () => {
-    if (window.innerWidth <= 600) {
-      return { left: window.innerWidth - 72, top: window.innerHeight - 72 };
-    }
-    return { left: window.innerWidth - 102, top: window.innerHeight - 102 };
-  };
-  const [position, setPosition] = useState(getDefaultPosition());
-  const [dragging, setDragging] = useState(false);
-  const dragOffset = useRef({ x: 0, y: 0 });
+  const buttonRef = useRef(null);
+  let pos = { top: 0, left: 0, x: 0, y: 0 };
 
-  // Update position on resize (to keep button visible)
-  useEffect(() => {
-    const handleResize = () => {
-      setPosition(getDefaultPosition());
+  const onMouseDown = (e) => {
+    const button = buttonRef.current;
+    pos = {
+      left: button.offsetLeft,
+      top: button.offsetTop,
+      x: e.clientX,
+      y: e.clientY,
     };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Mouse/touch down
-  const handleDragStart = (e) => {
-    e.stopPropagation();
-    setDragging(true);
-    let clientX, clientY;
-    if (e.type === 'touchstart') {
-      clientX = e.touches[0].clientX;
-      clientY = e.touches[0].clientY;
-    } else {
-      clientX = e.clientX;
-      clientY = e.clientY;
-    }
-    dragOffset.current = {
-      x: clientX - position.left,
-      y: clientY - position.top
-    };
-    document.body.style.userSelect = 'none';
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
   };
 
-  // Mouse/touch move
-  const handleDrag = (e) => {
-    if (!dragging) return;
-    let clientX, clientY;
-    if (e.type === 'touchmove') {
-      clientX = e.touches[0].clientX;
-      clientY = e.touches[0].clientY;
-    } else {
-      clientX = e.clientX;
-      clientY = e.clientY;
-    }
-    const btn = document.getElementById('draggable-doubt-btn');
-    const btnRect = btn ? btn.getBoundingClientRect() : { width: 70, height: 70 };
-    const viewport = { width: window.innerWidth, height: window.innerHeight };
-    let newLeft = clientX - dragOffset.current.x;
-    let newTop = clientY - dragOffset.current.y;
-    // Clamp to viewport
-    newLeft = Math.max(0, Math.min(newLeft, viewport.width - btnRect.width));
-    newTop = Math.max(0, Math.min(newTop, viewport.height - btnRect.height));
-    setPosition({ left: newLeft, top: newTop });
+  const onMouseMove = (e) => {
+    const button = buttonRef.current;
+    const dx = e.clientX - pos.x;
+    const dy = e.clientY - pos.y;
+    button.style.left = `${pos.left + dx}px`;
+    button.style.top = `${pos.top + dy}px`;
+    button.style.right = "auto";
+    button.style.bottom = "auto";
   };
 
-  // Mouse/touch up
-  const handleDragEnd = () => {
-    setDragging(false);
-    document.body.style.userSelect = '';
-  };
-
-  // Attach/detach listeners
-  React.useEffect(() => {
-    if (dragging) {
-      window.addEventListener('mousemove', handleDrag);
-      window.addEventListener('mouseup', handleDragEnd);
-      window.addEventListener('touchmove', handleDrag, { passive: false });
-      window.addEventListener('touchend', handleDragEnd);
-    } else {
-      window.removeEventListener('mousemove', handleDrag);
-      window.removeEventListener('mouseup', handleDragEnd);
-      window.removeEventListener('touchmove', handleDrag);
-      window.removeEventListener('touchend', handleDragEnd);
-    }
-    return () => {
-      window.removeEventListener('mousemove', handleDrag);
-      window.removeEventListener('mouseup', handleDragEnd);
-      window.removeEventListener('touchmove', handleDrag);
-      window.removeEventListener('touchend', handleDragEnd);
-    };
-    // eslint-disable-next-line
-  }, [dragging]);
-
-  const handleDoubt = (e) => {
-    if (!dragging) {
-      e.preventDefault();
-      navigate('/AskAI');
-    }
+  const onMouseUp = () => {
+    document.removeEventListener("mousemove", onMouseMove);
+    document.removeEventListener("mouseup", onMouseUp);
   };
 
   return (
-    <button
-      id="draggable-doubt-btn"
-      className='doubtButton-fixed'
+    <Link
+      to="/AskAI"
+      className="doubtButton-fixed"
+      ref={buttonRef}
       style={{
-        left: position.left,
-        top: position.top,
-        right: 'auto',
-        bottom: 'auto',
-        touchAction: 'none',
-        position: 'fixed',
-        zIndex: 1000
+        left: "auto",
+        top: "auto",
+        right: 32,
+        bottom: 32,
+        position: "fixed",
       }}
-      onClick={handleDoubt}
-      onMouseDown={handleDragStart}
-      onTouchStart={handleDragStart}
-      aria-label="Ask Doubt"
+      onMouseDown={onMouseDown}
+      draggable={false}
     >
-      <span className="chatbot-icon" role="img" aria-label="chat">💬</span>
-      <span className="chatbot-label">Doubts</span>
-    </button>
+      <img
+        src="/teacher.png"
+        alt="Indian Teacher"
+        className="chatbot-icon"
+        draggable={false}
+      />
+    </Link>
   );
 };
 
-export default DoubtButton; 
+export default DoubtButton;

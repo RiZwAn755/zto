@@ -1,52 +1,64 @@
 .doubtButton-fixed {
   position: fixed;
+  bottom: 32px;
+  right: 32px;
   z-index: 1000;
-  width: 70px;
-  height: 70px;
-  background-color: #6A0DAD;
-  border-radius: 10%;
+  width: auto;
+  height: auto;
+  background: none;
   border: none;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  box-shadow: none;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+  cursor: grab;
   padding: 0;
+  animation: none;
+  user-select: none;
+}
+
+.doubtButton-fixed:active {
+  cursor: grabbing;
 }
 
 .doubtButton-fixed:hover {
-  background-color: #531f9c;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.22);
-  transform: translateY(-2px) scale(1.05);
+  background: none;
+  box-shadow: none;
+  transform: scale(1.08);
 }
 
 .chatbot-icon {
-  font-size: 2rem;
-  display: block;
-  margin-bottom: 2px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: none;
+  margin-bottom: 0;
+  padding: 0;
+  border: 3px solid #111;
+  animation: pulse 1.8s infinite;
 }
 
-.chatbot-label {
-  font-size: 0.75rem;
-  color: #fff;
-  font-weight: 600;
-  margin-top: 0px;
-  line-height: 1;
-  letter-spacing: 0.5px;
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(79, 172, 254, 0.25);
+  }
+  70% {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 12px rgba(79, 172, 254, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(79, 172, 254, 0);
+  }
 }
 
 @media (max-width: 600px) {
-  .doubtButton-fixed {
-    width: 56px;
-    height: 56px;
-   
-  }
   .chatbot-icon {
-    font-size: 1.5rem;
+    width: 16vw;
+    height: 16vw;
+    min-width: 48px;
+    min-height: 48px;
   }
-  .chatbot-label {
-    font-size: 0.65rem;
-  }
-} 
+}

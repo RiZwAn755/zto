@@ -23,6 +23,8 @@ import Landing from './pages/Landing';
 import DoubtButton from './Components/DoubtButton';
 import ForgotPassword from './Components/ForgotPassword';
 import ResetPassword from './Components/resetpassword';
+import Article from './pages/article';
+import HomeArticles from './pages/homeArticle';
 
 
 
@@ -61,6 +63,8 @@ function App() {
             <Route path="/rewards" element={<Rewards />} />
             <Route path="/checkresult" element={<CheckResult />} />
             <Route path='/AskAI' element = {<AskAI />} />
+            <Route path='/Article' element = {<Article/>} />
+            <Route path = "/HomeArticle" element = {<HomeArticles/>} />
             </Route>
 
 

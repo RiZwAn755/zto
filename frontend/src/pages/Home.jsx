@@ -4,12 +4,15 @@ import ExamSection from "../Components/ExamSection";
 import MissionSection from "../Components/Mission";
 import Footer from "../Components/Footer";
 import OurTeams from "../Components/OurTeams";
+import HomeArticles from "./homeArticle";
+
 
 const Home = () => {
   return (
     <div className="home-container">
       <Navbar />
       <HeroCarousel />
+      <HomeArticles/>
       <ExamSection />
       <MissionSection />
       <OurTeams />
