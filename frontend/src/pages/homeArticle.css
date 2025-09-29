@@ -1,0 +1,117 @@
+.article-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.3s;
+  min-height: 260px;
+  max-width: 320px;
+}
+
+.article-card:hover {
+  box-shadow: 0 6px 24px rgba(34,197,94,0.15);
+}
+
+.article-image-container {
+  position: relative;
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+}
+
+.article-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.article-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(255,255,255,0.92);
+  color: #166534;
+  font-weight: 600;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.article-date {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(34,197,94,0.85);
+  color: #fff;
+  font-size: 10px;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.article-content {
+  flex: 1;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.article-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #166534;
+  transition: color 0.3s;
+}
+
+.article-desc {
+  font-size: 0.85rem;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+.read-more-btn {
+  background: linear-gradient(90deg,#22c55e 60%,#16a34a 100%);
+  color: #fff;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 1px 4px rgba(34,197,94,0.10);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.read-more-btn:hover {
+  background: linear-gradient(90deg,#16a34a 60%,#22c55e 100%);
+  transform: scale(1.05);
+}
+
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 24px;
+  justify-content: center;
+  padding: 16px;
+}
+
+@media (min-width: 600px) {
+  .articles-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .articles-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
