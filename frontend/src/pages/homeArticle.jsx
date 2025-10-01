@@ -168,9 +168,9 @@ export default function HomeArticlesDemo() {
         }}
       >
         <h2 style={{
-          fontSize: "2rem",
+          fontSize: "2.5rem",
           fontWeight: 800,
-          color: "#166534",
+          color: "#660094",
           marginBottom: 32,
           textAlign: "center"
         }}>
