@@ -25,6 +25,7 @@ import ForgotPassword from './Components/ForgotPassword';
 import ResetPassword from './Components/resetpassword';
 import Article from './pages/article';
 import HomeArticles from './pages/homeArticle';
+import AddArticle from './AdminComponents/addArticle';
 
 
 
@@ -65,6 +66,7 @@ function App() {
             <Route path='/AskAI' element = {<AskAI />} />
             <Route path='/Article' element = {<Article/>} />
             <Route path = "/HomeArticle" element = {<HomeArticles/>} />
+            <Route path = "/addArticle" element = {<AddArticle/>} />
             </Route>
 
 

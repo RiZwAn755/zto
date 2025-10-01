@@ -75,7 +75,7 @@ router.post("/", async (req, res) => {
         googleId: googleId 
       }, 
       process.env.JWT_SECRET, 
-      { expiresIn: "7d" } // changed to 7 days for frontend storage
+      { expiresIn: "30m" } 
     );
 
     // Return token in JSON response for frontend localStorage
