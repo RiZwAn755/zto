@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
 
     const role = student ? "student" : "admin";
 
-    const token = jwt.sign({ email, role }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign({ email, role }, process.env.JWT_SECRET, { expiresIn: "1m" });
 
     return res.status(200).json({
       message: "Login successful",
