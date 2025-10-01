@@ -20,7 +20,7 @@ import "./DB/config.js";
 import rateLimitter from "./middlewares/rateLimitter.middleware.js";
 import cachedData from "./middlewares/redis.middlware.js";
 import addArticle from "./api/addArticle.api.js"
-
+import article from "./api/article.api.js";
 
 const app = express();
 dotenv.config();
@@ -55,6 +55,7 @@ app.use("/registered/update", updateRegistration);
 app.use("/expenses", cachedData("expenses"), rateLimitter({limit:10 , time:17 , key:"expenses"}) , expensesApi);
 app.use("/admin/prompts", adminPrompts);
 app.use("/addArticle", addArticle);
+app.use("/article", article);
 
 app.get("/", rateLimitter({limit:5 , time:17 , key:"home"}), (req,resp) => {
   console.log(process.pid);
