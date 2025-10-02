@@ -8,7 +8,7 @@ const slides = [
     image: '/img1.jpg',
     title: 'Empower Your Learning',
     subtitle: 'Discover endless resources and boost your knowledge.',
-   bgColor: '#ff6347',
+    bgColor: '#6a5acd',
    heigh: '300px',
    width:'500px'
   },
@@ -27,7 +27,7 @@ const slides = [
 
     title: 'Build Something Amazing',
     subtitle: 'Turn your ideas into reality with powerful tools.',
-    bgColor: '#20b2aa',
+    bgColor: '#6a5acd',
   },
 ];
 
