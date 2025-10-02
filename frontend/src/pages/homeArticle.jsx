@@ -3,68 +3,72 @@ import { motion } from "framer-motion";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import "./homeArticle.css"; // <-- Import the CSS
+import { useEffect } from "react";
+import axios from "axios";
 
 // Demo articles for testing
-const demoArticles = [
-  {
-    _id: "1",
-    title: "How to Prepare for Olympiads",
-    description: "Tips and tricks to ace your next talent olympiad.",
-    category: "Education",
-    subcategory: "Olympiad",
-    image: "https://images.unsplash.com/photo-1503676382389-4809596d5290",
-    slug: "prepare-for-olympiads",
-    createdAt: "2025-09-01",
-  },
-  {
-    _id: "2",
-    title: "Benefits of Participating in Talent Exams",
-    description: "Discover the advantages of joining competitive exams.",
-    category: "Education",
-    subcategory: "Talent Exams",
-    image: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca",
-    slug: "benefits-talent-exams",
-    createdAt: "2025-09-15",
-  },
-  {
-    _id: "3",
-    title: "Olympiad Success Stories",
-    description: "Inspiring stories from past winners.",
-    category: "Stories",
-    subcategory: "Success",
-    image: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308",
-    slug: "olympiad-success-stories",
-    createdAt: "2025-09-20",
-  },
-  {
-    _id: "4",
-    title: "Exam Strategies for Students",
-    description: "Learn how to manage time and stress during competitive exams.",
-    category: "Education",
-    subcategory: "Strategy",
-    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
-    slug: "exam-strategies",
-    createdAt: "2025-09-22",
-  },
-  {
-    _id: "5",
-    title: "Interview with Olympiad Winner",
-    description: "Exclusive interview with last year's gold medalist.",
-    category: "Stories",
-    subcategory: "Interview",
-    image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
-    slug: "winner-interview",
-    createdAt: "2025-09-25",
-  },
-];
+// const demoArticles = [
+//   {
+//     _id: "1",
+//     title: "How to Prepare for Olympiads",
+//     description: "Tips and tricks to ace your next talent olympiad.",
+//     category: "Education",
+//     subcategory: "Olympiad",
+//     image: "https://images.unsplash.com/photo-1503676382389-4809596d5290",
+//     slug: "prepare-for-olympiads",
+//     createdAt: "2025-09-01",
+//   },
+//   {
+//     _id: "2",
+//     title: "Benefits of Participating in Talent Exams",
+//     description: "Discover the advantages of joining competitive exams.",
+//     category: "Education",
+//     subcategory: "Talent Exams",
+//     image: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca",
+//     slug: "benefits-talent-exams",
+//     createdAt: "2025-09-15",
+//   },
+//   {
+//     _id: "3",
+//     title: "Olympiad Success Stories",
+//     description: "Inspiring stories from past winners.",
+//     category: "Stories",
+//     subcategory: "Success",
+//     image: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308",
+//     slug: "olympiad-success-stories",
+//     createdAt: "2025-09-20",
+//   },
+//   {
+//     _id: "4",
+//     title: "Exam Strategies for Students",
+//     description: "Learn how to manage time and stress during competitive exams.",
+//     category: "Education",
+//     subcategory: "Strategy",
+//     image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
+//     slug: "exam-strategies",
+//     createdAt: "2025-09-22",
+//   },
+//   {
+//     _id: "5",
+//     title: "Interview with Olympiad Winner",
+//     description: "Exclusive interview with last year's gold medalist.",
+//     category: "Stories",
+//     subcategory: "Interview",
+//     image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
+//     slug: "winner-interview",
+//     createdAt: "2025-09-25",
+//   },
+// ];
 
 const HomeArticles = ({ blog = {}, index = 0 }) => {
   const { title, description = "", category, subcategory, image, _id, slug } = blog;
   const [isHovered, setIsHovered] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  const handleClick = () => {
-    window.location.href = `/blogs/${slug || _id}`;
+  const handleClick = (e) => {
+    // window.location.href = `/blogs/${slug || _id}`;
+      e.stopPropagation();
+    window.location.href = "/Article";
   };
 
   const formatDate = (dateString) => {
@@ -81,6 +85,8 @@ const HomeArticles = ({ blog = {}, index = 0 }) => {
   };
 
   return (
+    <>
+   
     <motion.div
       initial={{ opacity: 0, y: 40, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -101,7 +107,7 @@ const HomeArticles = ({ blog = {}, index = 0 }) => {
     >
       <div className="article-image-container">
         <LazyLoadImage
-          src={image || "/default-blog.jpg"}
+          src={image || "/article.jpg"}
           alt={title || "Blog"}
           effect="blur"
           className="article-image"
@@ -131,6 +137,7 @@ const HomeArticles = ({ blog = {}, index = 0 }) => {
             className="read-more-btn"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={handleClick}
           >
             READ MORE
             <motion.svg
@@ -152,12 +159,27 @@ const HomeArticles = ({ blog = {}, index = 0 }) => {
           </motion.button>
         </div>
       </div>
+      
     </motion.div>
+     
+  </>
   );
 };
 
 // Demo wrapper to show articles
 export default function HomeArticlesDemo() {
+    const [articles, setArticles] = useState([]); 
+    const baseURL = import.meta.env.VITE_BASE_URL;
+    useEffect(() => {
+     
+      axios.get(`${baseURL}/article`) 
+      .then(res => setArticles(res.data))
+        .catch(()=>setArticles([]));
+    }, []);
+
+    const handleSeeMore = () => {
+      window.location.href = "/Article";
+    }
   return (
     <div style={{ background: "#f6f8fa", minHeight: "100vh" }}>
       <div
@@ -177,9 +199,30 @@ export default function HomeArticlesDemo() {
           Latest Articles
         </h2>
         <div className="articles-grid">
-          {demoArticles.map((blog, idx) => (
+          {articles.map((blog, idx) => (
             <HomeArticles key={blog._id} blog={blog} index={idx} />
           ))}
+        </div>
+        <div style={{display: "flex", justifyContent: "center",textAlign: "center", marginTop: 32 }}>
+         <button
+  className="see-more-btn"
+  onClick={handleSeeMore}
+>
+  SEE MORE ARTICLES
+  <svg
+    style={{ width: 22, height: 22, marginLeft: 8 }}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M13 7l5 5m0 0l-5 5m5-5H6"
+    />
+  </svg>
+</button>
         </div>
       </div>
     </div>
