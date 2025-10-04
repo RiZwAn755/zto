@@ -1,8 +1,8 @@
-import Navbar from "../components/navbar.js";
+import Navbar from "../components/navbar";
 import HeroCarousel from '../components/herocarousel';
 import ExamSection from "../components/examsection";
 import MissionSection from "../components/mission.jsx";
-import Footer from "../components/footer.js";
+import Footer from "../components/footer";
 import OurTeams from "../components/ourteams.jsx";
 import HomeArticles from "./homearticle.jsx";
 

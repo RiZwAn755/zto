@@ -11,22 +11,20 @@ import Rewards from './pages/rewards';
 import PastExams from './pages/pastexams';
 import UpcomingExams from './pages/upcomingexams'
 import Admin from './pages/admin';
-// import EnrollExams from './pages/EnrollExams';
+
 import PrivateComponent from './pages/privatecomponent';
 
-import CheckResult from './pages/checkresult'; // Corrected import
+import CheckResult from './pages/checkresult'; 
 
 import CardLayout from './pages/exams';
 import PageNotFound from './components/pagenotfound';
 import AskAI from './components/doubt_assistant';
 import Landing from './pages/landing';
-import DoubtButton from './components/doubtbutton';
 import ForgotPassword from './components/forgotpassword';
 import ResetPassword from './components/resetpassword';
 import Article from './pages/article';
 import HomeArticles from './pages/homearticle';
 import AddArticle from './admincomponents/addarticle';
-
 
 
 
