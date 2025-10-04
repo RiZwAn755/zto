@@ -8,7 +8,7 @@ import AskAI from '../Components/Doubt_Assistant';
 const Resources = () => {
   const [activeTab, setActiveTab] = useState('grades');
   const [selectedGrade, setSelectedGrade] = useState(6);
-  const [selectedSubject, setSelectedSubject] = useState(null);
+  // const [selectedSubject, setSelectedSubject] = useState(null);
 
  const handleSample = (paper)=> (e) => {
     e.preventDefault();

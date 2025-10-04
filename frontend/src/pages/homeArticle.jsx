@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import axios from "axios";
@@ -9,7 +9,7 @@ import { useNavigate } from "react-router";
 
 
 const HomeArticles = ({ blog = {}, index = 0 }) => {
-  const { title, description = "", category, subcategory, image, _id, slug, createdAt } = blog;
+  const { title, description = "",  image, _id, slug, createdAt } = blog;
   const [isHovered, setIsHovered] = useState(false);
 const navigate = useNavigate();
   const handleClick = (e, id) => {
@@ -32,7 +32,7 @@ navigate(`/Article/${slug || id}`);
   };
 
   return (
-    <motion.div
+    <div
       initial={{ opacity: 0, y: 40, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{
@@ -65,14 +65,14 @@ navigate(`/Article/${slug || id}`);
           {description?.length > 120 ? `${description.slice(0, 120)}...` : description}
         </p>
         <div style={{ marginTop: "auto" }}>
-          <motion.button
+          <button
             className="read-more-btn"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={(e) => handleClick(e, slug || _id)}
           >
             READ MORE
-            <motion.svg
+            <svg
               className="w-4 h-4"
               fill="none"
               stroke="currentColor"
@@ -82,11 +82,11 @@ navigate(`/Article/${slug || id}`);
               style={{ width: 18, height: 18 }}
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </motion.svg>
-          </motion.button>
+            </svg>
+          </button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
