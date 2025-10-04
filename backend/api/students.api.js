@@ -1,8 +1,8 @@
 // api to get all students
 
 
-import Student from "../DB/student.js";
-import redis from "../DB/redis.js";
+import Student from "../db/student.js";
+import redis from "../db/redis.js";
 import Router from "express";
 
 const router = new Router();

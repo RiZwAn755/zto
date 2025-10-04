@@ -1,9 +1,9 @@
 // api to get registered students
 
 import express from "express";
-import examForm from "../DB/examForm.js";
+import examForm from "../db/examForm.js";
 import { verifyToken } from "../middlewares/jwt.middleware.js";
- import redis from "../DB/redis.js";
+ import redis from "../db/redis.js";
 
 const router = express.Router();
 

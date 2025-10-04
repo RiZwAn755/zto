@@ -1,7 +1,7 @@
 // api for admin signup
 import express from "express";
-import Admin from "../DB/admin.js";
-import "../DB/config.js";
+import Admin from "../db/admin.js";
+import "../db/config.js";
 const router = express.Router();
 
 router.post("/",  async (req, res) => {

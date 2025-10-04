@@ -1,5 +1,5 @@
 import express from 'express';
-import Expense from '../DB/expense.js';
+import Expense from '../db/expense.js';
 
 const router = express.Router();
 

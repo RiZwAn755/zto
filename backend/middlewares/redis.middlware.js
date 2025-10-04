@@ -1,4 +1,4 @@
-import redis from "../DB/redis.js";
+import redis from "../db/redis.js";
 
   const cachedData = (key) => {
 

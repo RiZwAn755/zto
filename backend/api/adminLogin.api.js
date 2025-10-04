@@ -1,7 +1,7 @@
 // api for admin login
 
 import express from "express";
-import Admin from "../DB/admin.js";
+import Admin from "../db/admin.js";
 import { verifyToken } from "../middlewares/jwt.middleware.js";
 const router = express.Router();
 

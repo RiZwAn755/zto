@@ -1,8 +1,8 @@
 // api for student signup, not registered students
 
 import express from "express";
-import Student from "../DB/student.js";
-import "../DB/config.js";
+import Student from "../db/student.js";
+import "../db/config.js";
 const router = express.Router();
 
 router.post("/", async (req, res) => {

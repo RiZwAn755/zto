@@ -1,6 +1,6 @@
 import express from "express";
-import Student from "../DB/student.js";
-import Admin from "../DB/admin.js";
+import Student from "../db/student.js";
+import Admin from "../db/admin.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 

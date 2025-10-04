@@ -1,5 +1,5 @@
 import express from 'express';
-import Registrations from '../DB/examForm.js';
+import Registrations from '../db/examForm.js';
 
 const router = express.Router();
 

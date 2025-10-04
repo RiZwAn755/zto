@@ -2,7 +2,7 @@ import express from 'express';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
-import Student from '../DB/student.js';
+import Student from '../db/student.js';
 
 dotenv.config();
 
