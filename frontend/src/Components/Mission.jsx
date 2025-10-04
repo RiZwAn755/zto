@@ -1,5 +1,5 @@
 import React from 'react';
-import './Mission.css';
+import './mission.css';
 import { useNavigate } from 'react-router';
 
 

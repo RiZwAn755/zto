@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import Footer from '../components/Footer';
+import Footer from '../components/footer';
 import { baseURL } from '../config/api';
-import Navbar from '../Components/Navbar';
+import Navbar from '../components/navbar';
 import './Article.css'; // Create this CSS file
 
 const Article = () => {

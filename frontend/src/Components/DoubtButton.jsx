@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import "./DoubtButton.css";
+import "./doubtbutton.css";
 import { Link } from "react-router-dom";
 
 const DoubtButton = () => {

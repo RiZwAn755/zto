@@ -1,6 +1,6 @@
 import React from 'react';
-import Navbar from '../Components/Navbar';   
-import Footer from '../Components/Footer';  
+import Navbar from '../components/navbar';   
+import Footer from '../components/footer';  
 import './PastExams.css';
 
 const pastExams = [

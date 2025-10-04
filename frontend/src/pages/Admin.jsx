@@ -4,7 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import AdminEdit from './adminEdit.jsx';
-import './Admin.css';
+import './admin.css';
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -91,7 +91,7 @@ const Admin = () => {
       // Calculate stats
       const totalUsers = users.length;
       const totalRegisteredForExams = registeredStudents.length;
-      const activeUsers = users.filter(user => user.status !== 'inactive').length;
+      // const activeUsers = users.filter(user => user.status !== 'inactive').length;
       
       // Calculate revenue based on class-based pricing
       const totalRevenue = registeredStudents.reduce((total, registration) => {
@@ -184,23 +184,23 @@ const Admin = () => {
     }
   };
 
-  const handleViewUser = (user) => {
-    setSelectedUser(user);
-    setModalType('view');
-    setShowUserModal(true);
-  };
+  // const handleViewUser = (user) => {
+  //   setSelectedUser(user);
+  //   setModalType('view');
+  //   setShowUserModal(true);
+  // };
 
-  const handleEditUser = (user) => {
-    setSelectedUser(user);
-    setModalType('edit');
-    setShowUserModal(true);
-  };
+  // const handleEditUser = (user) => {
+  //   setSelectedUser(user);
+  //   setModalType('edit');
+  //   setShowUserModal(true);
+  // };
 
-  const handleDeleteUser = (user) => {
-    setSelectedUser(user);
-    setModalType('delete');
-    setShowUserModal(true);
-  };
+  // const handleDeleteUser = (user) => {
+  //   setSelectedUser(user);
+  //   setModalType('delete');
+  //   setShowUserModal(true);
+  // };
 
   const handleDeleteConfirm = async () => {
     try {
@@ -219,24 +219,24 @@ const Admin = () => {
     }
   };
 
-  // Registration handlers
-  const handleViewRegistration = (registration) => {
-    setSelectedRegistration(registration);
-    setModalType('view');
-    setShowRegistrationModal(true);
-  };
+  // // Registration handlers
+  // const handleViewRegistration = (registration) => {
+  //   setSelectedRegistration(registration);
+  //   setModalType('view');
+  //   setShowRegistrationModal(true);
+  // };
 
-  const handleEditRegistration = (registration) => {
-    setSelectedRegistration(registration);
-    setModalType('edit');
-    setShowRegistrationModal(true);
-  };
+  // const handleEditRegistration = (registration) => {
+  //   setSelectedRegistration(registration);
+  //   setModalType('edit');
+  //   setShowRegistrationModal(true);
+  // };
 
-  const handleDeleteRegistration = (registration) => {
-    setSelectedRegistration(registration);
-    setModalType('delete');
-    setShowRegistrationModal(true);
-  };
+  // const handleDeleteRegistration = (registration) => {
+  //   setSelectedRegistration(registration);
+  //   setModalType('delete');
+  //   setShowRegistrationModal(true);
+  // };
 
   const handleRegistrationUpdate = (updatedData) => {
     if (updatedData === null) {
@@ -261,7 +261,7 @@ const Admin = () => {
     fetchDashboardData();
   };
 
-  const handlePaymentStatusToggle = (registrationId, currentStatus) => {
+  const handlePaymentStatusToggle = (registrationId) => {
     // Find the registration and open edit modal
     const registration = examRegistrations.find(reg => reg.id === registrationId);
     if (registration) {
@@ -300,8 +300,8 @@ const Admin = () => {
   const addExpense = async (e) => {
     e.preventDefault();
     try {
-      const config = getAuthConfig();
-      const response = await axios.post(`${baseUrl}/expenses`, newExpense, config);
+      // const config = getAuthConfig();
+      // const response = await axios.post(`${baseUrl}/expenses`, newExpense, config);
       toast.success('Expense added successfully');
       setNewExpense({ name: '', description: '', amount: '' });
       setShowAddExpenseModal(false);
@@ -346,8 +346,8 @@ const Admin = () => {
   const addPrompt = async (e) => {
     e.preventDefault();
     try {
-      const config = getAuthConfig();
-      const response = await axios.post(`${baseUrl}/admin/prompts`, newPrompt, config);
+      // const config = getAuthConfig();
+      // const response = await axios.post(`${baseUrl}/admin/prompts`, newPrompt, config);
       toast.success('Prompt added successfully');
       setShowAddPromptModal(false);
       setNewPrompt({ title: '', prompt: '', customResponse: '', useCustomResponse: true });
@@ -361,8 +361,8 @@ const Admin = () => {
   const updatePrompt = async (e) => {
     e.preventDefault();
     try {
-      const config = getAuthConfig();
-      const response = await axios.put(`${baseUrl}/admin/prompts/${editingPrompt.id}`, editingPrompt, config);
+      // const config = getAuthConfig();
+      // const response = await axios.put(`${baseUrl}/admin/prompts/${editingPrompt.id}`, editingPrompt, config);
       toast.success('Prompt updated successfully');
       setShowAddPromptModal(false);
       setEditingPrompt(null);

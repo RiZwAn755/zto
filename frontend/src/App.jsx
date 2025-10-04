@@ -1,31 +1,31 @@
 import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Resources from './pages/Resources';
-import Contact from './pages/Contact';
-import About from './pages/About';
-import Home from './pages/Home';
-import EnrollExams from './pages/EnrollExams';
-import Rewards from './pages/Rewards';
-import PastExams from './pages/PastExams';
+import Login from './pages/login';
+import Register from './pages/register';
+import Resources from './pages/resources';
+import Contact from './pages/contact';
+import About from './pages/about';
+import Home from './pages/home';
+import EnrollExams from './pages/enrollexams';
+import Rewards from './pages/rewards';
+import PastExams from './pages/pastexams';
 import UpcomingExams from './pages/upcomingExams'
-import Admin from './pages/Admin';
+import Admin from './pages/admin';
 // import EnrollExams from './pages/EnrollExams';
-import PrivateComponent from './pages/privateComponent';
+import PrivateComponent from './pages/privatecomponent';
 
-import CheckResult from './pages/CheckResult'; // Corrected import
+import CheckResult from './pages/checkresult'; // Corrected import
 
-import CardLayout from './pages/Exams';
-import PageNotFound from './Components/PageNotFound';
-import AskAI from './Components/Doubt_Assistant';
-import Landing from './pages/Landing';
-import DoubtButton from './Components/DoubtButton';
-import ForgotPassword from './Components/ForgotPassword';
-import ResetPassword from './Components/resetpassword';
+import CardLayout from './pages/exams';
+import PageNotFound from './components/pagenotfound';
+import AskAI from './components/doubt_assistant';
+import Landing from './pages/landing';
+import DoubtButton from './components/doubtbutton';
+import ForgotPassword from './components/forgotpassword';
+import ResetPassword from './components/resetpassword';
 import Article from './pages/article';
-import HomeArticles from './pages/homeArticle';
-import AddArticle from './AdminComponents/addArticle';
+import HomeArticles from './pages/homearticle';
+import AddArticle from './admincomponents/addarticle';
 
 
 

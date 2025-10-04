@@ -1,10 +1,10 @@
-import Navbar from "../Components/Navbar";
-import HeroCarousel from "../Components/HeroCarousel";
-import ExamSection from "../Components/ExamSection";
-import MissionSection from "../Components/Mission";
-import Footer from "../Components/Footer";
-import OurTeams from "../Components/OurTeams";
-import HomeArticles from "./homeArticle";
+import Navbar from "../components/navbar";
+import HeroCarousel from '../components/herocarousel.jsx';
+import ExamSection from "../components/examsection";
+import MissionSection from "../components/mission";
+import Footer from "../components/footer";
+import OurTeams from "../components/ourteams";
+import HomeArticles from "./homearticle.jsx";
 
 
 const Home = () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import './Exams.css'; 
-import Navbar from '../Components/Navbar';
-import Footer from '../components/Footer';
+import Navbar from '../components/navbar';
+import Footer from '../components/footer';
 import { useNavigate } from 'react-router-dom';
 
 const Exams = () => {

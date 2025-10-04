@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import './ExamSection.css';
-import DoubtButton from "./DoubtButton"
+import './examSection.css';
+import DoubtButton from "./doubtbutton"
 import { useNavigate } from 'react-router-dom';
 import { FaSquareRootAlt, FaAtom, FaVial, FaDna, FaGlobeAmericas, FaPuzzlePiece } from 'react-icons/fa';
 import { Typewriter } from 'react-simple-typewriter';

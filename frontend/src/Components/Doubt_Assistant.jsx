@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './Doubt_assistant.css';
+import './doubt_assistant.css';
 import ReactMarkdown from "react-markdown";
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';

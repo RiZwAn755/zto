@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import './ForgotPassword.css';
+import './forgotpassword.css';
 
 const ForgotPassword = () => {      
     const [email, setEmail] = useState('');

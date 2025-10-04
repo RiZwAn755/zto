@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Register.css';
-import Navbar from '../Components/Navbar';
+import Navbar from '../components/navbar';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';

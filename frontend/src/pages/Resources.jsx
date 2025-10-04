@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import './Resources.css';
-import Navbar from '../Components/Navbar';
-import Footer from '../components/Footer';
+import Navbar from '../components/navbar';
+import Footer from '../components/footer';
 import { useNavigate } from 'react-router';
-import AskAI from '../Components/Doubt_Assistant';
+import AskAI from '../components/doubt_assistant';
 
 const Resources = () => {
   const [activeTab, setActiveTab] = useState('grades');

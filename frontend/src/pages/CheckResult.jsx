@@ -1,8 +1,8 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import "./CheckResult.css";
-import Navbar from "../Components/Navbar"; // Ensure correct import
-import Footer from '../components/Footer';// Ensure correct import
+import Navbar from "../components/navbar"; // Ensure correct import
+import Footer from '../components/footer';// Ensure correct import
 
 const CheckResult = () => {
   const location = useLocation();

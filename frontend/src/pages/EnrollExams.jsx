@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './EnrollExams.css';
-import Navbar from '../Components/Navbar';
-import Footer from '../components/Footer';
+import Navbar from '../components/navbar';
+import Footer from '../components/footer';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

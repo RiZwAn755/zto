@@ -4,7 +4,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // import { handleRateLimitError } from '../utils/rateLimitHandler.js';
-import './ResetPassword.css';
+import './resetpassword.css';
 
 const ResetPassword = () => {
     const [searchParams] = useSearchParams();
