@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Resources.css';
 import Navbar from '../Components/Navbar';
-import Footer from '../Components/Footer';
+import Footer from '../components/Footer';
 import { useNavigate } from 'react-router';
 import AskAI from '../Components/Doubt_Assistant';
 

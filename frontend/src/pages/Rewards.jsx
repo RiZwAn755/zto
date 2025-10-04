@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from '../Components/Navbar';
 import { useNavigate } from 'react-router-dom';
 import './Rewards.css';
-import Footer from '../Components/Footer';
+import Footer from '../components/Footer';
 
 const Rewards = () => {
   const navigate = useNavigate();

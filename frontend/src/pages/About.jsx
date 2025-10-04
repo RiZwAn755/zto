@@ -1,6 +1,6 @@
 import './About.css';
 import Navbar from '../Components/Navbar';
-import Footer from '../Components/Footer';
+import Footer from '../components/Footer';
 import Particles from 'react-tsparticles';
 import { loadFull } from 'tsparticles';
 import { useCallback } from 'react';
