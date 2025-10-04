@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from '../components/navbar';
 import { useNavigate } from 'react-router-dom';
-import './Rewards.css';
+import './rewards.css';
 import Footer from '../components/footer';
 
 const Rewards = () => {

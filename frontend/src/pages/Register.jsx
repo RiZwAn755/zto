@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import './Register.css';
-import Navbar from '../components/navbar';
+import './register.css';
+import Navbar from '../components/navbar.jsx';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
@@ -11,10 +11,7 @@ const baseUrl = import.meta.env.VITE_BASE_URL;
 
 const RegisterPage = () => {
 
-  const handGooglereg= (e) =>{
-    e.preventDefault();
-    console.log("signup with google");
-  }
+
 
   const navigate = useNavigate();
 
@@ -82,7 +79,7 @@ const RegisterPage = () => {
     setErrors({}); // Clear previous errors
 
     
-      const {data} = await axios.post(`${baseUrl}/stReg` , formData);
+       await axios.post(`${baseUrl}/stReg` , formData);
       setIsSubmitting(true);
       toast.success('Registered successfully , You can login now');
       setTimeout(() => {

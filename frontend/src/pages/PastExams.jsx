@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from '../components/navbar';   
 import Footer from '../components/footer';  
-import './PastExams.css';
+import './pastexams.css';
 
 const pastExams = [
   {

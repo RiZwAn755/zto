@@ -1,5 +1,5 @@
 import React from 'react';
-import './Exams.css'; 
+import './exams.css'; 
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
 import { useNavigate } from 'react-router-dom';

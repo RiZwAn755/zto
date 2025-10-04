@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import axios from "axios";
-import "./homeArticle.css"; // Make sure your CSS exists
+import "./homearticle.css"; // Make sure your CSS exists
 import { baseURL, company } from "../config/api";
 import { useNavigate } from "react-router";
 

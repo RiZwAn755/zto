@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './EnrollExams.css';
+import './enrollexams.css';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
 import axios from 'axios';

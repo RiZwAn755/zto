@@ -4,7 +4,7 @@ import axios from 'axios';
 import Footer from '../components/footer';
 import { baseURL } from '../config/api';
 import Navbar from '../components/navbar';
-import './Article.css'; // Create this CSS file
+import './article.css'; // Create this CSS file
 
 const Article = () => {
   const { slug } = useParams();

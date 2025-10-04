@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import "./CheckResult.css";
+import "./checkresult.css";
 import Navbar from "../components/navbar"; // Ensure correct import
 import Footer from '../components/footer';// Ensure correct import
 

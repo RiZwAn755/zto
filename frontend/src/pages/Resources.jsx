@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Resources.css';
+import './resources.css';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
 import { useNavigate } from 'react-router';

@@ -9,7 +9,7 @@ import Home from './pages/home';
 import EnrollExams from './pages/enrollexams';
 import Rewards from './pages/rewards';
 import PastExams from './pages/pastexams';
-import UpcomingExams from './pages/upcomingExams'
+import UpcomingExams from './pages/upcomingexams'
 import Admin from './pages/admin';
 // import EnrollExams from './pages/EnrollExams';
 import PrivateComponent from './pages/privatecomponent';
