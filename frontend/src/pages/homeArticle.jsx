@@ -1,93 +1,38 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
+
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import "./homeArticle.css"; // <-- Import the CSS
-import { useEffect } from "react";
 import axios from "axios";
+import "./homeArticle.css"; 
+import { baseURL, company } from "../config/api";
+import { useNavigate } from "react-router";
 
-// Demo articles for testing
-// const demoArticles = [
-//   {
-//     _id: "1",
-//     title: "How to Prepare for Olympiads",
-//     description: "Tips and tricks to ace your next talent olympiad.",
-//     category: "Education",
-//     subcategory: "Olympiad",
-//     image: "https://images.unsplash.com/photo-1503676382389-4809596d5290",
-//     slug: "prepare-for-olympiads",
-//     createdAt: "2025-09-01",
-//   },
-//   {
-//     _id: "2",
-//     title: "Benefits of Participating in Talent Exams",
-//     description: "Discover the advantages of joining competitive exams.",
-//     category: "Education",
-//     subcategory: "Talent Exams",
-//     image: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca",
-//     slug: "benefits-talent-exams",
-//     createdAt: "2025-09-15",
-//   },
-//   {
-//     _id: "3",
-//     title: "Olympiad Success Stories",
-//     description: "Inspiring stories from past winners.",
-//     category: "Stories",
-//     subcategory: "Success",
-//     image: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308",
-//     slug: "olympiad-success-stories",
-//     createdAt: "2025-09-20",
-//   },
-//   {
-//     _id: "4",
-//     title: "Exam Strategies for Students",
-//     description: "Learn how to manage time and stress during competitive exams.",
-//     category: "Education",
-//     subcategory: "Strategy",
-//     image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
-//     slug: "exam-strategies",
-//     createdAt: "2025-09-22",
-//   },
-//   {
-//     _id: "5",
-//     title: "Interview with Olympiad Winner",
-//     description: "Exclusive interview with last year's gold medalist.",
-//     category: "Stories",
-//     subcategory: "Interview",
-//     image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
-//     slug: "winner-interview",
-//     createdAt: "2025-09-25",
-//   },
-// ];
 
 const HomeArticles = ({ blog = {}, index = 0 }) => {
-  const { title, description = "", category, subcategory, image, _id, slug } = blog;
+  const { title, description = "",  image, _id, slug, createdAt } = blog;
   const [isHovered, setIsHovered] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
-
-  const handleClick = (e) => {
-    // window.location.href = `/blogs/${slug || _id}`;
-      e.stopPropagation();
-    window.location.href = "/Article";
+const navigate = useNavigate();
+  const handleClick = (e, id) => {
+    e.stopPropagation();
+navigate(`/Article/${slug || id}`);
   };
 
   const formatDate = (dateString) => {
     try {
       const date = new Date(dateString);
-      return date.toLocaleDateString("en-US", {
+      if (isNaN(date.getTime())) return "Unknown Date";
+      return new Intl.DateTimeFormat("en-US", {
         month: "short",
         day: "numeric",
         year: "numeric",
-      });
+      }).format(date);
     } catch {
       return "Unknown Date";
     }
   };
 
   return (
-    <>
-   
-    <motion.div
+    <div
       initial={{ opacity: 0, y: 40, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{
@@ -95,15 +40,11 @@ const HomeArticles = ({ blog = {}, index = 0 }) => {
         delay: index * 0.1,
         ease: [0.25, 0.46, 0.45, 0.94],
       }}
-      whileHover={{
-        y: -5,
-        scale: 1.02,
-        transition: { duration: 0.3, ease: "easeOut" },
-      }}
+      whileHover={{ y: -5, scale: 1.02, transition: { duration: 0.3, ease: "easeOut" } }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       className="article-card"
-      onClick={handleClick}
+      onClick={(e) => handleClick(e, slug || _id)}
     >
       <div className="article-image-container">
         <LazyLoadImage
@@ -111,18 +52,9 @@ const HomeArticles = ({ blog = {}, index = 0 }) => {
           alt={title || "Blog"}
           effect="blur"
           className="article-image"
-          afterLoad={() => setImageLoaded(true)}
         />
-
-        {(subcategory || category) && (
-          <span className="article-badge">
-            {subcategory || category}
-          </span>
-        )}
-
-        <span className="article-date">
-          {formatDate(blog.createdAt || new Date())}
-        </span>
+       
+        <span className="article-date">{formatDate(createdAt || new Date())}</span>
       </div>
 
       <div className="article-content">
@@ -133,14 +65,14 @@ const HomeArticles = ({ blog = {}, index = 0 }) => {
           {description?.length > 120 ? `${description.slice(0, 120)}...` : description}
         </p>
         <div style={{ marginTop: "auto" }}>
-          <motion.button
+          <button
             className="read-more-btn"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={handleClick}
+            onClick={(e) => handleClick(e, slug || _id)}
           >
             READ MORE
-            <motion.svg
+            <svg
               className="w-4 h-4"
               fill="none"
               stroke="currentColor"
@@ -149,81 +81,83 @@ const HomeArticles = ({ blog = {}, index = 0 }) => {
               transition={{ duration: 0.3 }}
               style={{ width: 18, height: 18 }}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
-            </motion.svg>
-          </motion.button>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </button>
         </div>
       </div>
-      
-    </motion.div>
-     
-  </>
+    </div>
   );
 };
 
 // Demo wrapper to show articles
 export default function HomeArticlesDemo() {
-    const [articles, setArticles] = useState([]); 
-    const baseURL = import.meta.env.VITE_BASE_URL;
-    useEffect(() => {
-     
-      axios.get(`${baseURL}/article`) 
-      .then(res => setArticles(res.data))
-        .catch(()=>setArticles([]));
-    }, []);
+  const [articles, setArticles] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-    const handleSeeMore = () => {
-      window.location.href = "/Article";
-    }
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await axios.get(`${baseURL}/api/blog/all`);
+        const filteredBlogs = response.data?.blogs?.filter((blog) => blog.company === company) || [];
+        setArticles(filteredBlogs);
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
+        setArticles([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
+  const handleSeeMore = () => {
+    window.location.href = "/Article";
+  };
+
   return (
     <div style={{ background: "#f6f8fa", minHeight: "100vh" }}>
-      <div
-        style={{
-          maxWidth: 1200,
-          margin: "0 auto",
-          padding: "48px 24px",
-        }}
-      >
-        <h2 style={{
-          fontSize: "2.5rem",
-          fontWeight: 800,
-          color: "#660094",
-          marginBottom: 32,
-          textAlign: "center"
-        }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "48px 24px" }}>
+        <h2
+          style={{
+            fontSize: "2.5rem",
+            fontWeight: 800,
+            color: "#660094",
+            marginBottom: 32,
+            textAlign: "center",
+          }}
+        >
           Latest Articles
         </h2>
-        <div className="articles-grid">
-          {articles.map((blog, idx) => (
-            <HomeArticles key={blog._id} blog={blog} index={idx} />
-          ))}
-        </div>
-        <div style={{display: "flex", justifyContent: "center",textAlign: "center", marginTop: 32 }}>
-         <button
-  className="see-more-btn"
-  onClick={handleSeeMore}
->
-  SEE MORE ARTICLES
-  <svg
-    style={{ width: 22, height: 22, marginLeft: 8 }}
-    fill="none"
-    stroke="currentColor"
-    strokeWidth={2}
-    viewBox="0 0 24 24"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M13 7l5 5m0 0l-5 5m5-5H6"
-    />
-  </svg>
-</button>
-        </div>
+
+        {isLoading ? (
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "200px" }}>
+            <div style={{ fontSize: "1.2rem", color: "#660094", fontWeight: 600 }}>Loading articles...</div>
+          </div>
+        ) : articles.length > 0 ? (
+          <div className="articles-grid">
+            {articles.map((blog, idx) => (
+              <HomeArticles key={blog._id} blog={blog} index={idx} />
+            ))}
+          </div>
+        ) : (
+          <div style={{ textAlign: "center", padding: "40px 20px", color: "#666" }}>
+            <h3 style={{ fontSize: "1.5rem", marginBottom: "16px", color: "#660094" }}>No Articles Found</h3>
+            <p>No articles available for Zonal Talent Olympiad at the moment.</p>
+          </div>
+        )}
+
+        {!isLoading && articles.length > 0 && (
+          <div style={{ display: "flex", justifyContent: "center", marginTop: 32 }}>
+            <button className="see-more-btn" onClick={handleSeeMore}>
+              SEE MORE ARTICLES
+              <svg style={{ width: 22, height: 22, marginLeft: 8 }} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
