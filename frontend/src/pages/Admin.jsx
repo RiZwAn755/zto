@@ -178,7 +178,7 @@ const Admin = () => {
       
       setAllUsers(allUsersData);
     } catch (error) {
-      console.error('Error fetching all users:', error);
+      console.error('Error fetchings all users:', error);
       
    
     }
