@@ -75,7 +75,7 @@ const  handleSubject = (subject, grade) => (e) => {
                 ))}
               </div>
               
-              {selectedGrade <= 8 ?  (
+              {selectedGrade <= 10 ?  (
                 <div className="subject-selection">
                   <h3>Subjects for {selectedGrade}</h3>
                   <div className="subject-grid">
