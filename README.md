@@ -1,6 +1,6 @@
-# 🎓 ZTO – Zone Test Online
+# 🎓 ZTO – Zonal Talent Olympiad
 
-ZTO (Zone Test Online) is a **full-stack learning platform** built to support **students in rural areas** by providing relevant study materials, online tests, and continuous academic support.  
+ZTO (Zonal Talent Olympiad) is a **full-stack learning platform** built to support **students in rural areas** by providing relevant study materials, online tests, and continuous academic support.  
 The system is designed with **performance, scalability, and security** in mind to handle high concurrent user traffic efficiently.
 
 ---
@@ -79,5 +79,5 @@ ZTO aims to bridge this gap by providing a **lightweight, fast, and scalable onl
 
 ---
 
-## 🗂 Project Structure (Simplified)
+
 
