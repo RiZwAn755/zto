@@ -25,6 +25,7 @@ import ForgotPassword from './Components/ForgotPassword';
 import ResetPassword from './Components/resetpassword';
 import Article from './pages/article';
 import HomeArticles from './pages/homeArticle';
+import StudentDashboard from './studentscomponents/stdashboard.jsx';
 
 
 
@@ -49,6 +50,8 @@ function App() {
             <Route path="/landing" element={<Landing />} />
             <Route path="/forgotPassword" element={<ForgotPassword />} />
             <Route path="/resetPassword" element={<ResetPassword />} />
+            <Route path="/enroll-exams" element={<EnrollExams />} />
+            <Route path="/resources" element={<Resources />} />
             <Route path="*" element={<PageNotFound />} />
 
                         // private hai ye Components
@@ -56,12 +59,12 @@ function App() {
             <Route path="/UpcomingExams" element={<UpcomingExams />} />
             <Route path="/" element={<Home />} />
              <Route path="/admin" element={<Admin />} />
-            <Route path="/resources" element={<Resources />} />
+            <Route path="/studentDashboard" element={<StudentDashboard  />} />
             <Route path="/exams" element={<CardLayout />} />
             <Route path="/pastexams" element={<PastExams />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<About />} />
-            <Route path="/enroll-exams" element={<EnrollExams />} />
+
             <Route path="/rewards" element={<Rewards />} />
             <Route path="/checkresult" element={<CheckResult />} />
             <Route path='/AskAI' element = {<AskAI />} />

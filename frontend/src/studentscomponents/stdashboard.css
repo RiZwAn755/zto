@@ -1,0 +1,122 @@
+/* Mobile-first responsive styles for Student Dashboard */
+/* Adjust variables to match your site's color scheme if needed */
+:root{
+  --primary: #1e73ff;      /* primary brand color */
+  --accent:  #ffd54a;      /* accent */
+  --bg:      #f7fbff;      /* page bg */
+  --card-bg: #ffffff;
+  --text:    #0f1724;
+  --muted:   #6b7280;
+  --border:  #e6e9ef;
+  --radius:  10px;
+}
+
+.student-dashboard{
+  max-width: 1100px;
+  margin: 24px auto;
+  padding: 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(247,251,255,0.88));
+  color: var(--text);
+  font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Header */
+.dashboard-header{
+  text-align: center;
+  margin-bottom: 18px;
+}
+.dashboard-header h3{
+  margin: 6px 0;
+  color: var(--primary);
+  font-size: 1.25rem; /* 20px */
+  font-weight: 600;
+}
+.dashboard-header .name{ color: var(--primary); }
+.dashboard-header .subtitle{
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* Sections */
+.student-dashboard h5{
+  margin: 18px 0 8px;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+/* Card-like table wrapper for mobile */
+.student-dashboard > div,
+.profile-section{
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  box-shadow: 0 2px 8px rgba(16,24,40,0.04);
+}
+
+/* Responsive tables: allow horizontal scroll on small screens */
+table{
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+thead td{
+  font-weight: 600;
+  color: var(--muted);
+  padding: 8px 6px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+tbody td{
+  padding: 10px 6px;
+  border-bottom: 1px dashed rgba(0,0,0,0.04);
+  color: var(--text);
+}
+
+/* Make larger tap targets for mobile */
+table td{
+  min-width: 90px;
+}
+
+/* Table container for horizontal scroll on very small screens */
+.student-dashboard .table-responsive{
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Small UI helpers */
+.name-badge{
+  display:inline-block;
+  background: rgba(30,115,255,0.12);
+  color: var(--primary);
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Desktop / larger screens */
+@media (min-width: 768px){
+  .dashboard-header h3{ font-size: 1.5rem; }
+  .student-dashboard{
+    padding: 24px;
+  }
+  .student-dashboard > div{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  table td{ padding: 12px 10px; }
+}
+
+/* Wide layout: place tables side-by-side if desired */
+@media (min-width: 1024px){
+  .student-dashboard > div{
+    grid-template-columns: 1fr 1fr;
+  }
+  /* Enrolled exams can span full width */
+  .student-dashboard > div > table:last-of-type{
+    grid-column: 1 / -1;
+  }
+}

@@ -20,4 +20,11 @@ router.get("/" ,  async (req , res) => {
     }
 });
 
+router.get("/me", async(req,resp) => {
+    
+
+    const data = await Student.find(req.user);
+    resp.json(data);
+});
+
 export default router;

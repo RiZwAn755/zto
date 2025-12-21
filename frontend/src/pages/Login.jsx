@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Login.css';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
@@ -47,7 +47,7 @@ const Login = () => {
 
         setTimeout(() => {
           if (data.role === 'admin') navigate('/admin');
-          else navigate('/');
+          else navigate('/studentDashboard');
         }, 1000);
       } else {
         toast.error(data.message || 'Invalid credentials. Please try again.');
@@ -91,7 +91,7 @@ const Login = () => {
 
         setTimeout(() => {
           if (data.user.userType === 'admin') navigate('/admin');
-          else navigate('/');
+          else navigate('/studentDashboard');
         }, 1000);
       } else {
         toast.error(data.message || 'Google login failed.');
