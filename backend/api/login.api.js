@@ -29,21 +29,11 @@ router.post("/", async (req, res) => {
 
     const token = jwt.sign({ email, role }, process.env.JWT_SECRET, { expiresIn: "30m" });
 
-    if(role === "student") {
     return res.status(200).json({
       message: "Login successful",
       role,
-      token,
-      student,
+      token
     });
-  }else{
-      return res.status(200).json({
-      message: "Login successful",
-      role,
-      token,
-      admin
-    });
-  }
 
   } catch (error) {
     console.error(error);
