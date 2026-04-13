@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import './Login.css';
-import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { GoogleLogin } from '@react-oauth/google';
+import React, { useState } from "react";
+import "./Login.css";
+import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { GoogleLogin } from "@react-oauth/google";
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
-const Login = () => {
+const Login = ({ onSuccess }) => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }));
   };
 
@@ -26,45 +26,32 @@ const Login = () => {
     setLoading(true);
 
     try {
-      console.log('Submitting login:', formData);
       const { data } = await axios.post(
         `${baseUrl}/Login`,
         {
           email: formData.email.trim(),
-          password: formData.password.trim()
+          password: formData.password.trim(),
         },
-        { headers: { 'Content-Type': 'application/json' } }
+        { headers: { "Content-Type": "application/json" } }
       );
 
-      console.log('Backend response:', data);
+      if (data?.token) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("role", data.role || "user");
 
-      if (data && data.token) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('email', data.email || formData.email);
-        localStorage.setItem('role', data.role || 'user');
+        toast.success("Logged in successfully!");
 
-        toast.success('Logged in successfully!');
+        // 🔥 SEND STUDENT TO APP
+        onSuccess(data.user || data);
 
         setTimeout(() => {
-          if (data.role === 'admin') navigate('/admin');
-          else navigate('/studentDashboard');
-        }, 1000);
+          navigate("/studentDashboard");
+        }, 800);
       } else {
-        toast.error(data.message || 'Invalid credentials. Please try again.');
+        toast.error("Invalid credentials");
       }
     } catch (err) {
-      console.error('Login error:', err);
-      if (err.response) {
-        // Backend responded with error
-        console.log('Error data:', err.response.data);
-        toast.error(err.response.data.message || 'Unable to login');
-      } else if (err.request) {
-        // Request made but no response
-        toast.error('No response from server. Please check your backend.');
-      } else {
-        // Something else
-        toast.error(err.message || 'Login failed');
-      }
+      toast.error(err.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
     }
@@ -73,39 +60,31 @@ const Login = () => {
   const handleGoogleSuccess = async (credentialResponse) => {
     setLoading(true);
     try {
-      console.log('Google credential:', credentialResponse);
       const { data } = await axios.post(
         `${baseUrl}/auth/google`,
         { token: credentialResponse.credential },
-        { headers: { 'Content-Type': 'application/json' } }
+        { headers: { "Content-Type": "application/json" } }
       );
 
-      console.log('Google login response:', data);
+      if (data?.token && data?.user) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("role", data.user.userType || "user");
 
-      if (data && data.user && data.token) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('email', data.user.email);
-        localStorage.setItem('role', data.user.userType || 'user');
+        toast.success("Google login successful!");
 
-        toast.success('Google login successful!');
+        onSuccess(data.user);
 
         setTimeout(() => {
-          if (data.user.userType === 'admin') navigate('/admin');
-          else navigate('/studentDashboard');
-        }, 1000);
+          navigate("/studentDashboard");
+        }, 800);
       } else {
-        toast.error(data.message || 'Google login failed.');
+        toast.error("Google login failed");
       }
     } catch (err) {
-      console.error('Google login error:', err);
-      toast.error('Google login failed. Please try again.');
+      toast.error("Google login failed");
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleGoogleError = () => {
-    toast.error('Google login failed. Please try again.');
   };
 
   return (
@@ -126,53 +105,33 @@ const Login = () => {
             disabled={loading}
           />
 
-          <div className="password-field">
-            <div className="password-input-wrapper">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                name="password"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-                disabled={loading}
-              />
-              <span
-                className="toggle-password"
-                onClick={() => setShowPassword(!showPassword)}
-                style={{ cursor: 'pointer' }}
-              >
-                {showPassword ? '🙈' : '👁️'}
-              </span>
-            </div>
+          <div className="password-input-wrapper">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              disabled={loading}
+            />
+            <span onClick={() => setShowPassword(!showPassword)}>
+              {showPassword ? "🙈" : "👁️"}
+            </span>
           </div>
 
-          <div className="forgotpassword">
-            <Link to="/forgotPassword">Forgot Password?</Link>
-          </div>
+          <Link to="/forgotPassword">Forgot Password?</Link>
 
-          <button type="submit" className="sign-in-btn" disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign in'}
+          <button type="submit" disabled={loading}>
+            {loading ? "Signing in..." : "Sign in"}
           </button>
 
           <div className="divider"><span>or</span></div>
 
-          <div className="social-icons">
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={handleGoogleError}
-              disabled={loading}
-              theme="outline"
-              size="large"
-              text="continue_with"
-              shape="rectangular"
-              width="300"
-            />
-          </div>
-
-          <p className="register-link">
-            Don’t have an account? <Link to="/register">Register Now</Link>
-          </p>
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => toast.error("Google login failed")}
+          />
         </form>
       </div>
     </div>

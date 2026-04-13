@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
 import express from "express";
-import { verifyToken } from "../middlewares/jwt.middleware.js";
+
 import { findMatchingPrompt, getPromptTitles } from "../config/prompts.js";
 dotenv.config();
 
@@ -13,7 +13,7 @@ async function main(prompt) {
   try {
     const response = await genai.models.generateContent({
       model: "gemini-2.5-flash",
-      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      contents: [{ role: "student", parts: [{ text: prompt }] }],
     });
     
     console.log("Full Gemini response:", JSON.stringify(response, null, 2));
@@ -55,7 +55,7 @@ async function main(prompt) {
   }
 }
 
-router.post("/", verifyToken, async (req, res) => {
+router.post("/", async (req, res) => {
   const { prompt } = req.body;
   if (!prompt) {
     return res.status(400).json({ error: "Prompt is required" });
@@ -95,7 +95,7 @@ router.post("/", verifyToken, async (req, res) => {
 });
 
 // New endpoint to get available prompt titles
-router.get("/prompts", verifyToken, async (req, res) => {
+router.get("/prompts", async (req, res) => {
   try {
     const promptTitles = getPromptTitles();
     res.json({ prompts: promptTitles });

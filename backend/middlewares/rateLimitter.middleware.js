@@ -1,31 +1,40 @@
 import redis from "../DB/redis.js";
 
- const rateLimitter = ({limit , time , key}) =>{
+const rateLimiter = ({ limit, time}) => {
+  return async (req, resp, next) => {
+    try {
+      const userId = req.user?._id; // user id from auth middleware
 
-   return  async (req , resp , next) =>{
+      if (!userId) {
+        return resp.status(401).send("Unauthorized: User not logged in");
+      }
 
-        const clientIp = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+      const redisKey = `${userId}:request_count`; // unique key per user
 
-        const redisKey = `${clientIp}:request_count`;
+      const counter = await redis.incr(redisKey);
 
-        const counter = await redis.incr(redisKey);
+      if (counter === 1) {
+        await redis.expire(redisKey, time);
+      }
 
-        if(counter === 1){ // set the timer = time
-
-           await redis.expire(redisKey , time);
-
-        }
-
+      if (counter > limit) {
         const timeLeft = await redis.ttl(redisKey);
+        return resp
+          .status(429)
+          .send(`You reached the request limit. Try again in ${timeLeft} seconds`);
+      }
 
-        if(counter > limit){
+      next();
+    } catch (err) {
+      console.log("Rate limiter error (Redis issue):", err?.message || err);
 
-            return resp.status(429).send(`you reached the requestLimit, Try again in ${timeLeft} seconds`);
-        }
-          next();
+      // block request if redis fails (strict mode)
+      return resp.status(503).json({
+        success: false,
+        message: "Service temporarily unavailable. Please try again.",
+      });
     }
-    
-  
+  };
 };
 
-export default rateLimitter ;
+export default rateLimiter;
